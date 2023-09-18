@@ -115,7 +115,7 @@ fun ChildSavingsApplication() {
             )
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(19.dp))
 
         Text("가격")
 //        TextField(
