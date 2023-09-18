@@ -85,8 +85,18 @@ class MainActivity : ComponentActivity() {
                             SavingsScreen()
                         }
                         composable("loan") {
-//                            LoanScreen()
+                            LoanScreen()
                         }
+                        composable("wallet"){
+                            WalletScreen()
+                        }
+                        composable("savingsApplication"){
+                            ChildSavingsApplication()
+                        }
+                        composable("childSavings"){
+                            ChlidSavingsScreen()
+                        }
+
                     }
                 }
 
@@ -200,6 +210,7 @@ class MainActivity : ComponentActivity() {
             Box(
                 modifier = Modifier
                     .size(42.dp)
+                    .clip(CircleShape)
                     .border(1.dp, Color.Black, CircleShape)
                     .clickable(onClick = onClick)
             ){
@@ -304,6 +315,9 @@ class MainActivity : ComponentActivity() {
                     .padding(end = 16.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFFFE9E8))
+                    .clickable {
+                        navController.navigate("wallet")
+                    }
             ){
                 Column (
                     modifier = Modifier
@@ -341,6 +355,9 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFFE2ECFF))
+                        .clickable {
+                            navController.navigate("loan")
+                        }
                 ){
                     Column (
                         modifier = Modifier

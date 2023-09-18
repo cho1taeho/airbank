@@ -47,15 +47,94 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import android.content.Intent
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
-fun LoanScreen() {
-    Text("HD")
+fun ChildSavingsApplication() {
+    val navController = rememberNavController()
+    var textFieldValue by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.arrowleft),
+                contentDescription = "Back",
+                modifier = Modifier.size(24.dp)
+                    .clickable {
+                        navController.navigate("childSavings")
+                    }
+            )
+
+            Text(
+                "티끌 신청하기",
+                fontSize = 20.sp
+            )
+
+            TextButton(
+                onClick = {
+                    navController.navigate("childsavings")
+                },
+            ) {
+                Text("신청")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("목표")
+
+        TextField(
+            value = textFieldValue,
+            onValueChange = { newValue ->
+                textFieldValue = newValue
+            },
+            label = { Text("목표를 입력하세요.") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("가격")
+//        TextField(
+//
+//        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("기간")
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("요청 금액")
+//        TextField(
+//
+//        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text("첨부하기")
+    }
 }

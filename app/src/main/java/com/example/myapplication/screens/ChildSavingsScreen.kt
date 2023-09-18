@@ -57,16 +57,23 @@ import androidx.navigation.compose.rememberNavController
 
 @Preview
 @Composable
-fun SavingsScreen() {
+fun ChlidSavingsScreen() {
     val navController = rememberNavController()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
     ) {
+        Text(
+            "티끌 모으기",
+            fontSize = 27.sp,
+            fontWeight = FontWeight.Bold,
+//            textAlign = TextAlign.Center,
+        )
+        Spacer(modifier = Modifier.size(5.dp))
         Box(modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
@@ -91,8 +98,7 @@ fun SavingsScreen() {
                 Spacer(modifier = Modifier.size(20.dp))
                 Image(
                     painter = painterResource(id = R.drawable.item),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.FillBounds,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(280.dp)
                         .align(Alignment.CenterHorizontally)
@@ -114,36 +120,62 @@ fun SavingsScreen() {
                 )
             }
         }
-        Spacer(modifier = Modifier.size(15.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(70.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFD6F2FF))
-                .clickable{
-                    navController.navigate("childSavings")
-                }
         ){
-            Column (
-                modifier = Modifier.fillMaxWidth()
+            Row (
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxHeight()
             ){
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    "현재 납입 금액 : 415,000",
-                    fontSize =  22.sp,
-                    modifier = Modifier
-                        .padding(start = 14.dp)
+                Spacer(modifier = Modifier.size(10.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.shoppingcart),
+                    contentDescription = null,
+                    modifier  = Modifier
+                        .size(30.dp)
                 )
-                Spacer(modifier = Modifier.size(9.dp))
+                Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "밀린 횟수 : 1회",
-                    fontSize = 22.sp,
-                    modifier = Modifier
-                        .padding(start = 14.dp)
+                    "구매하기",
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Bold
+
                 )
                 Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    painter = painterResource(id = R.drawable.vector),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+
+                )
+
             }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFF00D2F3))
+                .clickable {
+                    navController.navigate("savingsApplication")
+                }
+        ) {
+            Text(
+                "신청하기",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
