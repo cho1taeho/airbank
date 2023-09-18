@@ -84,6 +84,9 @@ class MainActivity : ComponentActivity() {
                         composable("savings") {
                             SavingsScreen()
                         }
+                        composable("loan") {
+//                            LoanScreen()
+                        }
                     }
                 }
 

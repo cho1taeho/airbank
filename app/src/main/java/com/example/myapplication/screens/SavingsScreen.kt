@@ -77,7 +77,7 @@ fun SavingsScreen() {
                 Text(
                     "신상 운동화",
                     fontSize = 20.sp,
-
+                    fontWeight = FontWeight.Bold
 
                 )
                 Image(
@@ -86,7 +86,8 @@ fun SavingsScreen() {
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .size(300.dp)
-//                        .align(Alignment.CenterStart)
+//                        .align(Alignment.Center)
+
                 )
             }
         }
