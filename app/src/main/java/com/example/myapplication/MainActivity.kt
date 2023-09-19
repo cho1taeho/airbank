@@ -155,18 +155,15 @@ class MainActivity : ComponentActivity() {
         }
 
         Row (
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
 
-
-
         ){
-
             Column (
                 horizontalAlignment  = Alignment.Start,
-                modifier = Modifier.weight(1f)
+//                modifier = Modifier.weight(1f)
             ) {
 
                 Box(
@@ -186,9 +183,9 @@ class MainActivity : ComponentActivity() {
                 Text(mainName)
             }
             Row (
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
+//                modifier = Modifier.weight(1f)
             ){
                 CircleWithImageAndBorder(image1, name1) {swapImages(image1, name1)}
                 Spacer(Modifier.width(8.dp) )

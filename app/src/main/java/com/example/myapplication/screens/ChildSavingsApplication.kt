@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -47,7 +48,11 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import android.content.Intent
+import android.icu.util.Calendar
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -55,27 +60,53 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
+
+@RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+//@Preview
 @Composable
 fun ChildSavingsApplication(navController: NavController) {
-//    val navController = rememberNavController()
     var textFieldValue by remember { mutableStateOf("") }
+
+    val calendar: Calendar = Calendar.getInstance()
+    var today by remember { mutableStateOf("") }
+    today = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf("") }
+    val context = LocalContext.current // Composable 내에서 Context 얻기
+
+
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+
+    if (showDatePicker) {
+        val datePickerDialog = DatePickerDialog(context, { _, selectedYear, selectedMonth, selectedDay ->
+
+        }, year, month, day)
+        datePickerDialog.show()
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(22.dp)
+
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+
         ) {
             Image(
                 painter = painterResource(id = R.drawable.arrowleft),
@@ -109,32 +140,76 @@ fun ChildSavingsApplication(navController: NavController) {
             onValueChange = { newValue ->
                 textFieldValue = newValue
             },
-            label = { Text("목표를 입력하세요.") },
+//            label = { Text("목표를 입력하세요.") },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text
             )
         )
 
-        Spacer(modifier = Modifier.height(19.dp))
-
-        Text("가격")
-//        TextField(
-//
-//        )
-
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text("기간")
+        Text("가격")
+
+        TextField(
+            value = textFieldValue,
+            onValueChange = { newValue ->
+                textFieldValue = newValue
+            },
+//            label = { Text("가격을 입력하세요.") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            )
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text("요청 금액")
-//        TextField(
+
+        TextField(
+            value = textFieldValue,
+            onValueChange = { newValue ->
+                textFieldValue = newValue
+            },
+//            label = { Text("요청 가격을 입력하세요.") },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            )
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+//        Text("기간")
 //
-//        )
+//        Text(selectedDate)  // 선택한 날짜를 표시
+//        Button(onClick = { showDatePicker = true }) {  // 버튼 클릭시 날짜 선택기 보여주기
+//            Text("날짜 선택")
+//        }
+        Text("기간: $today ~ $selectedDate")
+
+        Button(onClick = { showDatePicker = true }) {
+            Text("날짜 선택")
+        }
+
+        if (showDatePicker) {
+            val context = LocalContext.current
+            val datePickerDialog = DatePickerDialog(
+                context,
+                { _, year, month, dayOfMonth ->
+                    selectedDate = "$year-${month + 1}-$dayOfMonth"
+                    showDatePicker = false
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.setOnCancelListener {
+                showDatePicker = false
+            }
+            datePickerDialog.show()
+        }
+    }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text("첨부하기")
     }
-}
