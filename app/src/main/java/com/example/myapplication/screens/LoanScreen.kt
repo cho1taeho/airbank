@@ -56,6 +56,6 @@ import androidx.navigation.compose.rememberNavController
 
 
 @Composable
-fun LoanScreen() {
+fun LoanScreen(navController: NavController) {
     Text("HD")
 }

@@ -82,19 +82,19 @@ class MainActivity : ComponentActivity() {
                             MainScreen(navController = navController)
                         }
                         composable("savings") {
-                            SavingsScreen()
+                            SavingsScreen(navController = navController)
                         }
                         composable("loan") {
-                            LoanScreen()
+                            LoanScreen(navController = navController)
                         }
                         composable("wallet"){
-                            WalletScreen()
+                            WalletScreen(navController = navController)
                         }
                         composable("savingsApplication"){
-                            ChildSavingsApplication()
+                            ChildSavingsApplication(navController = navController)
                         }
                         composable("childSavings"){
-                            ChlidSavingsScreen()
+                            ChildSavingsScreen(navController = navController)
                         }
 
                     }

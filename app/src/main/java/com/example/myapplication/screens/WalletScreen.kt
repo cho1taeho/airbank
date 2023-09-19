@@ -55,6 +55,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun WalletScreen() {
+fun WalletScreen(navController: NavController) {
     Text("wlrkqdlqslek")
 }

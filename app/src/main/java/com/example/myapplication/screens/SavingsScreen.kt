@@ -57,8 +57,8 @@ import androidx.navigation.compose.rememberNavController
 
 @Preview
 @Composable
-fun SavingsScreen() {
-    val navController = rememberNavController()
+fun SavingsScreen(navController: NavController) {
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),

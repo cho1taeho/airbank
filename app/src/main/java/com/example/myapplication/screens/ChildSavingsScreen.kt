@@ -55,10 +55,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-@Preview
+//@Preview
 @Composable
-fun ChlidSavingsScreen() {
-    val navController = rememberNavController()
+fun ChildSavingsScreen(navController: NavController) {
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),

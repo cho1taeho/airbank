@@ -63,8 +63,8 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun ChildSavingsApplication() {
-    val navController = rememberNavController()
+fun ChildSavingsApplication(navController: NavController) {
+//    val navController = rememberNavController()
     var textFieldValue by remember { mutableStateOf("") }
 
     Column(
