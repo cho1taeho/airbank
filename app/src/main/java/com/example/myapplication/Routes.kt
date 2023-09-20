@@ -17,17 +17,17 @@ import com.example.myapplication.screens.BottomNavItem
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun AppNavigation(navController: NavHostController){
-    NavHost(navController = navController, startDestination = BottomNavItem.Main.screenRoute) {
-        composable(BottomNavItem.Main.screenRoute) {
+    NavHost(navController = navController, startDestination = BottomNavItem.main.screenRoute) {
+        composable(BottomNavItem.main.screenRoute) {
             MainScreen(navController = navController)
         }
-        composable(BottomNavItem.Savings.screenRoute) {
+        composable(BottomNavItem.savings.screenRoute) {
             SavingsScreen(navController = navController)
         }
-        composable(BottomNavItem.Loan.screenRoute) {
+        composable(BottomNavItem.loan.screenRoute) {
             LoanScreen(navController = navController)
         }
-        composable(BottomNavItem.Wallet.screenRoute) {
+        composable(BottomNavItem.wallet.screenRoute) {
             WalletScreen(navController = navController)
         }
         composable("savingsApplication") {
