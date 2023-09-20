@@ -41,12 +41,7 @@ fun ChildSavingsScreen(navController: NavController) {
             .fillMaxWidth()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
     ) {
-        Text(
-            "티끌 모으기",
-            fontSize = 27.sp,
-            fontWeight = FontWeight.Bold,
-//            textAlign = TextAlign.Center,
-        )
+
         Spacer(modifier = Modifier.size(5.dp))
         Box(modifier = Modifier
             .fillMaxWidth()

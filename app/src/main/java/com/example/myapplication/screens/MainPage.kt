@@ -44,7 +44,6 @@ import com.example.myapplication.R
 @Composable
 fun MainScreen(navController: NavController) {
     Column {
-        Spacer(modifier = Modifier.height(70.dp))
         Text("관리중인 자녀 4")
         ChildProfile()
         Body(navController = navController)

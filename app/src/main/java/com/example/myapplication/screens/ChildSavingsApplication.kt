@@ -28,7 +28,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Build
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -53,7 +58,12 @@ import com.example.myapplication.R
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.*
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
+//import com.google.accompanist.coil.rememberImagePainter
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,6 +102,7 @@ fun ChildSavingsApplication(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(22.dp)
+            .verticalScroll(rememberScrollState())
 
     ) {
         Row(
@@ -223,47 +234,88 @@ fun ChildSavingsApplication(navController: NavController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .border(3.dp, Color(0xFF00D2F3), RoundedCornerShape(10.dp))
-                .padding(horizontal = 20.dp)
-                .background(color = Color.White)
-//                .clickable(
-//
-//                )
-        ){
-            Row (
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
+
+        var uri by remember {
+            mutableStateOf<Uri?>(null)
+        }
+        val singlePhotoPicker = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = {
+                uri = it
+            }
+        )
+
+
+
+
+        if(uri == null) {
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight()
-            ){
-                Spacer(modifier = Modifier.size(15.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.imagepicker),
-                    contentDescription = null,
+                    .height(70.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(3.dp, Color(0xFF00D2F3), RoundedCornerShape(10.dp))
+                    .padding(horizontal = 20.dp)
+                    .background(color = Color.White)
+                    .clickable(
+                        onClick = {
+                            singlePhotoPicker.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
+                    )
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .size(25.dp)
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    "첨부하기",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF00D2F3)
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                ) {
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.imagepicker),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(25.dp)
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(
+                        "첨부하기",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF00D2F3)
+                    )
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .background(color = Color.White)
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(3.dp, Color(0xFF00D2F3), RoundedCornerShape(10.dp))
+                    .padding(horizontal = 20.dp)
+                    .clickable(
+                        onClick = {
+                            singlePhotoPicker.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
+                    )
+            ){
+                AsyncImage(
+                    model = uri,
+                    contentDescription = null,
+                    modifier = Modifier.size(500.dp)
                 )
             }
         }
 
+
     }
 }
-
-
-
 
 
 
