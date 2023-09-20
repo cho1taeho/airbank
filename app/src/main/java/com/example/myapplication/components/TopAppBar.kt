@@ -1,6 +1,8 @@
 package com.example.myapplication.components
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,36 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import com.example.myapplication.AppNavigation
 
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun SongsPage() {
-    // Content of the Songs page
-    Text(text = "Songs Page Content")
+fun MyUI() {
+    AppNavigation()
 }
-
-@Composable
-fun ArtistsPage() {
-    // Content of the Artists page
-    Text(text = "Artists Page Content")
-}
-
-@Composable
-fun PlaylistsPage() {
-    // Content of the Playlists page
-    Text(text = "Playlists Page Content")
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun MyUI(navController: NavHostController) {
+fun AppMainContent() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -83,7 +71,7 @@ fun MyUI(navController: NavHostController) {
                 containerColor = Color(0xFFB4EBF7),
                 content = {
                     // Add your bottom bar content here
-                    var selectedItem by remember { mutableIntStateOf(0) }
+                    val selectedItem by remember { mutableIntStateOf(0) }
                     val items = listOf("Songs", "Artists", "Playlists")
                     NavigationBar {
                         items.forEachIndexed { index, item ->
@@ -91,18 +79,7 @@ fun MyUI(navController: NavHostController) {
                                 icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
                                 label = { Text(item) },
                                 selected = selectedItem == index,
-                                onClick = {
-                                    if (selectedItem != index) {
-                                        selectedItem = index
-                                        val route = when (index) {
-                                            0 -> "songs"
-                                            1 -> "artists"
-                                            2 -> "playlists"
-                                            else -> "songs" // Default route
-                                        }
-                                        navController.navigate(route)
-                                    }
-                                }
+                                onClick = { /* doSomething() */ }
                             )
                         }
                     }
@@ -115,17 +92,12 @@ fun MyUI(navController: NavHostController) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-//        val currentBackStackEntry by rememberUpdatedState(navController.currentBackStackEntryAsState())
-            val currentRoute = navController.currentBackStackEntry?.arguments?.getString("route")
-            when (currentRoute) {
-                "songs" -> SongsPage()
-                "artists" -> ArtistsPage()
-                "playlists" -> PlaylistsPage()
-                else -> SongsPage() // Default page
-            }
+            MyUI()
         }
     }
 }
+
+
 
 
 

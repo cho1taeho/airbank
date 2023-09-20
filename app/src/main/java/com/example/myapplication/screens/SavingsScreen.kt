@@ -1,4 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.screens
+
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -54,8 +55,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.R
 
-@Preview
 @Composable
 fun SavingsScreen(navController: NavController) {
 
