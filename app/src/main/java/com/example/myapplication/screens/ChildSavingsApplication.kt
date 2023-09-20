@@ -2,6 +2,7 @@ package com.example.myapplication.screens
 
 
 import android.app.DatePickerDialog
+import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,8 +30,18 @@ import androidx.compose.ui.unit.sp
 import android.icu.util.Calendar
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -39,6 +50,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
 import com.example.myapplication.R
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -90,7 +104,8 @@ fun ChildSavingsApplication(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.arrowleft),
                 contentDescription = "Back",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier
+                    .size(24.dp)
                     .clickable {
                         navController.navigate("childSavings")
                     }
@@ -173,19 +188,83 @@ fun ChildSavingsApplication(navController: NavController) {
         val monthNumbers = (3..12).toList()
         var selectedMonths by remember { mutableStateOf(3) }
         var expanded by remember { mutableStateOf(false) }
+        val scrollState = rememberScrollState()
+        val futureCalendar: Calendar = Calendar.getInstance()
+        futureCalendar.add(Calendar.MONTH, selectedMonths)
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        selectedDate = sdf.format(futureCalendar.time)
 
         Text("기간: $today ~ $selectedDate")
 
-        Button(onClick = { showDatePicker = true }) {
-            Text("날짜 선택")
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = {expanded = false},
+        ) {
+            (3..12).forEach { num ->
+            DropdownMenuItem(
+                text = {"$num 개월"},
+                onClick = {
+                    selectedMonths = num
+                    expanded = false
+                }
+            )}
         }
 
 
+        Button(
+            onClick = { expanded = true},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Text( "기간 선택 : $selectedMonths 개월" )
+
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text("첨부하기")
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .border(3.dp, Color(0xFF00D2F3), RoundedCornerShape(10.dp))
+                .padding(horizontal = 20.dp)
+                .background(color = Color.White)
+//                .clickable(
+//
+//                )
+        ){
+            Row (
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ){
+                Spacer(modifier = Modifier.size(15.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.imagepicker),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(25.dp)
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    "첨부하기",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF00D2F3)
+                )
+            }
+        }
+
     }
 }
+
+
+
+
 
 
 
