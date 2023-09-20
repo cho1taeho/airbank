@@ -4,12 +4,10 @@ package com.example.myapplication.components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -20,24 +18,29 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 
+
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.AppNavigation
+import com.example.myapplication.screens.BottomNavItem
 
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun MyUI() {
-    AppNavigation()
+fun MyUI(navController: NavHostController) {
+    AppNavigation(navController)
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun AppMainContent() {
+    val navController = rememberNavController()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -67,32 +70,43 @@ fun AppMainContent() {
             )
         },
         bottomBar = {
-            BottomAppBar(
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+            NavigationBar(
                 containerColor = Color(0xFFB4EBF7),
                 content = {
-                    // Add your bottom bar content here
-                    val selectedItem by remember { mutableIntStateOf(0) }
-                    val items = listOf("Songs", "Artists", "Playlists")
-                    NavigationBar {
-                        items.forEachIndexed { index, item ->
-                            NavigationBarItem(
-                                icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
-                                label = { Text(item) },
-                                selected = selectedItem == index,
-                                onClick = { /* doSomething() */ }
-                            )
-                        }
+                    val items = listOf(
+                        BottomNavItem.Main,
+                        BottomNavItem.Wallet,
+                        BottomNavItem.Loan,
+                        BottomNavItem.Savings,
+                        BottomNavItem.Mypage
+                    )
+                    items.forEach {item ->
+                        NavigationBarItem(
+                            icon = {Icon(painter = painterResource(id = item.icon), contentDescription = item.title)},
+                            label = { Text(item.title) },
+                            selected = currentRoute == item.screenRoute,
+                            alwaysShowLabel = false,
+                            onClick = {
+                                navController.navigate(item.screenRoute){
+                                    navController.graph.startDestinationRoute?.let {
+                                        popUpTo(it) {saveState = true}
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             )
         }
-    ) { innerPadding ->
+    ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+//                .fillMaxSize()
+                .padding(it)
         ) {
-            MyUI()
+            MyUI(navController =navController)
         }
     }
 }

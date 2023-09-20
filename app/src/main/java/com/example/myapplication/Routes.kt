@@ -3,8 +3,8 @@ package com.example.myapplication
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
@@ -12,22 +12,22 @@ import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.WalletScreen
 import androidx.navigation.compose.NavHost
+import com.example.myapplication.screens.BottomNavItem
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun AppNavigation(){
-    val navController = rememberNavController()
-    NavHost(navController, startDestination = "main") {
-        composable("main") {
+fun AppNavigation(navController: NavHostController){
+    NavHost(navController = navController, startDestination = BottomNavItem.Main.screenRoute) {
+        composable(BottomNavItem.Main.screenRoute) {
             MainScreen(navController = navController)
         }
-        composable("savings") {
+        composable(BottomNavItem.Savings.screenRoute) {
             SavingsScreen(navController = navController)
         }
-        composable("loan") {
+        composable(BottomNavItem.Loan.screenRoute) {
             LoanScreen(navController = navController)
         }
-        composable("wallet") {
+        composable(BottomNavItem.Wallet.screenRoute) {
             WalletScreen(navController = navController)
         }
         composable("savingsApplication") {

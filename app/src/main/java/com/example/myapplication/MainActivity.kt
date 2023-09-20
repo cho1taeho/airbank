@@ -8,8 +8,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.components.AppMainContent
 
 
@@ -38,5 +40,14 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyApplicationTheme {
+        AppMainContent()
     }
 }
