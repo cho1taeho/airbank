@@ -188,45 +188,53 @@ fun WalletScreen(navController: NavController) {
                 Spacer(modifier = Modifier.size(10.dp))
                 Text("레이첼님의 신용점수")
                 ScoreBar(score = 512)
-//                CreditPoint()
+                CreditPoint()
             }
         }
 
     }
 }
 
-//@Composable
-//fun CreditPoint() {
-//    val zipList: List<Pair<Float, Float>> = list.zipWithNext()
-//
-//    Row() {
-//        val max = list.max()
-//        val min = list.min()
-//
-//        val lineColor =
-//            if (list.last() > list.first()) LightOlive else LightCarmin // <-- Line color is Green if its going up and Red otherwise
-//
-//        for (pair in zipList) {
-//
-//            val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
-//            val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
-//
-//            Canvas(
-//                modifier = Modifier
-//                    .fillMaxHeight()
-//                    .weight(1f),
-//                onDraw = {
-//                    val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage)) // <-- Use times so it works for any available space
-//                    val toPoint =
-//                        Offset(x = size.width, y = size.height.times(1 - toValuePercentage)) // <-- Also here!
-//
-//                    drawLine(
-//                        color = lineColor,
-//                        start = fromPoint,
-//                        end = toPoint,
-//                        strokeWidth = 3f
-//                    )
-//                })
-//        }
-//    }
-//}
+@Composable
+fun CreditPoint() {
+    val list = listOf(500f, 600f, 450f, 550f, 650f, 700f) // 예시 데이터
+    val zipList: List<Pair<Float, Float>> = list.zipWithNext()
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val max = list.maxOrNull() ?: 0f
+        val min = 0f
+
+        val lineColor = if (list.last() > list.first()) Color.Green else Color.Red
+
+        for (pair in zipList) {
+            val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
+            val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
+
+            Canvas(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                onDraw = {
+                    val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage))
+                    val toPoint = Offset(x = size.width, y = size.height.times(1 - toValuePercentage))
+
+                    drawLine(
+                        color = lineColor,
+                        start = fromPoint,
+                        end = toPoint,
+                        strokeWidth = 3f
+                    )
+                })
+        }
+    }
+}
+
+fun getValuePercentageForRange(value: Float, max: Float, min: Float): Float {
+    if (max - min == 0f) return 0f
+    return (value - min) / (max - min)
+}
