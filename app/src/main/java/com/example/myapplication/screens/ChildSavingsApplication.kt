@@ -196,7 +196,7 @@ fun ChildSavingsApplication(navController: NavController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        val monthNumbers = (3..12).toList()
+
         var selectedMonths by remember { mutableStateOf(3) }
         var expanded by remember { mutableStateOf(false) }
         val scrollState = rememberScrollState()
@@ -213,7 +213,7 @@ fun ChildSavingsApplication(navController: NavController) {
         ) {
             (3..12).forEach { num ->
             DropdownMenuItem(
-                text = {"$num 개월"},
+                text = {"$num"},
                 onClick = {
                     selectedMonths = num
                     expanded = false
@@ -244,9 +244,6 @@ fun ChildSavingsApplication(navController: NavController) {
                 uri = it
             }
         )
-
-
-
 
         if(uri == null) {
             Box(
@@ -312,8 +309,6 @@ fun ChildSavingsApplication(navController: NavController) {
                 )
             }
         }
-
-
     }
 }
 
