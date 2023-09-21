@@ -35,6 +35,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -61,12 +62,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import coil.compose.AsyncImage
 
 @Composable
 fun WalletScreen(navController: NavController) {
+
+
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -136,6 +144,89 @@ fun WalletScreen(navController: NavController) {
                 
             }
         }
-//        Box(modifier = )
+        Spacer(modifier = Modifier.size(17.dp))
+        Divider(
+            color = Color.Black,
+            thickness = 1.dp
+        )
+        Spacer(modifier = Modifier.size(17.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(110.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFFE4EBED))
+                .padding(horizontal = 16.dp)
+
+        ){
+            Column (
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            ){
+                Spacer(modifier = Modifier.size(10.dp))
+                Text("레이첼님의 기본 용돈")
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    "월 100,000원",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(5.dp))
+                Text("매월 10일 자동이체")
+            }
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFFE4EBED))
+                .padding(horizontal = 16.dp)
+        ){
+            Column {
+                Spacer(modifier = Modifier.size(10.dp))
+                Text("레이첼님의 신용점수")
+                ScoreBar(score = 512)
+//                CreditPoint()
+            }
+        }
+
     }
 }
+
+//@Composable
+//fun CreditPoint() {
+//    val zipList: List<Pair<Float, Float>> = list.zipWithNext()
+//
+//    Row() {
+//        val max = list.max()
+//        val min = list.min()
+//
+//        val lineColor =
+//            if (list.last() > list.first()) LightOlive else LightCarmin // <-- Line color is Green if its going up and Red otherwise
+//
+//        for (pair in zipList) {
+//
+//            val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
+//            val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
+//
+//            Canvas(
+//                modifier = Modifier
+//                    .fillMaxHeight()
+//                    .weight(1f),
+//                onDraw = {
+//                    val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage)) // <-- Use times so it works for any available space
+//                    val toPoint =
+//                        Offset(x = size.width, y = size.height.times(1 - toValuePercentage)) // <-- Also here!
+//
+//                    drawLine(
+//                        color = lineColor,
+//                        start = fromPoint,
+//                        end = toPoint,
+//                        strokeWidth = 3f
+//                    )
+//                })
+//        }
+//    }
+//}
