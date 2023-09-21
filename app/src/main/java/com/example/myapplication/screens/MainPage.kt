@@ -32,7 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -44,7 +47,7 @@ import com.example.myapplication.R
 @Composable
 fun MainScreen(navController: NavController) {
     Column {
-        Text("관리중인 자녀 4")
+        Text("관리중인 자녀 4", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
         ChildProfile()
         Body(navController = navController)
     }
