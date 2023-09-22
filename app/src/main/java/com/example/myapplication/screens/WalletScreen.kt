@@ -2,7 +2,6 @@ package com.example.myapplication.screens
 
 
 import android.app.DatePickerDialog
-import android.icu.text.SimpleDateFormat
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
-import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -70,6 +68,21 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import coil.compose.AsyncImage
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import java.util.*
+import androidx.compose.ui.platform.LocalContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
+import java.text.SimpleDateFormat
 
 @Composable
 fun WalletScreen(navController: NavController) {
@@ -99,7 +112,7 @@ fun WalletScreen(navController: NavController) {
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     "20,000,000",
-                    fontSize = 22.sp,
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(10.dp))
@@ -195,43 +208,108 @@ fun WalletScreen(navController: NavController) {
     }
 }
 
+
+
 @Composable
 fun CreditPoint() {
-    val list = listOf(500f, 600f, 450f, 550f, 650f, 700f) // 예시 데이터
+    val list = listOf(500f, 600f, 450f, 550f, 650f, 700f)
     val zipList: List<Pair<Float, Float>> = list.zipWithNext()
+    val xAxisLabels = getMonths()
+    val yAxisLabels = List((1000 / 200) + 1) { it * 200 }
 
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(16.dp)
     ) {
         val max = list.maxOrNull() ?: 0f
         val min = 0f
-
         val lineColor = if (list.last() > list.first()) Color.Green else Color.Red
 
-        for (pair in zipList) {
-            val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
-            val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
+        // Y Axis Labels
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            yAxisLabels.reversed().forEach { label ->
+                Text(text = label.toString(), modifier = Modifier.padding(end = 4.dp))
+            }
+        }
 
+        // Graph, X Axis Labels, and Axis Lines
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .fillMaxSize()
+                .padding(start = 32.dp)
+        ) {
             Canvas(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(1f),
-                onDraw = {
-                    val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage))
-                    val toPoint = Offset(x = size.width, y = size.height.times(1 - toValuePercentage))
+                    .width(1.dp)
+                    .align(Alignment.TopStart),
+                onDraw = { drawRect(color = Color.Black) }
+            )
 
-                    drawLine(
-                        color = lineColor,
-                        start = fromPoint,
-                        end = toPoint,
-                        strokeWidth = 3f
-                    )
-                })
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                for ((index, pair) in zipList.withIndex()) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    ) {
+                        Canvas(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(bottom = 16.dp), // Making space for X Axis Labels
+                            onDraw = {
+                                val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
+                                val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
+                                val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage))
+                                val toPoint = Offset(x = size.width, y = size.height.times(1 - toValuePercentage))
+
+                                drawLine(
+                                    color = lineColor,
+                                    start = fromPoint,
+                                    end = toPoint,
+                                    strokeWidth = 3f
+                                )
+                            }
+                        )
+                        Canvas(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .align(Alignment.BottomStart),
+                            onDraw = { drawRect(color = Color.Black) }
+                        )
+                        Text(
+                            text = xAxisLabels.getOrNull(index) ?: "",
+                            modifier = Modifier.align(Alignment.BottomStart)
+                        )
+                    }
+                }
+            }
         }
     }
+}
+
+
+
+@Composable
+fun getMonths(): List<String> {
+    val calendar = Calendar.getInstance()
+    val dateFormat = SimpleDateFormat("MMM", Locale.getDefault())
+    return List(6) {
+        val month = dateFormat.format(calendar.time)
+        calendar.add(Calendar.MONTH, -1)
+        month
+    }.reversed()
 }
 
 fun getValuePercentageForRange(value: Float, max: Float, min: Float): Float {
