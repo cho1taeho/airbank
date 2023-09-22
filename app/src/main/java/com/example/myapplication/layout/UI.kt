@@ -1,4 +1,4 @@
-package com.example.myapplication.components
+package com.example.myapplication.layout
 
 
 import android.os.Build
@@ -6,12 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +18,8 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,19 +31,18 @@ import androidx.compose.ui.text.style.TextOverflow
 
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.AppNavigation
+import com.example.myapplication.navigate.AppNavigation
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -76,14 +72,15 @@ fun AppMainContent() {
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.pretendardbold))
+                            fontFamily = FontFamily(Font(R.font.pretendardbold)),
+                            fontSize = 20.sp,
                         )
 
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(BottomNavItem.main.screenRoute){
+                        navController.navigate(BottomNavItem.Main.screenRoute){
                             navController.graph.startDestinationRoute?.let {
                                 popUpTo(it) {saveState = true}
                                 }
@@ -95,14 +92,18 @@ fun AppMainContent() {
                         contentDescription = "Logo",
                         modifier = Modifier
                             .fillMaxWidth() // Set the width to fill the available space
-//                            .height(200.dp) // Set the desired height
-//                            .width(200.dp)
                             .aspectRatio(1.5f) // Set the desired aspect ratio (width / height)
                         )
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = {
+                        navController.navigate(BottomNavItem.Notification.screenRoute){
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {saveState = true}
+                            }
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Notifications,
                             contentDescription = "notification"
@@ -116,16 +117,16 @@ fun AppMainContent() {
                 containerColor = Color(0xFFB4EBF7),
                 content = {
                     val items = listOf(
-                        BottomNavItem.main,
-                        BottomNavItem.wallet,
-                        BottomNavItem.loan,
-                        BottomNavItem.savings,
-                        BottomNavItem.mypage
+                        BottomNavItem.Main,
+                        BottomNavItem.Wallet,
+                        BottomNavItem.Loan,
+                        BottomNavItem.Savings,
+                        BottomNavItem.MyPage
                     )
                     items.forEach {item ->
                         NavigationBarItem(
                             icon = {Icon(painter = painterResource(id = item.icon), contentDescription = item.title)},
-                            label = { Text(item.title) },
+//                            label = { Text(item.title) },
                             selected = currentRoute == item.screenRoute,
                             alwaysShowLabel = false,
                             onClick = {
@@ -134,7 +135,8 @@ fun AppMainContent() {
                                         popUpTo(it) {saveState = true}
                                     }
                                 }
-                            }
+                            },
+//                            colors =  NavigationBarItemColors.iconColor
                         )
                     }
                 }

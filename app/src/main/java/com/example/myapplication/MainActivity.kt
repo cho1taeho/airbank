@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.components.AppMainContent
+import com.example.myapplication.layout.AppMainContent
 
 
 //enum class Destination {
