@@ -130,7 +130,6 @@ fun ChildSavingsApplication(navController: NavController) {
 
             TextButton(
                 onClick = {
-                    // 모든 필드가 올바르게 채워졌는지 검사합니다.
                     when {
                         targetValue.text.isEmpty() -> snackbarMessage = "목표를 입력하세요."
                         priceValue.text.isEmpty() -> snackbarMessage = "가격을 입력하세요."

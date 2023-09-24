@@ -78,6 +78,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -204,15 +205,14 @@ fun WalletScreen(navController: NavController) {
                 CreditPoint()
             }
         }
-
     }
 }
 
 
-
+@Preview
 @Composable
 fun CreditPoint() {
-    val list = listOf(500f, 600f, 450f, 550f, 650f, 700f)
+    val list = listOf(500f, 600f, 450f, 480f, 650f, 700f)
     val zipList: List<Pair<Float, Float>> = list.zipWithNext()
     val xAxisLabels = getMonths()
     val yAxisLabels = List((1000 / 200) + 1) { it * 200 }
