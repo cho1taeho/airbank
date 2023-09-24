@@ -73,7 +73,8 @@ fun ChildSavingsApplication(navController: NavController) {
     var targetValue by remember { mutableStateOf(TextFieldValue()) }
     var priceValue by remember { mutableStateOf(TextFieldValue()) }
     var requestPriceValue by remember { mutableStateOf(TextFieldValue()) }
-
+    var uri by remember { mutableStateOf<Uri?>(null) }
+    var selectedMonths by remember { mutableStateOf(3) }
     val calendar: Calendar = Calendar.getInstance()
     var today by remember { mutableStateOf("") }
     today =
@@ -82,7 +83,7 @@ fun ChildSavingsApplication(navController: NavController) {
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
     val context = LocalContext.current // Composable 내에서 Context 얻기
-
+    var snackbarMessage by remember { mutableStateOf<String?>(null) }
 
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
@@ -129,8 +130,18 @@ fun ChildSavingsApplication(navController: NavController) {
 
             TextButton(
                 onClick = {
-                    navController.navigate("childsavings")
-                },
+                    // 모든 필드가 올바르게 채워졌는지 검사합니다.
+                    when {
+                        targetValue.text.isEmpty() -> snackbarMessage = "목표를 입력하세요."
+                        priceValue.text.isEmpty() -> snackbarMessage = "가격을 입력하세요."
+                        requestPriceValue.text.isEmpty() -> snackbarMessage = "요청 금액을 입력하세요."
+                        uri == null -> snackbarMessage = "첨부파일을 추가하세요."
+                        selectedMonths <= 0 -> snackbarMessage = "기간을 선택하세요."
+                        else -> {
+                            navController.navigate("childSavings")
+                        }
+                    }
+                }
             ) {
                 Text("신청")
             }

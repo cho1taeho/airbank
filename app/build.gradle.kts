@@ -76,4 +76,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.2")
     implementation ("com.google.accompanist:accompanist-coil:0.15.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 }
