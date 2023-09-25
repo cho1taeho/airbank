@@ -19,6 +19,8 @@ class SavingsViewModel : ViewModel() {
         getSavings()
     }
     private fun getSavings() {
+        val groupId = 1
+
         viewModelScope.launch {
             try {
                 val response = apiService.getSavings(groupId)
