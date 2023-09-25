@@ -59,3 +59,58 @@ data class UpdateSavingsResponse(
         val status: String
     )
 }
+
+data class CancelSavingsRequest(
+    val id : Int
+)
+
+data class CancelSavingsResponse(
+    val code : String,
+    val messge : String,
+    val data : Data
+){
+    data class Data(
+        val id : Int,
+        val status : String
+    )
+}
+
+data class SavingsRemitRequest(
+    val id : Int,
+    val acount : Int
+)
+
+data class SavingsRemitResponse(
+    val code : String,
+    val message : String,
+    val data : Data
+){
+    data class Data(
+        val id : Int,
+        val amount : Int,
+        val apiCreateAt : String,
+        val transactionType : String,
+        val transactionDistinction : String,
+        val transactionPartner : String
+    )
+}
+
+data class BonusSavingsRequest(
+    val id : Int,
+    val amout : Int
+)
+
+data class BounusSavingsResponse(
+    val code : String,
+    val message : String,
+    val data : Data
+){
+    data class Data(
+        val id : Int,
+        val amount : Int,
+        val apiCreateAt : String,
+        val transactionType : String,
+        val transactionDistinction : String,
+        val transactionPartner : String
+    )
+}
