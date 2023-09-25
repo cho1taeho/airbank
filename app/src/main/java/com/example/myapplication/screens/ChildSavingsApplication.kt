@@ -91,7 +91,7 @@ fun ChildSavingsApplication(navController: NavController, viewModel: SavingsView
 
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
-    val context = LocalContext.current // Composable 내에서 Context 얻기
+    val context = LocalContext.current
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
     val focusManager = LocalFocusManager.current
 
