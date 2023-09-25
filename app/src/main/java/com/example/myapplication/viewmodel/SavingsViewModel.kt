@@ -1,5 +1,6 @@
 package com.example.myapplication.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,9 +26,12 @@ class SavingsViewModel : ViewModel() {
             try {
                 val response = apiService.getSavings(groupId)
                 if (response.isSuccessful) {
+                    Log.d("SavingsViewModel", "Response: ${response.body()}")
                     savingsData.postValue(response.body()?.data)
                 } else {
-                    _error.value = "Server Response Error: ${response.code()}"
+                    val errorMsg = "Server Response Error: ${response.code()}"
+                    Log.e("SavingsViewModel", errorMsg)
+                    _error.value = errorMsg
                 }
             } catch (e: Exception) {
                 _error.value = "Network Error: ${e.localizedMessage}"

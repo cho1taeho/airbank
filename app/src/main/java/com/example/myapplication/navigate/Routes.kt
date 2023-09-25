@@ -3,6 +3,7 @@ package com.example.myapplication.navigate
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,6 +18,7 @@ import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignInScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
+import com.example.myapplication.viewmodel.SavingsViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -51,7 +53,8 @@ fun AppNavigation(navController: NavHostController){
         }
 
         composable("savingsApplication") {
-            ChildSavingsApplication(navController = navController)
+            val viewModel: SavingsViewModel = viewModel()
+            ChildSavingsApplication(navController = navController, viewModel = viewModel)
         }
         composable("childSavings") {
             ChildSavingsScreen(navController = navController)
