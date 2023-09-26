@@ -59,17 +59,26 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Snackbar
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
+import com.example.myapplication.model.CreateSavingsItemRequest
+import com.example.myapplication.viewmodel.SavingsViewModel
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalFocusManager
+
 //import com.google.accompanist.coil.rememberImagePainter
 
 @RequiresApi(Build.VERSION_CODES.N)
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview
 @Composable
-fun ChildSavingsApplication(navController: NavController) {
+fun ChildSavingsApplication(navController: NavController, viewModel: SavingsViewModel) {
+
     var targetValue by remember { mutableStateOf(TextFieldValue()) }
     var priceValue by remember { mutableStateOf(TextFieldValue()) }
     var requestPriceValue by remember { mutableStateOf(TextFieldValue()) }
@@ -82,13 +91,13 @@ fun ChildSavingsApplication(navController: NavController) {
 
     var showDatePicker by remember { mutableStateOf(false) }
     var selectedDate by remember { mutableStateOf("") }
-    val context = LocalContext.current // Composable 내에서 Context 얻기
+    val context = LocalContext.current
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
+    val focusManager = LocalFocusManager.current
 
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
     val day = calendar.get(Calendar.DAY_OF_MONTH)
-
 
     if (showDatePicker) {
         val datePickerDialog =
@@ -137,7 +146,14 @@ fun ChildSavingsApplication(navController: NavController) {
                         uri == null -> snackbarMessage = "첨부파일을 추가하세요."
                         selectedMonths <= 0 -> snackbarMessage = "기간을 선택하세요."
                         else -> {
-                            navController.navigate("childSavings")
+                            val createSavingsItemRequest = CreateSavingsItemRequest(
+                                name = targetValue.text,
+                                amount = priceValue.text.toIntOrNull() ?: 0,
+                                month = selectedMonths,
+                                parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
+                                imageUrl = uri.toString()
+                            )
+                            viewModel.createSavingsItem(createSavingsItemRequest)
                         }
                     }
                 }
@@ -157,7 +173,7 @@ fun ChildSavingsApplication(navController: NavController) {
                     targetValue = newValue
                 }
             },
-//            label = { Text("목표를 입력하세요.") },
+            label = { Text("목표를 입력하세요.") },
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color(0xFFD6F2FF)),
@@ -180,7 +196,7 @@ fun ChildSavingsApplication(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color(0xFFD6F2FF)),
-//            label = { Text("가격을 입력하세요.") },
+            label = { Text("가격을 입력하세요.") },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             )
@@ -198,7 +214,7 @@ fun ChildSavingsApplication(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color(0xFFD6F2FF)),
-//            label = { Text("요청 가격을 입력하세요.") },
+            label = { Text("요청 가격을 입력하세요.") },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             )
@@ -317,6 +333,20 @@ fun ChildSavingsApplication(navController: NavController) {
                     contentDescription = null,
                     modifier = Modifier.size(500.dp)
                 )
+            }
+        }
+        if (snackbarMessage != null) {
+            Snackbar(
+                modifier = Modifier
+                    .padding(16.dp),
+
+                action = {
+                    TextButton(onClick = { snackbarMessage = null }) {
+                        Text(text = "닫기")
+                    }
+                }
+            ) {
+                Text(text = snackbarMessage!!)
             }
         }
     }
