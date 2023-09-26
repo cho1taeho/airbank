@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -32,12 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
-
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
@@ -91,7 +90,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.kakao.sdk:v2-user:2.16.0") // 카카오 로그인
 }
 
 kapt {

@@ -7,12 +7,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
-import com.example.myapplication.screens.NaverScreen
 import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignInScreen
@@ -38,7 +38,8 @@ fun AppNavigation(navController: NavHostController){
         }
         composable(BottomNavItem.MyPage.screenRoute){
 //            MyPageScreen(navController = navController)
-            NaverScreen(navController = navController)
+//            NaverScreen(navController = navController)
+        AuthScreen(navController = navController)
         }
         composable(BottomNavItem.Notification.screenRoute){
             NotificationScreen(navController = navController)

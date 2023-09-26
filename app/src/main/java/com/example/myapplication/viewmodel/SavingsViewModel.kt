@@ -1,17 +1,14 @@
 package com.example.myapplication.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.model.CreateSavingsItemRequest
-import com.example.myapplication.model.SavingsResponse
-import com.example.myapplication.network.RetrofitBuilder
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.model.BonusSavingsRequest
 import com.example.myapplication.model.CancelSavingsRequest
-import com.example.myapplication.model.CancelSavingsResponse
+import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.model.SavingsRemitRequest
+import com.example.myapplication.model.SavingsResponse
 import com.example.myapplication.model.UpdateSavingsRequest
 import com.example.myapplication.repository.SavingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +34,7 @@ class SavingsViewModel @Inject constructor(
     private fun getSavings() {
         viewModelScope.launch {
             try {
-                val response = savingsRepository.getSavings()
+                val response = savingsRepository.getSavings(1 )
                 if (response.isSuccessful) {
                     savingsData.postValue(response.body()?.data)
                 } else {

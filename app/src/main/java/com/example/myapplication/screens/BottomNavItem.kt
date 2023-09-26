@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 import com.example.myapplication.R
+import dagger.hilt.android.HiltAndroidApp
 
 
 sealed class BottomNavItem(
