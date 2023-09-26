@@ -33,10 +33,13 @@ import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.viewmodel.SavingsViewModel
 import android.util.Log
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.model.CancelSavingsRequest
+
 //@Preview
 @Composable
 fun ChildSavingsScreen(navController: NavController) {
-    val viewModel : SavingsViewModel = viewModel()
+    val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsData.observeAsState(initial = null)
 
     Log.d("ChildSavingsScreen", "savingsData: $savingsData")
@@ -185,6 +188,16 @@ fun ChildSavingsScreen(navController: NavController) {
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
+
+
+                val cancelSuccess by viewModel.cancelSuccess.observeAsState(initial = false)
+
+                if (cancelSuccess) {
+
+                    navController.navigate("savingsApplication") {
+                        popUpTo("route_start_destination") { inclusive = true }
+                    }
+                }
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -193,7 +206,9 @@ fun ChildSavingsScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFF00D2F3))
                         .clickable {
-                            navController.navigate("savingsApplication")
+//                            navController.navigate("savingsApplication")
+                            val groupId = 1
+                            viewModel.cancelSavings(CancelSavingsRequest(id = groupId))
                         }
                 ) {
                     Text(

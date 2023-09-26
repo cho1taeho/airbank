@@ -49,6 +49,20 @@ fun ChildMainScreen(navController: NavController) {
     Column {
         Text("관리중인 자녀 4", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
         Body(navController = navController)
+        Quiz()
     }
 }
 
+@Composable
+fun Quiz(){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(110.dp)
+            .background(color = Color.Gray)
+//            .clickable()
+    ){
+        Text("퀴즈")
+    }
+}

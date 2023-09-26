@@ -164,6 +164,21 @@ fun ChildSavingsApplication(navController: NavController, viewModel: SavingsView
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        if (snackbarMessage != null) {
+            Snackbar(
+                modifier = Modifier
+                    .padding(16.dp),
+
+                action = {
+                    TextButton(onClick = { snackbarMessage = null }) {
+                        Text(text = "닫기")
+                    }
+                }
+            ) {
+                Text(text = snackbarMessage!!)
+            }
+        }
+
         Text("목표")
         val targetMaxLength = 10
         TextField(
@@ -261,9 +276,7 @@ fun ChildSavingsApplication(navController: NavController, viewModel: SavingsView
         Spacer(modifier = Modifier.height(20.dp))
 
 
-        var uri by remember {
-            mutableStateOf<Uri?>(null)
-        }
+
         val singlePhotoPicker = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia(),
             onResult = {
@@ -333,20 +346,6 @@ fun ChildSavingsApplication(navController: NavController, viewModel: SavingsView
                     contentDescription = null,
                     modifier = Modifier.size(500.dp)
                 )
-            }
-        }
-        if (snackbarMessage != null) {
-            Snackbar(
-                modifier = Modifier
-                    .padding(16.dp),
-
-                action = {
-                    TextButton(onClick = { snackbarMessage = null }) {
-                        Text(text = "닫기")
-                    }
-                }
-            ) {
-                Text(text = snackbarMessage!!)
             }
         }
     }

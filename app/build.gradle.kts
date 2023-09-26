@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -86,4 +88,11 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-rxjava3:1.3.3")
     implementation("androidx.compose.runtime:runtime:1.3.3")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+}
+
+kapt {
+    correctErrorTypes = true
 }
