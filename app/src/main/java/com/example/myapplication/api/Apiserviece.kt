@@ -27,16 +27,14 @@ interface ApiService {
     suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest): Response<CreateSavingsItemResponse>
     @PATCH("/savings/confirm")
     suspend fun updateSavings(@Query("group_id") groupId: Int, @Body request: UpdateSavingsRequest): Response<UpdateSavingsResponse>
-
     @PATCH("/savings/cancel")
-    suspend fun canaelSavings(@Body request: CancelSavingsRequest) : Response<CancelSavingsResponse>
+    suspend fun cancelSavings(@Body request: CancelSavingsRequest) : Response<CancelSavingsResponse>
 
     @POST("/savings")
     suspend fun remitSavings(@Body request : SavingsRemitRequest) : Response<SavingsRemitResponse>
 
-    @POST("/savings/reqard")
+    @POST("/savings/reward")
     suspend fun bonusSavings(@Query("group_id") groupId: Int,@Body request: BonusSavingsRequest) : Response<BounusSavingsResponse>
-
 
 
 }

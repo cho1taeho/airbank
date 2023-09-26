@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.layout.AppMainContent
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
-
+import dagger.hilt.android.HiltAndroidApp
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
