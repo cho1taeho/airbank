@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -81,4 +81,8 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation( "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.kakao.sdk:v2-user:2.16.0") // 카카오 로그인
+
 }
