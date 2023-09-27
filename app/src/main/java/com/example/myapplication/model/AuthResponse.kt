@@ -10,3 +10,9 @@ data class AuthResponse(
         val phoneNumber: Int,
     )
 }
+
+data class LoginRequest(
+    val oauthIdentifier : String,
+    val imageURL : String,
+    val isDefaultImage : String
+)
