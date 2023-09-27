@@ -55,7 +55,7 @@ fun AppNavigation(navController: NavHostController){
 
         composable("savingsApplication") {
             val viewModel: SavingsViewModel = viewModel()
-            ChildSavingsApplication(navController = navController, viewModel = viewModel)
+            ChildSavingsApplication(navController = navController)
         }
         composable("childSavings") {
             ChildSavingsScreen(navController = navController)
