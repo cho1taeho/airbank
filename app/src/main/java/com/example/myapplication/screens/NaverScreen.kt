@@ -49,7 +49,6 @@ class JavaScriptInterface(private val webView: WebView) {
         Log.d(TAG,"code: ${data.code}")
         Log.d(TAG,"data: ${data.data}")
         Log.d(TAG,"message: ${data.message}")
-
     }
 }
 

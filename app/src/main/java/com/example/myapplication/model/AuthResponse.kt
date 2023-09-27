@@ -1,13 +1,13 @@
 package com.example.myapplication.model
 
 data class AuthResponse(
-    val code: String,
+    val code: Int,
     val message: String,
     val data: Data
 ) {
     data class Data(
         val name: String,
-        val phoneNumber: Int,
+        val phoneNumber: String,
     )
 }
 

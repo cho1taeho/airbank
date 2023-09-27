@@ -11,6 +11,5 @@ object HDRetrofitBuilder {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
         val HDapiService: HDApiService = retrofit.create(HDApiService::class.java)
 }

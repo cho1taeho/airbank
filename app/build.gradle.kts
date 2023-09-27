@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-//    kotlin("kapt")
-//    id("com.google.dagger.hilt.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -89,13 +89,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.3.3")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("com.google.dagger:hilt-android:2.44")
-//    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.kakao.sdk:v2-user:2.16.0") // 카카오 로그인
 }
-//
-//kapt {
-//    correctErrorTypes = true
-//}
+
+kapt {
+    correctErrorTypes = true
+}
