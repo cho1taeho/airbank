@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -14,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.layout.AppMainContent
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -32,8 +34,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     AppMainContent()
-//                    var keyHash = Utility.getKeyHash(this)
-//                    Log.d("KeyHash",keyHash)
+                    var keyHash = Utility.getKeyHash(this)
+                    Log.d("KeyHash",keyHash)
                 }
 
             }
