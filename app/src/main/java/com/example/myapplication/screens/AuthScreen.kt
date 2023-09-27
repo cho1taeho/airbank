@@ -109,7 +109,10 @@ fun FetchMember(token: OAuthToken?, error: Throwable?, navController: NavControl
             } else if (user != null) {
                 val oauthIdentifier = user.id.toString()
                 val profileImageUrl = user.properties?.get("profile_image") ?: ""
-                val isDefaultImage = user.kakaoAccount?.profile?.isDefaultImage?.toString() ?: ""
+                val isDefaultImageString = user.kakaoAccount?.profile?.isDefaultImage?.toString() ?: ""
+
+                // Convert the isDefaultImageString to a Boolean
+                val isDefaultImage = isDefaultImageString.toBoolean() ?: false
 
                 // Create a LoginRequest object with extracted information
                 val loginRequest = LoginRequest(

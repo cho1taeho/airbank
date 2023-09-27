@@ -14,5 +14,6 @@ data class AuthResponse(
 data class LoginRequest(
     val oauthIdentifier : String,
     val imageURL : String,
-    val isDefaultImage : String
+    val isDefaultImage : Boolean
 )
+
