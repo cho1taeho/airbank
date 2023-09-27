@@ -51,6 +51,7 @@ import android.content.Intent
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -61,7 +62,7 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 
 @Composable
 fun SavingsScreen(navController: NavController) {
-    val viewModel: SavingsViewModel = viewModel()
+//    val viewModel : SavingsViewModel = hiltViewModel()
 //    val savingsData by viewModel.savingsData.observeAsState()
 
 
