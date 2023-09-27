@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.myapplication.R
@@ -62,7 +64,10 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 //@Preview
 @Composable
-fun ChildSavingsApplication(navController: NavController, viewModel: SavingsViewModel) {
+fun ChildSavingsApplication(navController: NavController) {
+    val viewModel : SavingsViewModel = hiltViewModel()
+    val savingsData by viewModel.savingsData.observeAsState(initial = null)
+
 
     var targetValue by remember { mutableStateOf(TextFieldValue()) }
     var priceValue by remember { mutableStateOf(TextFieldValue()) }

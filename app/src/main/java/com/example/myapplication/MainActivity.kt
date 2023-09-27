@@ -14,7 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.layout.AppMainContent
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +34,6 @@ class MainActivity : ComponentActivity() {
                     AppMainContent()
 //                    var keyHash = Utility.getKeyHash(this)
 //                    Log.d("KeyHash",keyHash)
-
                 }
 
             }

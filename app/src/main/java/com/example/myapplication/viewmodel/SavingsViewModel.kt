@@ -98,35 +98,33 @@ class SavingsViewModel @Inject constructor(
         }
     }
 
-    fun remitSavings(request: SavingsRemitRequest) {
-        viewModelScope.launch{
-            try {
-                val response = savingsRepository.remitSavings(request)
-                if (response.isSuccessful) {
-
-                }else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
-        }
-    }
-
-    fun bonusSavings(groupId: Int, request: BonusSavingsRequest) {
-        viewModelScope.launch{
-            try {
-                val response = savingsRepository.bonusSavings(groupId, request)
-                if (response.isSuccessful) {
-
-                } else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
-        }
-    }
-
-
+//    fun remitSavings(request: SavingsRemitRequest) {
+//        viewModelScope.launch{
+//            try {
+//                val response = savingsRepository.remitSavings(request)
+//                if (response.isSuccessful) {
+//
+//                }else {
+//                    _error.value = "Server Response Error: ${response.code()}"
+//                }
+//            } catch (e: Exception) {
+//                _error.value = "Network Error: ${e.localizedMessage}"
+//            }
+//        }
+//    }
+//
+//    fun bonusSavings(groupId: Int, request: BonusSavingsRequest) {
+//        viewModelScope.launch{
+//            try {
+//                val response = savingsRepository.bonusSavings(groupId, request)
+//                if (response.isSuccessful) {
+//
+//                } else {
+//                    _error.value = "Server Response Error: ${response.code()}"
+//                }
+//            } catch (e: Exception) {
+//                _error.value = "Network Error: ${e.localizedMessage}"
+//            }
+//        }
+//    }
 }
