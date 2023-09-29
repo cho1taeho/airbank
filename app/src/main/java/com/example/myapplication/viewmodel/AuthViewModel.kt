@@ -1,0 +1,97 @@
+package com.example.myapplication.viewmodel
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.myapplication.model.LoginRequest
+import com.example.myapplication.model.LoginResponse
+import com.kakao.sdk.auth.model.OAuthToken
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+
+import androidx.navigation.NavController
+import com.example.myapplication.AirbankApplication
+import com.example.myapplication.repository.AuthRepository
+import com.example.myapplication.screens.BottomNavItem
+import kotlinx.coroutines.Dispatchers
+import retrofit2.Response
+import javax.inject.Inject
+
+@HiltViewModel
+class AuthViewModel @Inject constructor() : ViewModel() {
+    private val TAG = "KAKAO LOGIN"
+    private val repository = AuthRepository(viewModelScope) // Create a repository for data operations
+
+    fun handlelogin(token: OAuthToken?, error: Throwable?, navController: NavController) {
+        if (error != null) {
+            Log.e(TAG, "로그인 실패", error)
+            // Handle login failure here
+        } else if (token != null) {
+            Log.i(TAG, "로그인 성공 ${token.accessToken}")
+            // After successful login, request user information
+            retrieveUserInfo(token, navController)
+        }
+    }
+    private fun retrieveUserInfo(token: OAuthToken, navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.retrieveUserInfo(token) { loginRequest: LoginRequest ->
+                // Handle the retrieved login request data
+                performLoginRequest(loginRequest, navController)
+            }
+        }
+    }
+
+    private fun performLoginRequest(loginRequest: LoginRequest, navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.performLoginRequest(loginRequest) {  response: Response<LoginResponse> ->
+                handleLoginResponse(response, navController)
+            }
+        }
+    }
+
+    private fun handleLoginResponse(response: Response<LoginResponse>, navController: NavController) {
+        if (response.isSuccessful) {
+            //val setCookieHeader = response.headers().values("Set-Cookie").firstOrNull()
+            //val sessionId = setCookieHeader?.substringAfter("JSESSIONID=")?.substringBefore(";")
+            //if (sessionId != null) {
+            //    Log.d(TAG, "Session ID: $sessionId")
+            //    AirbankApplication.prefs.setString("JSESSIONID",sessionId)
+            //} else {
+            //    Log.e(TAG, "Session ID not found in Set-Cookie header")
+            //}
+            val loginResponse = response.body()
+            if (loginResponse != null) {
+                val name = loginResponse.data.name
+                val phoneNumber = loginResponse.data.phoneNumber
+
+                if (name.isNullOrEmpty() || phoneNumber.isNullOrEmpty()) {
+                    // Either name or phoneNumber is empty, navigate to the signup page
+                    Log.d(TAG, "name: $name")
+                    Log.d(TAG, "number: $phoneNumber")
+                    // Implement navigation to signup screen
+                    navController.navigate(BottomNavItem.SignUp.screenRoute)
+                } else {
+                    // Both name and phoneNumber are not empty, navigate to the main screen
+                    // Implement navigation to main screen
+                    navController.navigate(BottomNavItem.Main.screenRoute)
+
+                }
+            }
+        } else {
+            // Handle the response status other than success
+            Log.e(TAG, "Login failed with HTTP status code: ${response.code()}")
+        }
+    }
+
+    fun performLogout(navController: NavController) {
+        repository.performLogout { error ->
+            if (error != null) {
+                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
+            } else {
+                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
+                // Optionally, you can navigate the user to a different screen after logout
+                navController.navigate(BottomNavItem.Main.screenRoute)
+            }
+        }
+    }
+}

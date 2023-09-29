@@ -44,6 +44,7 @@ import com.example.myapplication.navigate.AppNavigation
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import okhttp3.internal.wait
 
 
 @RequiresApi(Build.VERSION_CODES.N)

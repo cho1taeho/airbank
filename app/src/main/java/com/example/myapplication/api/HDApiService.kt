@@ -1,12 +1,15 @@
 package com.example.myapplication.api
 
-import com.example.myapplication.model.AuthResponse
 import com.example.myapplication.model.LoginRequest
+import com.example.myapplication.model.LoginResponse
 import com.example.myapplication.model.SavingsResponse
+import com.example.myapplication.model.SignUpRequest
+import com.example.myapplication.model.SignUpResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 
@@ -15,8 +18,10 @@ interface HDApiService {
     @GET("/auth/logout")
     suspend fun logoutUser(): Response<SavingsResponse>
     @POST("/auth/login")
-    fun loginUser(@Body loginRequest: LoginRequest): Call<AuthResponse>
+    suspend fun loginUser(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
+    @PATCH("/members")
+    suspend fun signupUser(@Body signUpRequest: SignUpRequest): Response<SignUpResponse>
 }
 
 
