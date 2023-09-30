@@ -6,6 +6,7 @@ import com.example.myapplication.model.CancelSavingsRequest
 import com.example.myapplication.model.CancelSavingsResponse
 import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.model.CreateSavingsItemResponse
+import com.example.myapplication.model.LoanResponse
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.model.SavingsRemitResponse
 import com.example.myapplication.model.SavingsResponse
@@ -36,7 +37,8 @@ interface ApiService {
     @POST("/savings/reward")
     suspend fun bonusSavings(@Query("group_id") groupId: Int,@Body request: BonusSavingsRequest) : Response<BounusSavingsResponse>
 
-
+    @GET("/loans")
+    suspend fun getLoan(@Query("group_id") groupId: Int): Response<LoanResponse>
 }
 
 

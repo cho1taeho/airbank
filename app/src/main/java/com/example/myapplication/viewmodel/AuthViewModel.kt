@@ -69,11 +69,11 @@ class AuthViewModel @Inject constructor() : ViewModel() {
                     Log.d(TAG, "name: $name")
                     Log.d(TAG, "number: $phoneNumber")
                     // Implement navigation to signup screen
-                    navController.navigate(BottomNavItem.SignUp.screenRoute)
+//                    navController.navigate(BottomNavItem.SignUp.screenRoute)
                 } else {
                     // Both name and phoneNumber are not empty, navigate to the main screen
                     // Implement navigation to main screen
-                    navController.navigate(BottomNavItem.Main.screenRoute)
+//                    navController.navigate(BottomNavItem.Main.screenRoute)
 
                 }
             }

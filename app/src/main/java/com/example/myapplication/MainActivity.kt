@@ -17,6 +17,7 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,16 +34,15 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     AppMainContent()
-                    val keyHash = Utility.getKeyHash(this)
+                    var keyHash = Utility.getKeyHash(this)
                     Log.d("KeyHash",keyHash)
                 }
+
             }
         }
     }
 
 }
-
-
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Preview(showBackground = true)
