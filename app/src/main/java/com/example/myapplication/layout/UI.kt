@@ -1,7 +1,6 @@
 package com.example.myapplication.layout
 
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -19,8 +18,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemColors
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,24 +37,31 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.navigate.AppNavigation
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.R
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import okhttp3.internal.wait
+import com.kakao.sdk.auth.TokenManagerProvider
+import com.kakao.sdk.user.UserApiClient
 
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun MyUI(navController: NavHostController) {
+fun AppMainContent(navController: NavHostController) {
     AppNavigation(navController)
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
-fun AppMainContent() {
+fun MyUI() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    var isLoggedin by remember {mutableStateOf(true)}
+    LaunchedEffect(Unit){
+        if (TokenManagerProvider.instance.manager.getToken() != null) {
+            isLoggedin = true
+        }
+    }
     val currentRoute = navBackStackEntry?.destination?.route
     var title by remember {mutableStateOf("")}
     LaunchedEffect(navController){
@@ -67,6 +71,7 @@ fun AppMainContent() {
     }
     Scaffold(
         topBar = {
+            if(isLoggedin){
             CenterAlignedTopAppBar(
                 title = {
                     Text(
@@ -113,8 +118,9 @@ fun AppMainContent() {
                     }
                 }
             )
-        },
+        }},
         bottomBar = {
+            if (isLoggedin){
             NavigationBar(
                 containerColor = Color(0xFFB4EBF7),
                 content = {
@@ -143,14 +149,14 @@ fun AppMainContent() {
                     }
                 }
             )
-        }
+        }}
     ) {
         Box(
             modifier = Modifier
 //                .fillMaxSize()
                 .padding(it)
         ) {
-            MyUI(navController =navController)
+            AppMainContent(navController =navController)
         }
     }
 }

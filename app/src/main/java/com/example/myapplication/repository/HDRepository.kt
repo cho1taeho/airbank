@@ -61,14 +61,6 @@ class AuthRepository(private val scope: CoroutineScope) {
             }
         }
     }
-
-    fun performLogout(onComplete: (Throwable?) -> Unit) {
-        scope.launch(Dispatchers.IO) {
-            UserApiClient.instance.logout { error ->
-                onComplete(error)
-            }
-        }
-    }
 }
 
 

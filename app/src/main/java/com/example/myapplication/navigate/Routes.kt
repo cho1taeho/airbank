@@ -11,8 +11,10 @@ import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
+import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
+import com.example.myapplication.screens.MyPageScreen
 import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignInScreen
@@ -23,7 +25,7 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun AppNavigation(navController: NavHostController){
-    NavHost(navController = navController, startDestination = BottomNavItem.Main.screenRoute) {
+    NavHost(navController = navController, startDestination = "First") {
         composable(BottomNavItem.Main.screenRoute) {
             MainScreen(navController = navController)
         }
@@ -37,9 +39,7 @@ fun AppNavigation(navController: NavHostController){
             WalletScreen(navController = navController)
         }
         composable(BottomNavItem.MyPage.screenRoute){
-//            MyPageScreen(navController = navController)
-//            NaverScreen(navController = navController)
-        AuthScreen(navController = navController)
+            MyPageScreen(navController = navController)
         }
         composable(BottomNavItem.Notification.screenRoute){
             NotificationScreen(navController = navController)
@@ -50,7 +50,8 @@ fun AppNavigation(navController: NavHostController){
         }
 
         composable(BottomNavItem.SignIn.screenRoute){
-            SignInScreen(navController = navController)
+//            SignInScreen(navController = navController)
+            AuthScreen(navController = navController)
         }
 
         composable("savingsApplication") {
@@ -59,6 +60,9 @@ fun AppNavigation(navController: NavHostController){
         }
         composable("childSavings") {
             ChildSavingsScreen(navController = navController)
+        }
+        composable("First"){
+            FirstScreen(navController = navController)
         }
     }
 }

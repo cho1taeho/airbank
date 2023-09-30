@@ -19,8 +19,6 @@ import com.kakao.sdk.user.UserApiClient
 @Composable
 fun AuthScreen(navController: NavController) {
     val viewModel: AuthViewModel = viewModel() // Create an instance of AuthViewModel
-//    var myimage = ""
-
     AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
@@ -29,12 +27,6 @@ fun AuthScreen(navController: NavController) {
             }
         }
     )
-    Button(
-        onClick = { viewModel.performLogout(navController) }, // Use the ViewModel for logout
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Text(text = "로그아웃")
-    }
 }
 
 fun WebView.setLoginClickListener(navController: NavController ,viewModel: AuthViewModel) {

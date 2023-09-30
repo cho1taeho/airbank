@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.layout.AppMainContent
+import com.example.myapplication.layout.MyUI
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppMainContent()
+                    MyUI()
                     var keyHash = Utility.getKeyHash(this)
                     Log.d("KeyHash",keyHash)
                 }
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        AppMainContent()
+        MyUI()
     }
 }
 

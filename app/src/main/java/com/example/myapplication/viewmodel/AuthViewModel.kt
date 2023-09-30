@@ -92,16 +92,4 @@ class AuthViewModel @Inject constructor() : ViewModel() {
             }
         }
     }
-
-    fun performLogout(navController: NavController) {
-        repository.performLogout { error ->
-            if (error != null) {
-                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
-            } else {
-                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
-                // Optionally, you can navigate the user to a different screen after logout
-                navController.navigate(BottomNavItem.Main.screenRoute)
-            }
-        }
-    }
 }
