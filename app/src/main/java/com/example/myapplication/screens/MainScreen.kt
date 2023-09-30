@@ -41,7 +41,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.myapplication.R
+import com.kakao.sdk.user.UserApiClient
 
 
 @Composable
@@ -164,6 +166,12 @@ fun CircleWithImageAndBorder(imageRes: Int, name: String, onClick: () -> Unit) {
 }
 @Composable
 fun ChildCard(mainImage: Int, mainName: String) {
+    var imagepath by remember { mutableStateOf("")}
+    UserApiClient.instance.me { user, _ ->
+        if (user!=null){
+            imagepath = user.properties?.get("profile_image") ?: ""
+        }
+    }
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -177,13 +185,23 @@ fun ChildCard(mainImage: Int, mainName: String) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = mainImage),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                )
+                if(imagepath.isEmpty()){
+                    Image(
+                        painter = painterResource(id = mainImage),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }else{
+                    AsyncImage(
+                        model = imagepath,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }
                 Spacer(Modifier.width(16.dp))
                 Text("자녀 $mainName 님의\n지갑을 관리하고 있습니다.")
             }
@@ -363,3 +381,5 @@ fun Body(navController: NavController) {
         }
     }
 }
+
+

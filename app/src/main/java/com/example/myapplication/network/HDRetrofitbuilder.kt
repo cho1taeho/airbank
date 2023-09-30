@@ -18,8 +18,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object HDRetrofitBuilder {
-//    private const val BASE_URL = "https://airbank.ssafy.life/"
-    private const val BASE_URL = "http://192.168.35.202:8080/"
+    private const val BASE_URL = "https://airbank.ssafy.life/"
+//    private const val BASE_URL = "http://192.168.35.202:8080/"
     // 로그인 되면 DB에 박히는거 확인해야함
     // wallet하나씩 따라 가면서 LoanScreen에 뷰모델 만드는거 부터 해서 api 연결하기
 

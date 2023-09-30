@@ -29,11 +29,6 @@ fun AuthScreen(navController: NavController) {
             }
         }
     )
-//    UserApiClient.instance.me { user, error -> if(user != null){
-//        myimage = user?.properties?.get("profile_image") ?: ""}
-//        else{ Log.e("error",error.toString()) }
-//        }
-//    AsyncImage(model = myimage, contentDescription = null)
     Button(
         onClick = { viewModel.performLogout(navController) }, // Use the ViewModel for logout
         modifier = Modifier.padding(16.dp)
