@@ -12,12 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.myapplication.viewmodel.AuthViewModel
 import com.kakao.sdk.user.UserApiClient
 
 @Composable
 fun AuthScreen(navController: NavController) {
     val viewModel: AuthViewModel = viewModel() // Create an instance of AuthViewModel
+//    var myimage = ""
 
     AndroidView(
         modifier = Modifier.fillMaxSize(),
@@ -27,7 +29,11 @@ fun AuthScreen(navController: NavController) {
             }
         }
     )
-
+//    UserApiClient.instance.me { user, error -> if(user != null){
+//        myimage = user?.properties?.get("profile_image") ?: ""}
+//        else{ Log.e("error",error.toString()) }
+//        }
+//    AsyncImage(model = myimage, contentDescription = null)
     Button(
         onClick = { viewModel.performLogout(navController) }, // Use the ViewModel for logout
         modifier = Modifier.padding(16.dp)

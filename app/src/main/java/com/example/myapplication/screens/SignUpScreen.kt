@@ -1,7 +1,9 @@
 package com.example.myapplication.screens
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,22 +15,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.model.SignUpRequest
 import com.example.myapplication.viewmodel.SignUpViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SignUpScreen(
-    navController: NavController,
-    viewModel: SignUpViewModel = viewModel()
+    navController: NavController
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val viewModel: SignUpViewModel = viewModel()
+
 
     var phoneNumber by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -65,6 +72,35 @@ fun SignUpScreen(
                 .padding(8.dp)
         )
 
+
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // User Role Selection
+        Column(Modifier.selectableGroup()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { role = "CHILD" }
+            ) {
+                RadioButton(
+                    selected = role == "CHILD",
+                    onClick = { role = "CHILD" }
+                )
+                Text(text = "아이", modifier = Modifier.padding(start = 8.dp))
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { role = "PARENT" }
+            ) {
+                RadioButton(
+                    selected = role == "PARENT",
+                    onClick = { role = "PARENT" }
+                )
+                Text(text = "부모", modifier = Modifier.padding(start = 8.dp))
+            }
+        }
+
         // Show a warning message if showError is true
         if (showError) {
             Text(
@@ -74,13 +110,6 @@ fun SignUpScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // User Role Selection
-        Column(Modifier.selectableGroup()) {
-            RadioButton(selected = role == "Child", onClick = { role = "Child" })
-            RadioButton(selected = role == "Parent", onClick = { role = "Parent" })
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -92,18 +121,8 @@ fun SignUpScreen(
                         phoneNumber = phoneNumber,
                         role = role
                     )
-                    // Call the ViewModel function to perform sign-up
-                    viewModel.signUpUser(
-                        requestDTO,
-                        onSuccess = {
-                            Log.d(TAG,"succeesseseseses")
-                            navController.navigate(BottomNavItem.Main.screenRoute)
-                        },
-                        onError = {
-                            Log.d(TAG,"noooooooooo")
-                        })
-                } else {
-                    // Set showError to true to display the warning message
+                    viewModel.signUpUser(requestDTO,navController)
+                } else {  // Set showError to true to display the warning message (required fields unfilled)
                     showError = true
                 }
             },

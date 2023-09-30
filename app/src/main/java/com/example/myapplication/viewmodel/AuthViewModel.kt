@@ -1,5 +1,6 @@
 package com.example.myapplication.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.example.myapplication.AirbankApplication
 import com.example.myapplication.repository.AuthRepository
 import com.example.myapplication.screens.BottomNavItem
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -43,43 +45,51 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 
     private fun performLoginRequest(loginRequest: LoginRequest, navController: NavController) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.performLoginRequest(loginRequest) {  response: Response<LoginResponse> ->
+            repository.performLoginRequest(loginRequest) { response: Response<LoginResponse> ->
                 handleLoginResponse(response, navController)
             }
         }
     }
 
-    private fun handleLoginResponse(response: Response<LoginResponse>, navController: NavController) {
-        if (response.isSuccessful) {
-            //val setCookieHeader = response.headers().values("Set-Cookie").firstOrNull()
-            //val sessionId = setCookieHeader?.substringAfter("JSESSIONID=")?.substringBefore(";")
-            //if (sessionId != null) {
-            //    Log.d(TAG, "Session ID: $sessionId")
-            //    AirbankApplication.prefs.setString("JSESSIONID",sessionId)
-            //} else {
-            //    Log.e(TAG, "Session ID not found in Set-Cookie header")
-            //}
-            val loginResponse = response.body()
-            if (loginResponse != null) {
-                val name = loginResponse.data.name
-                val phoneNumber = loginResponse.data.phoneNumber
-
-                if (name.isNullOrEmpty() || phoneNumber.isNullOrEmpty()) {
-                    // Either name or phoneNumber is empty, navigate to the signup page
-                    Log.d(TAG, "name: $name")
-                    Log.d(TAG, "number: $phoneNumber")
-                    // Implement navigation to signup screen
-//                    navController.navigate(BottomNavItem.SignUp.screenRoute)
-                } else {
-                    // Both name and phoneNumber are not empty, navigate to the main screen
-                    // Implement navigation to main screen
-//                    navController.navigate(BottomNavItem.Main.screenRoute)
-
+    private fun handleLoginResponse(
+        response: Response<LoginResponse>,
+        navController: NavController
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (response.isSuccessful) {
+                val setCookieHeader = response.headers().values("Set-Cookie").firstOrNull()
+                val sessionId = setCookieHeader?.substringAfter("JSESSIONID=")?.substringBefore(";")
+                if (sessionId != null) {
+                    AirbankApplication.prefs.setString("JSESSIONID", sessionId)
                 }
+                Log.d(TAG, "Session ID: ${AirbankApplication.prefs.getString("JSESSIONID", "")}")
+                val loginResponse = response.body()
+                if (loginResponse != null) {
+                    val name = loginResponse.data.name
+                    val phoneNumber = loginResponse.data.phoneNumber
+
+                    if (name.isNullOrEmpty() || phoneNumber.isNullOrEmpty()) {
+                        // Either name or phoneNumber is empty, navigate to the signup page
+                        Log.d(TAG, "name: $name")
+                        Log.d(TAG, "number: $phoneNumber")
+                        // Implement navigation to signup screen
+                        withContext(Dispatchers.Main) {
+                            navController.navigate(BottomNavItem.SignUp.screenRoute)
+                        }
+                    } else {
+                        // Both name and phoneNumber are not empty, navigate to the main screen
+                        // Implement navigation to main screen
+
+                        withContext(Dispatchers.Main) {
+                            navController.navigate(BottomNavItem.Main.screenRoute)
+                        }
+
+                    }
+                }
+            } else {
+                // Handle the response status other than success
+                Log.e(TAG, "Login failed with HTTP status code: ${response.code()}")
             }
-        } else {
-            // Handle the response status other than success
-            Log.e(TAG, "Login failed with HTTP status code: ${response.code()}")
         }
     }
 

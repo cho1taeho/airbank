@@ -12,11 +12,11 @@ import retrofit2.Response
 import com.example.myapplication.model.SignUpRequest
 import com.example.myapplication.model.SignUpResponse
 import com.example.myapplication.network.HDRetrofitBuilder
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 
-
 class AuthRepository(private val scope: CoroutineScope) {
-    fun retrieveUserInfo(
+    fun retrieveUserInfo( //카카오sdk활용, user.instance(이름,프로필이미지,기본프로필여부)를 반환
         token: OAuthToken,
         onComplete: (LoginRequest) -> Unit
     ) {
@@ -44,20 +44,20 @@ class AuthRepository(private val scope: CoroutineScope) {
         }
     }
 
-    fun performLoginRequest(
+    fun performLoginRequest( //반환받은 유저 정보를 서버에 보냄
         loginRequest: LoginRequest,
         onComplete: (Response<LoginResponse>) -> Unit
     ) {
         scope.launch(Dispatchers.IO) {
             try {
                 Log.d("POSTTT",loginRequest.toString())
-                val response = HDRetrofitBuilder.HDapiService().loginUser(loginRequest)
+                val response = HDRetrofitBuilder.HDapiService().loginUser(loginRequest) //retrofit2활용, airbank서버에 유저 정보 1차 전송
                 Log.d("POSTTT",response.toString())
 
                 onComplete(response)
             } catch (e: Exception) {
                 // Handle network request exception
-                onComplete(Response.error(500, okhttp3.ResponseBody.create(null, e.message ?: "Unknown error")))
+                onComplete(Response.error(500, (e.message ?: "Unknown error").toResponseBody(null)))
             }
         }
     }
@@ -72,17 +72,22 @@ class AuthRepository(private val scope: CoroutineScope) {
 }
 
 
-class SignUpRepository {
-    suspend fun signUp(signUpRequest: SignUpRequest): Result<SignUpResponse> {
-        return try {
-            val response = HDRetrofitBuilder.HDapiService().signupUser(signUpRequest)
-            if (response.isSuccessful) {
-                Result.success(response.body()!!)
-            } else {
-                Result.failure(HttpException(response))
+class SignUpRepository(private val scope: CoroutineScope) {
+    val TAG = "SIGNUP"
+    fun signUp(
+        signUpRequest: SignUpRequest,
+        onComplete: (Response<SignUpResponse>) -> Unit
+    ) {
+        scope.launch(Dispatchers.IO) {
+             try {
+                 Log.d(TAG,signUpRequest.toString())
+                val response = HDRetrofitBuilder.HDapiService().signupUser(signUpRequest)
+                 Log.d(TAG,response.toString())
+
+                    onComplete(response)
+            } catch (e: Exception) {
+                 onComplete(Response.error(500, (e.message ?: "Unknown error").toResponseBody(null)))
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 }
