@@ -33,14 +33,18 @@ import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.viewmodel.SavingsViewModel
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.model.Resource
+import com.example.myapplication.model.State
 import com.example.myapplication.model.UpdateSavingsRequest
+import com.example.myapplication.model.UpdateSavingsResponse
 
 //@Preview
 @Composable
 fun SavingsApproveScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
-    val savingsData by viewModel.savingsData.observeAsState(initial = null)
+    val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
 
 
@@ -65,7 +69,7 @@ fun SavingsApproveScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "${data.savingsItem.name}",
+                        "${data.data?.data?.savingsItem?.name}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -85,17 +89,17 @@ fun SavingsApproveScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        "${data.myAmount}원",
+                        "${data.data?.data?.myAmount}원",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                     Text(
-                        "기간 : ${data.startedAt} ~ ${data.endedAt}",
+                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
                         fontSize = 13.sp
                     )
                     Text(
-                        "요청금액 : ${data.savingsItem.amount}원",
+                        "요청금액 : ${data.data?.data?.savingsItem?.amount}원",
                         fontSize = 13.sp
                     )
                 }
@@ -141,13 +145,15 @@ fun SavingsApproveScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            val updateSuccess by viewModel.updateSuccess.observeAsState(initial = false)
+            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
 
-            if (updateSuccess) {
-                navController.navigate("SavingsScreen"){
-                    popUpTo("route_start_destination") {inclusive = true}
+            if (updateSavingsState.status == State.SUCCESS) {
+                navController.navigate("SavingsScreen") {
+                    popUpTo("route_start_destination") { inclusive = true }
                 }
             }
+
+
 
 
             Row(

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -33,14 +34,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.model.CancelSavingsRequest
+import com.example.myapplication.model.CancelSavingsResponse
+import com.example.myapplication.model.Resource
 import com.example.myapplication.viewmodel.SavingsViewModel
 import dagger.hilt.android.HiltAndroidApp
+import com.example.myapplication.model.SavingsResponse
+import com.example.myapplication.model.State
+
 
 //@Preview
 @Composable
 fun ChildSavingsScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
-    val savingsData by viewModel.savingsData.observeAsState(initial = null)
+    val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
     Log.d("ChildSavingsScreen", "savingsData: $savingsData")
 
@@ -113,7 +119,7 @@ fun ChildSavingsScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            "${data.savingsItem.name}",
+                            "${data.data?.data?.savingsItem?.name}",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -133,17 +139,17 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
-                            "${data.myAmount}원",
+                            "${data.data?.data?.myAmount}원",
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold,
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         Text(
-                            "기간 : ${data.startedAt} ~ ${data.endedAt}",
+                            "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
                             fontSize = 13.sp
                         )
                         Text(
-                            "요청금액 : ${data.savingsItem.amount}원",
+                            "요청금액 : ${data.data?.data?.savingsItem?.amount ?:"0"}원",
                             fontSize = 13.sp
                         )
                     }
@@ -190,14 +196,16 @@ fun ChildSavingsScreen(navController: NavController) {
                 Spacer(modifier = Modifier.weight(1f))
 
 
-                val cancelSuccess by viewModel.cancelSuccess.observeAsState(initial = false)
+                val cancelSavingsState = viewModel.cancelSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
 
-                if (cancelSuccess) {
-
+                if (cancelSavingsState.status == State.SUCCESS) {
                     navController.navigate("savingsApplication") {
                         popUpTo("route_start_destination") { inclusive = true }
                     }
                 }
+
+
+
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier

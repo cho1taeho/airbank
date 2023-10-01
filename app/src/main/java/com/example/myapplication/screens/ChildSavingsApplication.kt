@@ -6,6 +6,7 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,7 +67,7 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 @Composable
 fun ChildSavingsApplication(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
-    val savingsData by viewModel.savingsData.observeAsState(initial = null)
+    val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
 
     var targetValue by remember { mutableStateOf(TextFieldValue()) }
@@ -143,6 +144,7 @@ fun ChildSavingsApplication(navController: NavController) {
                                 parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
                                 imageUrl = uri.toString()
                             )
+                            Log.d("CreateItem", "Sending Item: $createSavingsItemRequest")
                             viewModel.createSavingsItem(createSavingsItemRequest)
                         }
                     }

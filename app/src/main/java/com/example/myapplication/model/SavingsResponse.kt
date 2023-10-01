@@ -100,7 +100,7 @@ data class BonusSavingsRequest(
     val amout : Int
 )
 
-data class BounusSavingsResponse(
+data class BonusSavingsResponse(
     val code : String,
     val message : String,
     val data : Data

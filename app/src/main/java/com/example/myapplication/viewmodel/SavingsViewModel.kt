@@ -5,16 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.model.BonusSavingsRequest
+import com.example.myapplication.model.BonusSavingsResponse
 import com.example.myapplication.model.CancelSavingsRequest
+import com.example.myapplication.model.CancelSavingsResponse
 import com.example.myapplication.model.CreateSavingsItemRequest
+import com.example.myapplication.model.CreateSavingsItemResponse
+import com.example.myapplication.model.Resource
 import com.example.myapplication.model.SavingsRemitRequest
+import com.example.myapplication.model.SavingsRemitResponse
 import com.example.myapplication.model.SavingsResponse
+import com.example.myapplication.model.State
 import com.example.myapplication.model.UpdateSavingsRequest
+import com.example.myapplication.model.UpdateSavingsResponse
 import com.example.myapplication.repository.SavingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 
 @HiltViewModel
@@ -22,109 +30,89 @@ class SavingsViewModel @Inject constructor(
     private val savingsRepository: SavingsRepository
 ) : ViewModel() {
 
-    val savingsData = MutableLiveData<SavingsResponse.Data>()
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
-    private val _navigateToSavings = MutableLiveData<Boolean>()
-    val navigateToSavings: LiveData<Boolean> get() = _navigateToSavings
+    private val _savingsState = MutableStateFlow<Resource<SavingsResponse>>(Resource(State.LOADING, null, null))
+    val savingsState: StateFlow<Resource<SavingsResponse>> get() = _savingsState
 
     init {
         getSavings()
     }
-    private fun getSavings() {
-        viewModelScope.launch {
-            try {
-                val response = savingsRepository.getSavings(1 )
-                if (response.isSuccessful) {
-                    savingsData.postValue(response.body()?.data)
-                } else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
-        }
-    }
 
-    fun createSavingsItem(request: CreateSavingsItemRequest) {
-        viewModelScope.launch {
-            try {
-                val response = savingsRepository.createSavingsItem(request)
-                if (response.isSuccessful && response.body()?.data?.id == 1) {
-                    _navigateToSavings.postValue(true)
-                } else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
+    fun getSavings() = viewModelScope.launch {
+        _savingsState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.getSavings(1)
+            _savingsState.emit(response)
+        } catch (e: Exception) {
+            _savingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
     }
 
 
-    private val _updateSuccess = MutableLiveData<Boolean>()
-    val updateSuccess: LiveData<Boolean> get() = _updateSuccess
+    private val _createItemState = MutableStateFlow<Resource<CreateSavingsItemResponse>>(Resource(State.LOADING, null, null))
+    val createItemState: StateFlow<Resource<CreateSavingsItemResponse>> get() = _createItemState
 
-    fun updateSavings(groupId: Int, request: UpdateSavingsRequest) {
-        viewModelScope.launch{
-            try {
-                val response = savingsRepository.updateSavings(groupId, request)
-                if (response.isSuccessful && response.body()?.data?.status == "PROCEEDING") {
-                    _updateSuccess.postValue(true)
-                } else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
+    fun createSavingsItem(request: CreateSavingsItemRequest) = viewModelScope.launch {
+        _createItemState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.createSavingsItem(request)
+            _createItemState.emit(response)
+        } catch (e: Exception) {
+            _createItemState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
     }
 
-    private val _cancelSuccess = MutableLiveData<Boolean>()
-    val cancelSuccess: LiveData<Boolean> get() = _cancelSuccess
+    private val _updateSavingsState = MutableStateFlow<Resource<UpdateSavingsResponse>>(Resource(State.LOADING, null, null))
+    val updateSavingsState: StateFlow<Resource<UpdateSavingsResponse>> get() = _updateSavingsState
 
-    fun cancelSavings(request : CancelSavingsRequest) {
-        viewModelScope.launch{
-            try {
-                val response = savingsRepository.cancelSavings(request)
-                if (response.isSuccessful && response.body()?.data?.status == "FAIL") {
-                    _cancelSuccess.postValue(true)
-                } else {
-                    _error.value = "Server Response Error: ${response.code()}"
-                }
-            } catch (e: Exception) {
-                _error.value = "Network Error: ${e.localizedMessage}"
-            }
+
+    fun updateSavings(groupId: Int, request: UpdateSavingsRequest) = viewModelScope.launch {
+        _updateSavingsState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.updateSavings(groupId, request)
+            _updateSavingsState.emit(response)
+        } catch (e: Exception) {
+            _updateSavingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
     }
 
-//    fun remitSavings(request: SavingsRemitRequest) {
-//        viewModelScope.launch{
-//            try {
-//                val response = savingsRepository.remitSavings(request)
-//                if (response.isSuccessful) {
-//
-//                }else {
-//                    _error.value = "Server Response Error: ${response.code()}"
-//                }
-//            } catch (e: Exception) {
-//                _error.value = "Network Error: ${e.localizedMessage}"
-//            }
-//        }
-//    }
-//
-//    fun bonusSavings(groupId: Int, request: BonusSavingsRequest) {
-//        viewModelScope.launch{
-//            try {
-//                val response = savingsRepository.bonusSavings(groupId, request)
-//                if (response.isSuccessful) {
-//
-//                } else {
-//                    _error.value = "Server Response Error: ${response.code()}"
-//                }
-//            } catch (e: Exception) {
-//                _error.value = "Network Error: ${e.localizedMessage}"
-//            }
-//        }
-//    }
+    private val _cancelSavingsState = MutableStateFlow<Resource<CancelSavingsResponse>>(Resource(State.LOADING, null, null))
+    val cancelSavingsState: StateFlow<Resource<CancelSavingsResponse>> get() = _cancelSavingsState
+
+    fun cancelSavings(request: CancelSavingsRequest) = viewModelScope.launch {
+        _cancelSavingsState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.cancelSavings(request)
+            _cancelSavingsState.emit(response)
+        } catch (e: Exception) {
+            _cancelSavingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+    }
+
+    private val _remitSavingsState = MutableStateFlow<Resource<SavingsRemitResponse>>(Resource(State.LOADING, null, null))
+    val remitSavingsState: StateFlow<Resource<SavingsRemitResponse>> get() = _remitSavingsState
+
+
+    fun remitSavings(request: SavingsRemitRequest) = viewModelScope.launch {
+        _remitSavingsState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.remitSavings(request)
+            _remitSavingsState.emit(response)
+        } catch (e: Exception) {
+            _remitSavingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+    }
+
+
+    private val _bonusSavingState = MutableStateFlow<Resource<BonusSavingsResponse>>(Resource(State.LOADING, null, null))
+    val bonusSavingsState: StateFlow<Resource<BonusSavingsResponse>> get() = _bonusSavingState
+
+    fun bonusSavings(groupId: Int, request: BonusSavingsRequest) = viewModelScope.launch {
+        _bonusSavingState.emit(Resource(State.LOADING, null, null))
+        try {
+            val response = savingsRepository.bonusSavings(groupId, request)
+            _bonusSavingState.emit(response)
+        } catch (e: Exception) {
+            _bonusSavingState.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+    }
 }

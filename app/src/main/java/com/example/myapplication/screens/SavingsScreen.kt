@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import android.content.Intent
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -59,12 +60,34 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.R
 import com.example.myapplication.viewmodel.SavingsViewModel
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.unit.dp
+import kotlin.math.min
+import kotlin.math.sqrt
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.res.painterResource
+
 
 @Composable
 fun SavingsScreen(navController: NavController) {
-//    val viewModel : SavingsViewModel = hiltViewModel()
-//    val savingsData by viewModel.savingsData.observeAsState()
+    val viewModel : SavingsViewModel = hiltViewModel()
+    val savingsData by viewModel.savingsState.collectAsState()
 
+    var denominator by remember { mutableStateOf(4) }
+    var numerator by remember { mutableStateOf(2) }
+    var showDenominatorDropdown by remember { mutableStateOf(false) }
+    var showNumeratorDropdown by remember { mutableStateOf(false) }
 
 
     Column(
@@ -104,6 +127,8 @@ fun SavingsScreen(navController: NavController) {
                         .size(280.dp)
                         .align(Alignment.CenterHorizontally)
                 )
+
+
                 Spacer(modifier = Modifier.size(15.dp))
                 Text(
                     "830,000원",
@@ -154,3 +179,5 @@ fun SavingsScreen(navController: NavController) {
         }
     }
 }
+
+
