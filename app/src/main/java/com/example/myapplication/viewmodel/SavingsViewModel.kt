@@ -58,8 +58,11 @@ class SavingsViewModel @Inject constructor(
         _createItemState.emit(Resource(State.LOADING, null, null))
         try {
             val response = savingsRepository.createSavingsItem(request)
+            Log.d("CreateItem","티클 모으기 성공: ${response.data}")
             _createItemState.emit(response)
+
         } catch (e: Exception) {
+            Log.d("CreateItem","티클 모으기 실패")
             _createItemState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
     }

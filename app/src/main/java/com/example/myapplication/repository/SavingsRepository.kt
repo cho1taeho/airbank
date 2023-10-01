@@ -34,6 +34,7 @@ class SavingsRepository @Inject constructor(
 
     suspend fun createSavingsItem(request: CreateSavingsItemRequest): Resource<CreateSavingsItemResponse> {
         val response = apiService.createSavingsItem(request)
+        Log.d("CreateItem", "티클 ${response.code()}")
         return if (response.isSuccessful) {
             Resource(State.SUCCESS, response.body(), "SUCCESS !")
         } else {
