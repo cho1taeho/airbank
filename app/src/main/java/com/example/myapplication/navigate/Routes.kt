@@ -11,11 +11,13 @@ import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
+import com.example.myapplication.screens.ChildSavingsTransferScreen
 import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.MyPageScreen
 import com.example.myapplication.screens.NotificationScreen
+import com.example.myapplication.screens.SavingsApproveScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignInScreen
 import com.example.myapplication.screens.SignUpScreen
@@ -64,6 +66,15 @@ fun AppNavigation(navController: NavHostController){
         composable("First"){
             FirstScreen(navController = navController)
         }
+
+        composable("savingsApprove") {
+            SavingsApproveScreen(navController = navController)
+        }
+        composable("savingsTransfer") {
+            ChildSavingsTransferScreen(navController = navController)
+        }
+
+
     }
 }
 

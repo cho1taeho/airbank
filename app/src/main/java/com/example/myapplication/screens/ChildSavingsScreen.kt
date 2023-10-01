@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,7 +52,7 @@ fun ChildSavingsScreen(navController: NavController) {
 
     Log.d("ChildSavingsScreen", "savingsData: $savingsData")
 
-    if (savingsData == null) {
+    if (savingsData?.status == State.ERROR) {
         Column (
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,15 +98,18 @@ fun ChildSavingsScreen(navController: NavController) {
                 )
             }
         }
-    } else {
+    } else if (savingsData?.status == State.SUCCESS) {
 
         savingsData?.let { data ->
+
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp, 20.dp, 20.dp, 20.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Spacer(modifier = Modifier.size(5.dp))
                 Box(
@@ -130,6 +135,7 @@ fun ChildSavingsScreen(navController: NavController) {
 
                         )
                         Spacer(modifier = Modifier.size(20.dp))
+
                         Image(
                             painter = painterResource(id = R.drawable.item),
                             contentDescription = null,

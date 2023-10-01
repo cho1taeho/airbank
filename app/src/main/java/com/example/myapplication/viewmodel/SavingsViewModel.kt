@@ -1,5 +1,6 @@
 package com.example.myapplication.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,8 @@ class SavingsViewModel @Inject constructor(
         try {
             val response = savingsRepository.getSavings(1)
             _savingsState.emit(response)
+            Log.d("DEBUG", "_savingsState is set: ${_savingsState.value}")
+
         } catch (e: Exception) {
             _savingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }

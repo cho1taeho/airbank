@@ -77,7 +77,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
-
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun SavingsScreen(navController: NavController) {
@@ -96,6 +96,7 @@ fun SavingsScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
+
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()

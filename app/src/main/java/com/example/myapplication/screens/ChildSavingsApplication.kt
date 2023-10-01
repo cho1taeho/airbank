@@ -85,6 +85,8 @@ fun ChildSavingsApplication(navController: NavController) {
     val context = LocalContext.current
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
     val focusManager = LocalFocusManager.current
+    val createItemState by viewModel.createItemState.collectAsState()
+
 
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
@@ -144,14 +146,16 @@ fun ChildSavingsApplication(navController: NavController) {
                                 parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
                                 imageUrl = uri.toString()
                             )
-                            Log.d("CreateItem", "Sending Item: $createSavingsItemRequest")
+                            Log.d("CreateItem", "티클 모으기: Sending Item: $createSavingsItemRequest")
                             viewModel.createSavingsItem(createSavingsItemRequest)
+                            navController.navigate(BottomNavItem.Main.screenRoute)
                         }
                     }
                 }
             ) {
                 Text("신청")
             }
+
         }
 
         Spacer(modifier = Modifier.height(20.dp))
