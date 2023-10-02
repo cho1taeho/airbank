@@ -23,6 +23,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.viewmodel.LoanViewModel
 
 
@@ -137,8 +138,9 @@ fun LoanScreen(navController: NavController) {
                             .padding(start = 13.dp)
                     ) {
                         Spacer(modifier = Modifier.size(10.dp))
+                        val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
                         Text(
-                            "신용점수",
+                            "신용점수 ${creditPoint}p",
                             fontSize = 16.sp,
                         )
                         ScoreBar(score = 500)

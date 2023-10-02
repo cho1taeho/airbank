@@ -33,6 +33,8 @@ import androidx.navigation.NavController
 import com.example.myapplication.R
 import com.example.myapplication.viewmodel.SavingsViewModel
 import android.util.Log
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,6 +58,7 @@ fun SavingsApproveScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp, 20.dp, 20.dp, 20.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.size(5.dp))
             Box(
