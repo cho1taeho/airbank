@@ -5,7 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.model.CreateSavingsItemResponse
+import com.example.myapplication.model.LoanChargeRequest
+import com.example.myapplication.model.LoanChargeResponse
+import com.example.myapplication.model.LoanRepaymentRequest
+import com.example.myapplication.model.LoanRepaymentResponse
 import com.example.myapplication.model.LoanResponse
+import com.example.myapplication.model.LoanStartRequest
+import com.example.myapplication.model.LoanStartResponse
 import com.example.myapplication.model.Resource
 import com.example.myapplication.model.State
 import com.example.myapplication.repository.LoanRepository
@@ -39,4 +46,51 @@ class LoanViewModel @Inject constructor(
         }
 
     }
+    private val _loanStartState = MutableStateFlow<Resource<LoanStartResponse>>(Resource(State.LOADING, null, null))
+    val loanStartState: StateFlow<Resource<LoanStartResponse>> get() = loanStartState
+
+    fun loanStart(request: LoanStartRequest) = viewModelScope.launch{
+        _loanStartState.emit(Resource(State.LOADING, null,null))
+        try {
+            val response = loanRepository.loanStart(request)
+            _loanStartState.emit(response)
+        } catch(e:Exception) {
+            _loanStartState.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+
+
+    }
+
+    private val _loanRepayment = MutableStateFlow<Resource<LoanRepaymentResponse>>(Resource(State.LOADING, null, null))
+    val loanRepayment: StateFlow<Resource<LoanRepaymentResponse>> get() = loanRepayment
+
+    fun loanRepayment(request: LoanRepaymentRequest) = viewModelScope.launch{
+        _loanRepayment.emit(Resource(State.LOADING, null,null))
+        try {
+            val response = loanRepository.loanRepayment(request)
+            _loanRepayment.emit(response)
+        } catch(e:Exception) {
+            _loanRepayment.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+
+
+    }
+
+    private val _loanCharge = MutableStateFlow<Resource<LoanChargeResponse>>(Resource(State.LOADING, null, null))
+    val loanCharge: StateFlow<Resource<LoanChargeResponse>> get() = loanCharge
+
+    fun loanCharge(groupId:Int, request: LoanChargeRequest) = viewModelScope.launch{
+        _loanCharge.emit(Resource(State.LOADING, null,null))
+        try {
+            val response = loanRepository.loanCharge(groupId,request)
+            _loanCharge.emit(response)
+        } catch(e:Exception) {
+            _loanCharge.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+
+
+    }
+
+
+
 }
