@@ -2,6 +2,7 @@ package com.example.myapplication.layout
 
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,39 +11,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
-
-
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.R
 import com.example.myapplication.navigate.AppNavigation
 import com.example.myapplication.screens.BottomNavItem
-import com.example.myapplication.R
-import com.kakao.sdk.auth.TokenManagerProvider
-import com.kakao.sdk.user.UserApiClient
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -56,18 +53,15 @@ fun AppMainContent(navController: NavHostController) {
 fun MyUI() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var isLoggedin by remember {mutableStateOf(true)}
-    LaunchedEffect(Unit){
-        if (TokenManagerProvider.instance.manager.getToken() != null) {
-            isLoggedin = true
-        }
-    }
+    var isLoggedin by remember {mutableStateOf(false)}
     val currentRoute = navBackStackEntry?.destination?.route
     var title by remember {mutableStateOf("")}
     LaunchedEffect(navController){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             title = BottomNavItem.fromRoute(destination.route.toString()).title
         }
+        isLoggedin = AirbankApplication.prefs.getString("name", "").isNotBlank()
+        Log.d("UI",AirbankApplication.prefs.getString("name", ""))
     }
     Scaffold(
         topBar = {
@@ -153,8 +147,8 @@ fun MyUI() {
     ) {
         Box(
             modifier = Modifier
-//                .fillMaxSize()
                 .padding(it)
+
         ) {
             AppMainContent(navController =navController)
         }

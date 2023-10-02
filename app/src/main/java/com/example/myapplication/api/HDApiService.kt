@@ -5,7 +5,7 @@ import com.example.myapplication.model.LoginResponse
 import com.example.myapplication.model.SavingsResponse
 import com.example.myapplication.model.SignUpRequest
 import com.example.myapplication.model.SignUpResponse
-import retrofit2.Call
+import com.example.myapplication.model.UserInfoResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,6 +22,9 @@ interface HDApiService {
 
     @PATCH("/members")
     suspend fun signupUser(@Body signUpRequest: SignUpRequest): Response<SignUpResponse>
+    @GET("/members")
+    suspend fun getUserInfo(): Response<UserInfoResponse>
+
 }
 
 

@@ -1,19 +1,19 @@
 package com.example.myapplication.repository
 
 import android.util.Log
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.LoginRequest
 import com.example.myapplication.model.LoginResponse
+import com.example.myapplication.model.SignUpRequest
+import com.example.myapplication.model.SignUpResponse
+import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
-import com.example.myapplication.model.SignUpRequest
-import com.example.myapplication.model.SignUpResponse
-import com.example.myapplication.network.HDRetrofitBuilder
 import okhttp3.ResponseBody.Companion.toResponseBody
-import retrofit2.HttpException
+import retrofit2.Response
 
 class AuthRepository(private val scope: CoroutineScope) {
     fun retrieveUserInfo( //카카오sdk활용, user.instance(이름,프로필이미지,기본프로필여부)를 반환
@@ -58,6 +58,27 @@ class AuthRepository(private val scope: CoroutineScope) {
             } catch (e: Exception) {
                 // Handle network request exception
                 onComplete(Response.error(500, (e.message ?: "Unknown error").toResponseBody(null)))
+            }
+        }
+    }
+
+    fun getUserInfo(){
+        scope.launch(Dispatchers.IO) {
+            try {
+                val response = HDRetrofitBuilder.HDapiService().getUserInfo()
+                val getUserResponse = response.body()
+                if(getUserResponse != null){
+                    Log.d("getUSER","Success "+response.body().toString())
+                    AirbankApplication.prefs.setString("name", getUserResponse.data.name)
+                    AirbankApplication.prefs.setString("phoneNumber", getUserResponse.data.phoneNumber)
+                    AirbankApplication.prefs.setString("creditScore", getUserResponse.data.creditScore.toString())
+                    AirbankApplication.prefs.setString("imageUrl", getUserResponse.data.imageUrl)
+                    AirbankApplication.prefs.setString("role", getUserResponse.data.role)
+                }else {
+                    Log.d("getUSER","Fail "+response.body().toString())
+                }
+            } catch (e:Exception){
+                Log.e("getUSER",e.toString())
             }
         }
     }

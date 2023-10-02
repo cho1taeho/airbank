@@ -1,20 +1,18 @@
 package com.example.myapplication.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.model.LoginRequest
-import com.example.myapplication.model.LoginResponse
-import com.kakao.sdk.auth.model.OAuthToken
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.LoginRequest
+import com.example.myapplication.model.LoginResponse
 import com.example.myapplication.repository.AuthRepository
 import com.example.myapplication.screens.BottomNavItem
+import com.kakao.sdk.auth.model.OAuthToken
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
@@ -79,7 +77,7 @@ class AuthViewModel @Inject constructor() : ViewModel() {
                     } else {
                         // Both name and phoneNumber are not empty, navigate to the main screen
                         // Implement navigation to main screen
-
+                        repository.getUserInfo()
                         withContext(Dispatchers.Main) {
                             navController.navigate(BottomNavItem.Main.screenRoute)
                         }

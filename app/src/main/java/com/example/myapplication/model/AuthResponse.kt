@@ -52,3 +52,25 @@ data class SignUpResponse(
         val role: String
     )
 }
+
+data class UserInfoResponse(
+    @SerializedName("code")
+    val code: Int,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("data")
+    val data: Data
+) {
+    data class Data(
+        @SerializedName("name")
+        val name: String,
+        @SerializedName("phoneNumber")
+        val phoneNumber: String,
+        @SerializedName("creditScore")
+        val creditScore: Int,
+        @SerializedName("imageUrl")
+        val imageUrl: String,
+        @SerializedName("role")
+        val role: String
+    )
+}
