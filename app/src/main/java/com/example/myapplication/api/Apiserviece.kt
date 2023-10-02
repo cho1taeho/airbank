@@ -39,6 +39,14 @@ interface ApiService {
 
     @GET("/loans")
     suspend fun getLoan(@Query("group_id") groupId: Int): Response<LoanResponse>
+
+    @POST("/accounts")
+    suspend fun accountRegister()
+
+
+
+
+
 }
 
 

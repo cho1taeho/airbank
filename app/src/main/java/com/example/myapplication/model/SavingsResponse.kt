@@ -76,8 +76,7 @@ data class CancelSavingsResponse(
 }
 
 data class SavingsRemitRequest(
-    val id : Int,
-    val acount : Int
+    val id : Int
 )
 
 data class SavingsRemitResponse(
@@ -86,18 +85,13 @@ data class SavingsRemitResponse(
     val data : Data
 ){
     data class Data(
-        val id : Int,
-        val amount : Int,
-        val apiCreateAt : String,
-        val transactionType : String,
-        val transactionDistinction : String,
-        val transactionPartner : String
+        val amount : Int
     )
 }
 
 data class BonusSavingsRequest(
     val id : Int,
-    val amout : Int
+    val amount : Int
 )
 
 data class BonusSavingsResponse(

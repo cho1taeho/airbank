@@ -79,6 +79,8 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -87,6 +89,8 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun WalletScreen(navController: NavController) {
+//    val viewModel : AccountViewModel = hiltViewModel()
+
 
 
     Column (

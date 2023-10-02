@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -79,6 +80,7 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.model.BonusSavingsRequest
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
@@ -88,7 +90,7 @@ import java.util.Locale
 import java.text.SimpleDateFormat
 
 @Composable
-fun ChildSavingsTransferScreen(navController: NavController) {
+fun SavingsBonusScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
@@ -97,21 +99,27 @@ fun ChildSavingsTransferScreen(navController: NavController) {
             .padding(16.dp)
     ){
         Text(
-            "${savingsData?.data?.data?.monthlyAmount}원",
+            "${savingsData?.data?.data?.parentsAmount ?: "로딩 중..."}원",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold
         )
-        val id = savingsData?.data?.data?.id
-        Text(
-            "티끌모으기 송금하기",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .clickable{
-                    id?.let {
-                        viewModel.remitSavings(SavingsRemitRequest(id = id))
+        savingsData?.data?.data?.let { data ->
+            val id = data.id
+            val amount = data.parentsAmount
+
+            Text(
+                "티끌모으기 지원금 보내기",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .clickable {
+                        viewModel.bonusSavings(id, BonusSavingsRequest(id = id, amount = amount))
                     }
-                }
+            )
+        } ?: Text(
+            "데이터 로딩 중...",
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }
