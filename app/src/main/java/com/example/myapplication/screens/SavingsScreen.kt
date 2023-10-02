@@ -65,6 +65,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -96,6 +97,7 @@ fun SavingsScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
+            .verticalScroll(rememberScrollState())
 
     ) {
         Box(modifier = Modifier
@@ -176,6 +178,38 @@ fun SavingsScreen(navController: NavController) {
                         .padding(start = 14.dp)
                 )
                 Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+                    Button(
+                        onClick = { navController.navigate("savingsApprove") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    ) {
+                        Text("티끌 수락")
+                    }
+                    Spacer(modifier = Modifier.size(10.dp)) // 버튼과 버튼 사이의 간격
+                    Button(
+                        onClick = { navController.navigate("savingsTransfer") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    ) {
+                        Text("티끌 송금")
+                    }
+                    Spacer(modifier = Modifier.size(10.dp)) // 버튼과 버튼 사이의 간격
+                    Button(
+                        onClick = { navController.navigate("savingsBonus") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                    ) {
+                        Text("티끌 보너스")
+                    }
+                }
             }
         }
     }

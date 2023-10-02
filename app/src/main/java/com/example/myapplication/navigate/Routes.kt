@@ -18,6 +18,7 @@ import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.MyPageScreen
 import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsApproveScreen
+import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignInScreen
 import com.example.myapplication.screens.SignUpScreen
@@ -73,7 +74,9 @@ fun AppNavigation(navController: NavHostController){
         composable("savingsTransfer") {
             ChildSavingsTransferScreen(navController = navController)
         }
-
+        composable("savingsBonus"){
+            SavingsBonusScreen(navController = navController)
+        }
 
     }
 }
