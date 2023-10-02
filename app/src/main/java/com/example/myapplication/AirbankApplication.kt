@@ -7,6 +7,7 @@ import dagger.hilt.android.HiltAndroidApp
 class AirbankApplication : Application() {
     companion object {
         lateinit var  prefs: PreferenceUtil
+            private set
     }
     override fun onCreate() {
         super.onCreate()
