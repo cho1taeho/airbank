@@ -244,30 +244,36 @@ fun ChildSavingsApplication(navController: NavController) {
 
         Text("기간: $today ~ $selectedDate")
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {expanded = false},
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+
         ) {
-            (3..12).forEach { num ->
-            DropdownMenuItem(
-                text = {"$num"},
-                onClick = {
-                    selectedMonths = num
-                    expanded = false
+            Button(
+                onClick = { expanded = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("기간 선택 : $selectedMonths 개월")
+            }
+
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                (3..12).forEach { num ->
+                    DropdownMenuItem(
+                        text = { Text("$num") },
+                        onClick = {
+                            selectedMonths = num
+                            expanded = false
+                        }
+                    )
                 }
-            )}
+            }
         }
 
-
-        Button(
-            onClick = { expanded = true},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-        ) {
-            Text( "기간 선택 : $selectedMonths 개월" )
-
-        }
 
         Spacer(modifier = Modifier.height(20.dp))
 

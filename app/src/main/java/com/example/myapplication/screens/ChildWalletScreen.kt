@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import android.net.Uri
+import android.net.http.UrlRequest.Status
 import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -78,14 +79,27 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.viewmodel.AccountViewModel
+import com.example.myapplication.viewmodel.LoanViewModel
+import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
-
+import com.example.myapplication.model.State
 @Composable
 fun ChildWalletScreen(navController: NavController) {
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
+    val confiscationCheckState by accountViewModel.confiscationCheckState.collectAsState(initial = null)
+    val taxData by accountViewModel.taxCheckState.collectAsState(initial = null)
+    val savingsViewModel: SavingsViewModel = hiltViewModel()
+    val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
+    val loanViewModel: LoanViewModel = hiltViewModel()
+    val loanData by loanViewModel.loanState.collectAsState(initial = null)
+
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -109,7 +123,7 @@ fun ChildWalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "20,000,000",
+                    text = accountData?.data?.data?.amount?.toString() ?: "로딩 중...",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -169,6 +183,9 @@ fun ChildWalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
                 .padding(horizontal = 16.dp)
+                .clickable {
+                    navController.navigate("ChildTaxTransfer")
+                }
 
         ) {
             Column (
@@ -176,10 +193,10 @@ fun ChildWalletScreen(navController: NavController) {
                     .padding(start = 16.dp)
             ){
                 Spacer(modifier = Modifier.size(13.dp))
-                Text("이번 달 수익")
+                Text("이번 달 세금")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "월 100,000원",
+                    "${taxData?.data?.data?.amount}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -192,6 +209,22 @@ fun ChildWalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
                 .padding(horizontal = 16.dp)
+                .let { modifier ->
+                    when (confiscationCheckState?.status) {
+                        State.SUCCESS -> {
+                            if (confiscationCheckState?.data?.data?.startedAt != null) {
+                                modifier.clickable {
+                                    navController.navigate("ChildConfiscationTransfer")
+                                }
+                            } else {
+                                modifier.clickable {
+                                    navController.navigate("ChildLoan")
+                                }
+                            }
+                        }
+                        else -> modifier
+                    }
+                }
 
         ) {
             Column (
@@ -202,27 +235,34 @@ fun ChildWalletScreen(navController: NavController) {
                 Text("대출금")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "월 100,000원",
+                    "${loanData?.data?.data?.amount}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
-// 압류시 오버레이
-//            if () {
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .background(Color.Gray.copy(alpha = 0.5f))
-//                ) {
-//                    Text(
-//                        "압류중",
-//                        color = Color.White,
-//                        fontSize = 23.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        modifier = Modifier.align(Alignment.Center)
-//                    )
-//                }
-//            }
+            when (confiscationCheckState?.status) {
+                State.SUCCESS -> {
+                    if (confiscationCheckState?.data?.data?.startedAt != null) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Gray.copy(alpha = 0.5f))
+                        ) {
+                            Text(
+                                "압류중",
+                                color = Color.White,
+                                fontSize = 23.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
+                State.ERROR -> {
+
+                }
+                else -> Unit
+            }
         }
         Box(
             modifier = Modifier
@@ -231,6 +271,9 @@ fun ChildWalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
                 .padding(horizontal = 16.dp)
+                .clickable {
+                    navController.navigate("childSavings")
+                }
 
         ) {
             Column (
@@ -241,7 +284,7 @@ fun ChildWalletScreen(navController: NavController) {
                 Text("티끌 모으기")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "월 100,000원",
+                    "${savingsData?.data?.data?.totalAmount}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )

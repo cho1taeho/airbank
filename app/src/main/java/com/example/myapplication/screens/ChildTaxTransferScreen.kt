@@ -79,7 +79,10 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.model.CancelSavingsRequest
 import com.example.myapplication.model.SavingsRemitRequest
+import com.example.myapplication.model.TaxTransferRequest
+import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -88,11 +91,13 @@ import java.util.Locale
 import java.text.SimpleDateFormat
 
 @Composable
-fun ChildSavingsTransferScreen(navController: NavController) {
-    val viewModel : SavingsViewModel = hiltViewModel()
-    val savingsData by viewModel.savingsState.collectAsState(initial = null)
+fun ChildTaxTransferScreen(navController: NavController) {
+    val viewModel : AccountViewModel = hiltViewModel()
+    val accountData by viewModel.taxTransferState.collectAsState(initial = null)
+    val taxCheckData by viewModel.taxCheckState.collectAsState(initial = null)
 
-    Column (
+
+    Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -108,14 +113,9 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 .clip(RoundedCornerShape(14.dp))
                 .height(470.dp)
                 .background(color = Color(0xFFD6F2FF))
-        ) {
-            Text(
-                "${savingsData?.data?.data?.monthlyAmount}원",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
-            )
+        ){
+            Text("${taxCheckData?.data?.data?.amount}")
         }
-        val id = savingsData?.data?.data?.id
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -125,15 +125,15 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
                     navController.navigate("childSavings")
-                    val request = SavingsRemitRequest(savingsData?.data?.data?.id ?:0)
-
-                    viewModel.remitSavings(request)
+                    val request = TaxTransferRequest(taxCheckData?.data?.data?.amount ?: 0)
+                    viewModel.taxTransfer(request)
                 }
         ) {
             Text(
-                "티끌모으기 송금하기",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
+                "납세하기",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }

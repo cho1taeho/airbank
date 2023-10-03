@@ -80,6 +80,8 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.viewmodel.AccountViewModel
+import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -89,8 +91,12 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun WalletScreen(navController: NavController) {
-//    val viewModel : AccountViewModel = hiltViewModel()
-
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
+    val savingsViewModel: SavingsViewModel = hiltViewModel()
+    val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
+    val loanViewModel: LoanViewModel = hiltViewModel()
+    val loanData by loanViewModel.loanState.collectAsState(initial = null)
 
 
     Column (
@@ -111,7 +117,7 @@ fun WalletScreen(navController: NavController) {
             ){
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "나의 잔액",
+                    "자식의 잔액",
                     fontSize = 14.sp,
                 )
                 Spacer(modifier = Modifier.size(8.dp))

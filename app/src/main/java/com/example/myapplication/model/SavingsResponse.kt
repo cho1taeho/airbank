@@ -11,6 +11,7 @@ data class SavingsResponse(
         val myAmount: Int,
         val parentsAmount: Int,
         val monthlyAmount: Int,
+        val totalAmount: Int,
         val startedAt: String,
         val expiredAt: String,
         val endedAt: String,
