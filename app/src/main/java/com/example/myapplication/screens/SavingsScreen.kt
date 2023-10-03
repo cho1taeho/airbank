@@ -193,7 +193,7 @@ fun SavingsScreen(navController: NavController) {
             ) {
                 Text("티끌 수락")
             }
-            Spacer(modifier = Modifier.size(10.dp)) // 버튼과 버튼 사이의 간격
+            Spacer(modifier = Modifier.size(10.dp))
             Button(
                 onClick = { navController.navigate("savingsTransfer") },
                 modifier = Modifier
@@ -202,7 +202,7 @@ fun SavingsScreen(navController: NavController) {
             ) {
                 Text("티끌 송금")
             }
-            Spacer(modifier = Modifier.size(10.dp)) // 버튼과 버튼 사이의 간격
+            Spacer(modifier = Modifier.size(10.dp))
             Button(
                 onClick = { navController.navigate("savingsBonus") },
                 modifier = Modifier

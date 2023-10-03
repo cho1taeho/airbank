@@ -78,6 +78,8 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.viewmodel.AccountViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -86,6 +88,11 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun ChildWalletScreen(navController: NavController) {
+    val viewModel: AccountViewModel = hiltViewModel()
+    val accountData by viewModel.accountCheckState.collectAsState(initial = null)
+
+
+
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -109,7 +116,7 @@ fun ChildWalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "20,000,000",
+                    text = accountData?.data?.data?.amount?.toString() ?: "로딩 중...",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )

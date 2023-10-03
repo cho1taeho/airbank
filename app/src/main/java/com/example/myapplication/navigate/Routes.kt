@@ -19,6 +19,7 @@ import com.example.myapplication.screens.ChildMainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
+import com.example.myapplication.screens.ChildWalletScreen
 import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
@@ -92,6 +93,11 @@ fun AppNavigation(navController: NavHostController){
         composable("savingsBonus"){
             SavingsBonusScreen(navController = navController)
         }
+        composable("childWallet"){
+            ChildWalletScreen(navController = navController)
+        }
+
+
 
     }
 }

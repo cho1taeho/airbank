@@ -91,8 +91,6 @@ import java.text.SimpleDateFormat
 fun WalletScreen(navController: NavController) {
 //    val viewModel : AccountViewModel = hiltViewModel()
 
-
-
     Column (
         modifier = Modifier
             .padding(16.dp)
