@@ -2,10 +2,11 @@ package com.example.myapplication.repository
 
 import android.util.Log
 import com.example.myapplication.AirbankApplication
-import com.example.myapplication.model.LoginRequest
-import com.example.myapplication.model.LoginResponse
-import com.example.myapplication.model.SignUpRequest
-import com.example.myapplication.model.SignUpResponse
+import com.example.myapplication.model.GETGroupsResponse
+import com.example.myapplication.model.POSTLoginRequest
+import com.example.myapplication.model.POSTLoginResponse
+import com.example.myapplication.model.PATCHMembersRequest
+import com.example.myapplication.model.PATCHMembersResponse
 import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -18,7 +19,7 @@ import retrofit2.Response
 class AuthRepository(private val scope: CoroutineScope) {
     fun retrieveUserInfo( //카카오sdk활용, user.instance(이름,프로필이미지,기본프로필여부)를 반환
         token: OAuthToken,
-        onComplete: (LoginRequest) -> Unit
+        onComplete: (POSTLoginRequest) -> Unit
     ) {
         Log.d("Token",token.toString())
         scope.launch(Dispatchers.IO) {
@@ -32,26 +33,26 @@ class AuthRepository(private val scope: CoroutineScope) {
                         user.kakaoAccount?.profile?.isDefaultImage?.toString() ?: ""
                     val isDefaultImage = isDefaultImageString.toBoolean()
 
-                    val loginRequest = LoginRequest(
+                    val postLoginRequest = POSTLoginRequest(
                         oauthIdentifier = oauthIdentifier,
                         imageURL = profileImageUrl,
                         isDefaultImage = isDefaultImage
                     )
 
-                    onComplete(loginRequest)
+                    onComplete(postLoginRequest)
                 }
             }
         }
     }
 
     fun performLoginRequest( //반환받은 유저 정보를 서버에 보냄
-        loginRequest: LoginRequest,
-        onComplete: (Response<LoginResponse>) -> Unit
+        postLoginRequest: POSTLoginRequest,
+        onComplete: (Response<POSTLoginResponse>) -> Unit
     ) {
         scope.launch(Dispatchers.IO) {
             try {
-                Log.d("POSTTT",loginRequest.toString())
-                val response = HDRetrofitBuilder.HDapiService().loginUser(loginRequest) //retrofit2활용, airbank서버에 유저 정보 1차 전송
+                Log.d("POSTTT",postLoginRequest.toString())
+                val response = HDRetrofitBuilder.HDapiService().loginUser(postLoginRequest) //retrofit2활용, airbank서버에 유저 정보 1차 전송
                 Log.d("POSTTT",response.toString())
 
                 onComplete(response)
@@ -64,21 +65,22 @@ class AuthRepository(private val scope: CoroutineScope) {
 
     fun getUserInfo(){
         scope.launch(Dispatchers.IO) {
+            val tag = "USER"
             try {
                 val response = HDRetrofitBuilder.HDapiService().getUserInfo()
                 val getUserResponse = response.body()
                 if(getUserResponse != null){
-                    Log.d("getUSER","Success "+response.body().toString())
+                    Log.d(tag,"Success "+response.body().toString())
                     AirbankApplication.prefs.setString("name", getUserResponse.data.name)
                     AirbankApplication.prefs.setString("phoneNumber", getUserResponse.data.phoneNumber)
                     AirbankApplication.prefs.setString("creditScore", getUserResponse.data.creditScore.toString())
                     AirbankApplication.prefs.setString("imageUrl", getUserResponse.data.imageUrl)
                     AirbankApplication.prefs.setString("role", getUserResponse.data.role)
                 }else {
-                    Log.d("getUSER","Fail "+response.body().toString())
+                    Log.d(tag,"Fail "+response.body().toString())
                 }
             } catch (e:Exception){
-                Log.e("getUSER",e.toString())
+                Log.e(tag,e.toString())
             }
         }
     }
@@ -86,16 +88,16 @@ class AuthRepository(private val scope: CoroutineScope) {
 
 
 class SignUpRepository(private val scope: CoroutineScope) {
-    val TAG = "SIGNUP"
+    private val tag = "SIGNUP"
     fun signUp(
-        signUpRequest: SignUpRequest,
-        onComplete: (Response<SignUpResponse>) -> Unit
+        patchMembersRequest: PATCHMembersRequest,
+        onComplete: (Response<PATCHMembersResponse>) -> Unit
     ) {
         scope.launch(Dispatchers.IO) {
              try {
-                 Log.d(TAG,signUpRequest.toString())
-                val response = HDRetrofitBuilder.HDapiService().signupUser(signUpRequest)
-                 Log.d(TAG,response.toString())
+                 Log.d(tag,patchMembersRequest.toString())
+                val response = HDRetrofitBuilder.HDapiService().signupUser(patchMembersRequest)
+                 Log.d(tag,response.toString())
 
                     onComplete(response)
             } catch (e: Exception) {
@@ -104,3 +106,4 @@ class SignUpRepository(private val scope: CoroutineScope) {
         }
     }
 }
+

@@ -21,18 +21,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @Composable
 fun MyPageScreen(navController: NavController) {
+
+    val viewModel: MyPageViewModel = viewModel() // Create an instance of AuthViewModel
+
+
     var imagepath by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("")}
     var userrole by remember { mutableStateOf("")}
@@ -50,8 +63,9 @@ fun MyPageScreen(navController: NavController) {
     }
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize() // Use this modifier to fill the available space
     ) {
         Box(
             modifier = Modifier
@@ -63,6 +77,7 @@ fun MyPageScreen(navController: NavController) {
             AsyncImage(
                 model = imagepath,
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
             )
@@ -97,7 +112,7 @@ fun MyPageScreen(navController: NavController) {
         }
 
         Button(
-            onClick = { performLogout(navController) }, // Use the ViewModel for logout
+            onClick = { performLogout(navController, viewModel) }, // Use the ViewModel for logout
             modifier = Modifier.padding(16.dp)
         ) {
             Text(text = "로그아웃")
@@ -106,11 +121,31 @@ fun MyPageScreen(navController: NavController) {
 
 }
 
-fun performLogout(navController: NavController) {
-    val TAG = "LOGOUT"
-    UserApiClient.instance.logout { error -> Log.e(TAG,error.toString()) }
-//    val response = HDRetrofitBuilder.HDapiService().loginUser(loginRequest)
-    AirbankApplication.prefs.setString("JSESSIONID","")
-    navController.navigate("First")
+fun performLogout(navController: NavController, viewModel: MyPageViewModel) {
+    viewModel.handlelogout(navController)
 }
 
+
+
+class MyPageViewModel @Inject constructor() : ViewModel() {
+
+    fun handlelogout(navController: NavController){
+        val tag = "LOGOUT"
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = HDRetrofitBuilder.HDapiService().logoutUser()
+            Log.d(tag,response.toString())
+            if (response.isSuccessful){
+                UserApiClient.instance.logout { error -> Log.e(tag+"kakao",error.toString()) }
+                AirbankApplication.prefs.setString("JSESSIONID","")
+                AirbankApplication.prefs.setString("name", "")
+                AirbankApplication.prefs.setString("phoneNumber", "")
+                AirbankApplication.prefs.setString("creditScore", "")
+                AirbankApplication.prefs.setString("imageUrl", "")
+                AirbankApplication.prefs.setString("role", "")
+                withContext(Dispatchers.Main){
+                    navController.navigate("First")
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -20,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -38,20 +41,79 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.myapplication.R
+import com.example.myapplication.model.GETGroupsResponse
+import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @Composable
 fun MainScreen(navController: NavController) {
+    val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
+
+    var childs by remember { mutableStateOf<List<GETGroupsResponse.Data>>(emptyList()) }
+    LaunchedEffect(Unit){
+        val mutablechilds = viewModel.childs
+        childs = mutablechilds
+    }
+
     Column {
-        Text("관리중인 자녀 4", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
-        ChildProfile()
+        if (childs.isNotEmpty()){
+            Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
+            ChildProfile()
+        } else {
+            postNewChild(navController)
+        }
         Body(navController = navController)
+    }
+}
+@Composable
+fun postNewChild(navController: NavController){
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color(0xFFD6F2FF))
+            .width(351.dp)
+            .height(133.dp)
+            .clickable { navController.navigate("addChild") }
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(RoundedCornerShape(size = 50.dp))
+                    .background(Color(0xFFF4F4F4))
+            ){
+                Image(
+                    painter = painterResource(id = R.drawable.plus_color),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(20.dp)
+                        .align(Alignment.Center)
+                )
+            }
+
+            Spacer(Modifier.width(16.dp))
+            Text("자녀를\n등록해주세요.")
+        }
     }
 }
 
@@ -377,6 +439,31 @@ fun Body(navController: NavController) {
                         .size(120.dp)
                         .align(Alignment.BottomEnd)
                 )
+            }
+        }
+    }
+}
+
+
+
+class MainViewModel @Inject constructor() : ViewModel() {
+
+    var childs : List<GETGroupsResponse.Data> = emptyList()
+    init {
+        getGroup()
+    }
+    private fun getGroup() {
+        val tag = "getGroup"
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = HDRetrofitBuilder.HDapiService().getGroups()
+                val getGroupsResponse = response.body()
+                if (getGroupsResponse != null) {
+                    Log.d(tag, getGroupsResponse.toString())
+                    childs = getGroupsResponse.data
+                }
+            } catch (e: Exception) {
+                Log.e(tag, e.toString())
             }
         }
     }

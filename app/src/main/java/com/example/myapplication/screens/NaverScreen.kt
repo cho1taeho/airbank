@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.example.myapplication.model.LoginResponse
+import com.example.myapplication.model.POSTLoginResponse
 import com.google.gson.Gson
 
 @Composable
@@ -45,7 +45,7 @@ class JavaScriptInterface(private val webView: WebView) {
         val TAG:String = "onData : "
         Log.d(TAG,"data: $response")
         val gson = Gson()
-        val data = gson.fromJson(response,LoginResponse::class.java)
+        val data = gson.fromJson(response,POSTLoginResponse::class.java)
         Log.d(TAG,"code: ${data.code}")
         Log.d(TAG,"data: ${data.data}")
         Log.d(TAG,"message: ${data.message}")

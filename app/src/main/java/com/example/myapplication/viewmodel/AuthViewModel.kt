@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
-import com.example.myapplication.model.LoginRequest
-import com.example.myapplication.model.LoginResponse
+import com.example.myapplication.model.POSTLoginRequest
+import com.example.myapplication.model.POSTLoginResponse
 import com.example.myapplication.repository.AuthRepository
 import com.example.myapplication.screens.BottomNavItem
 import com.kakao.sdk.auth.model.OAuthToken
@@ -34,23 +34,23 @@ class AuthViewModel @Inject constructor() : ViewModel() {
     }
     private fun retrieveUserInfo(token: OAuthToken, navController: NavController) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.retrieveUserInfo(token) { loginRequest: LoginRequest ->
+            repository.retrieveUserInfo(token) { postLoginRequest: POSTLoginRequest ->
                 // Handle the retrieved login request data
-                performLoginRequest(loginRequest, navController)
+                performLoginRequest(postLoginRequest, navController)
             }
         }
     }
 
-    private fun performLoginRequest(loginRequest: LoginRequest, navController: NavController) {
+    private fun performLoginRequest(postLoginRequest: POSTLoginRequest, navController: NavController) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.performLoginRequest(loginRequest) { response: Response<LoginResponse> ->
+            repository.performLoginRequest(postLoginRequest) { response: Response<POSTLoginResponse> ->
                 handleLoginResponse(response, navController)
             }
         }
     }
 
     private fun handleLoginResponse(
-        response: Response<LoginResponse>,
+        response: Response<POSTLoginResponse>,
         navController: NavController
     ) {
         viewModelScope.launch(Dispatchers.IO) {

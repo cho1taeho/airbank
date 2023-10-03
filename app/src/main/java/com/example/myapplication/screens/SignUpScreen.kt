@@ -1,6 +1,5 @@
 package com.example.myapplication.screens
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,16 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.model.SignUpRequest
+import com.example.myapplication.model.PATCHMembersRequest
 import com.example.myapplication.viewmodel.SignUpViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun SignUpScreen(
@@ -116,7 +109,7 @@ fun SignUpScreen(
         Button(
             onClick = {
                 if (phoneNumber.isNotEmpty() && name.isNotEmpty() && role.isNotEmpty()) {
-                    val requestDTO = SignUpRequest(
+                    val requestDTO = PATCHMembersRequest(
                         name = name,
                         phoneNumber = phoneNumber,
                         role = role

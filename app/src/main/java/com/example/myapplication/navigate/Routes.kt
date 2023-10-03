@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.screens.AddChildScreen
 import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildMainScreen
@@ -68,12 +70,9 @@ fun AppNavigation(navController: NavHostController){
         }
 
         composable(BottomNavItem.SignIn.screenRoute){
-//            SignInScreen(navController = navController)
             AuthScreen(navController = navController)
         }
-
         composable("savingsApplication") {
-//            val viewModel: SavingsViewModel = viewModel()
             ChildSavingsApplication(navController = navController)
         }
         composable("childSavings") {
@@ -92,7 +91,9 @@ fun AppNavigation(navController: NavHostController){
         composable("savingsBonus"){
             SavingsBonusScreen(navController = navController)
         }
-
+        composable("addChild"){
+            AddChildScreen(navController = navController)
+        }
     }
 }
 

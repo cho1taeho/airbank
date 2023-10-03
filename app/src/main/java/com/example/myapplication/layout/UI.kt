@@ -5,7 +5,9 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -56,12 +59,15 @@ fun MyUI() {
     var isLoggedin by remember {mutableStateOf(false)}
     val currentRoute = navBackStackEntry?.destination?.route
     var title by remember {mutableStateOf("")}
-    LaunchedEffect(navController){
+    LaunchedEffect(navController.currentDestination,isLoggedin){
+        val isLoggedIn = AirbankApplication.prefs.getString("name", "").isNotBlank()
+        Log.d("MYUI",AirbankApplication.prefs.getString("name", "")+isLoggedin.toString())
+        if (isLoggedin != isLoggedIn) {
+            isLoggedin = isLoggedIn
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             title = BottomNavItem.fromRoute(destination.route.toString()).title
         }
-        isLoggedin = AirbankApplication.prefs.getString("name", "").isNotBlank()
-        Log.d("UI",AirbankApplication.prefs.getString("name", ""))
     }
     Scaffold(
         topBar = {
@@ -76,7 +82,6 @@ fun MyUI() {
                             fontFamily = FontFamily(Font(R.font.pretendardbold)),
                             fontSize = 20.sp,
                         )
-
                     )
                 },
                 navigationIcon = {
@@ -145,12 +150,13 @@ fun MyUI() {
             )
         }}
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .padding(it)
-
+            , horizontalArrangement = Arrangement.Center
+            , verticalAlignment = Alignment.CenterVertically
         ) {
-            AppMainContent(navController =navController)
+            AppMainContent(navController = navController)
         }
     }
 }
