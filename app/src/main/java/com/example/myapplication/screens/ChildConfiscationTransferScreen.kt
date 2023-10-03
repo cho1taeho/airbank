@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import android.net.Uri
+import android.net.http.UrlRequest.Status
 import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -79,18 +80,22 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.myapplication.model.SavingsRemitRequest
+import com.example.myapplication.viewmodel.AccountViewModel
+import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
+import com.example.myapplication.model.State
 
 @Composable
-fun ChildSavingsTransferScreen(navController: NavController) {
-    val viewModel : SavingsViewModel = hiltViewModel()
-    val savingsData by viewModel.savingsState.collectAsState(initial = null)
+fun ChildConfiscationTransferScreen(navController: NavController){
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
+    val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
+    var transferAmount by remember { mutableStateOf("") }
 
     Column (
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
@@ -99,41 +104,63 @@ fun ChildSavingsTransferScreen(navController: NavController) {
             .fillMaxWidth()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
             .verticalScroll(rememberScrollState())
-    ){
+    ) {
         Spacer(modifier = Modifier.size(5.dp))
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(470.dp)
+                .height(100.dp)
                 .background(color = Color(0xFFD6F2FF))
         ) {
             Text(
-                "${savingsData?.data?.data?.monthlyAmount}원",
+                "변제금액 : ${confiscationData?.data?.data?.amount}원",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold
             )
         }
-        val id = savingsData?.data?.data?.id
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = Color(0xFF00D2F3))
-                .clickable {
-                    navController.navigate("childSavings")
-                    val request = SavingsRemitRequest(savingsData?.data?.data?.id ?:0)
-
-                    viewModel.remitSavings(request)
-                }
+                .clip(RoundedCornerShape(14.dp))
+                .height(100.dp)
+                .background(color = Color(0xFFD6F2FF))
         ) {
+            val accountAmount = accountData?.data?.data?.amount ?: 0
+            val inputAmount = transferAmount.toIntOrNull() ?: 0
+
+            if (inputAmount > accountAmount) {
+                transferAmount = accountAmount.toString()
+            }
+
+            TextField(
+                value = transferAmount,
+                onValueChange = {
+                    transferAmount = it
+                },
+                label = { Text("금액 입력") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                maxLines = 1,
+                modifier = Modifier.fillMaxWidth(0.9f)
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .height(100.dp)
+                .background(color = Color(0xFFD6F2FF))
+        ) {
+            val remainingAmount = (confiscationData?.data?.data?.amount ?: 0) - (accountData?.data?.data?.amount ?: 0)
             Text(
-                "티끌모으기 송금하기",
+                "남은 금액: $remainingAmount 원",
                 fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Bold
             )
         }
     }

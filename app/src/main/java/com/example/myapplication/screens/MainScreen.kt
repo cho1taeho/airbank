@@ -49,7 +49,7 @@ import com.kakao.sdk.user.UserApiClient
 @Composable
 fun MainScreen(navController: NavController) {
     Column {
-        Text("관리중인 자녀 4", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
+        Text("관리중인 자녀 4부모", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
         ChildProfile()
         Body(navController = navController)
     }

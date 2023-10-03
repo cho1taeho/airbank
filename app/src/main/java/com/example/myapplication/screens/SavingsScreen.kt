@@ -79,10 +79,11 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.verticalScroll
+import coil.compose.rememberImagePainter
 
 @Composable
 fun SavingsScreen(navController: NavController) {
-    val viewModel : SavingsViewModel = hiltViewModel()
+    val viewModel: SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState()
 
     var denominator by remember { mutableStateOf(4) }
@@ -90,129 +91,125 @@ fun SavingsScreen(navController: NavController) {
     var showDenominatorDropdown by remember { mutableStateOf(false) }
     var showNumeratorDropdown by remember { mutableStateOf(false) }
 
+    savingsData?.let { data ->
+        val imageUrl = data?.data?.data?.savingsItem?.imageUrl
+        val painter = rememberImagePainter(data = imageUrl)
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp, 20.dp, 20.dp, 20.dp)
-            .verticalScroll(rememberScrollState())
-
-    ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
-            .height(470.dp)
-            .background(color = Color(0xFFD6F2FF))
-        ){
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text(
-                    "신상 운동화",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp)
-
-
-                )
-                Spacer(modifier = Modifier.size(20.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.item),
-                    contentDescription = "image description",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .size(280.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-
-
-                Spacer(modifier = Modifier.size(15.dp))
-                Text(
-                    "830,000원",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    "기간 : 23.02.10 ~ 23.11.09",
-                    fontSize = 13.sp
-                )
-                Text(
-                    "요청금액 : 83,000원",
-                    fontSize = 13.sp
-                )
-            }
-        }
-        Spacer(modifier = Modifier.size(15.dp))
-        Box(
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+            horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = Color(0xFFD6F2FF))
-                .clickable{
-                    navController.navigate("childSavings")
-                }
-        ){
-            Column (
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    "현재 납입 금액 : 415,000",
-                    fontSize =  22.sp,
-                    modifier = Modifier
-                        .padding(start = 14.dp)
-                )
-                Spacer(modifier = Modifier.size(9.dp))
-                Text(
-                    "밀린 횟수 : 1회",
-                    fontSize = 22.sp,
-                    modifier = Modifier
-                        .padding(start = 14.dp)
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
+                .padding(20.dp, 20.dp, 20.dp, 20.dp)
+                .verticalScroll(rememberScrollState())
+
         ) {
-            Button(
-                onClick = { navController.navigate("savingsApprove") },
+            Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .height(470.dp)
+                    .background(color = Color(0xFFD6F2FF))
             ) {
-                Text("티끌 수락")
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        "${data.data?.data?.savingsItem?.name}",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp)
+
+
+                    )
+                    Spacer(modifier = Modifier.size(20.dp))
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .size(280.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+
+
+                    Spacer(modifier = Modifier.size(15.dp))
+                    Text(
+                        "${data.data?.data?.myAmount}원",
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(
+                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
+                        fontSize = 13.sp
+                    )
+                    Text(
+                        "요청금액 :${data.data?.data?.savingsItem?.amount ?:"0"}원",
+                        fontSize = 13.sp
+                    )
+                }
             }
-            Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                onClick = { navController.navigate("savingsTransfer") },
+            Spacer(modifier = Modifier.size(15.dp))
+            Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color = Color(0xFFD6F2FF))
+//                .clickable{
+//                    navController.navigate("childSavings")
+//                }
             ) {
-                Text("티끌 송금")
+//                Column(
+//                    modifier = Modifier.fillMaxWidth()
+//                ) {
+//                    Spacer(modifier = Modifier.weight(1f))
+//                    Text(
+//                        "현재 납입 금액 : 415,000",
+//                        fontSize = 22.sp,
+//                        modifier = Modifier
+//                            .padding(start = 14.dp)
+//                    )
+//                    Spacer(modifier = Modifier.size(9.dp))
+//                    Text(
+//                        "밀린 횟수 : 1회",
+//                        fontSize = 22.sp,
+//                        modifier = Modifier
+//                            .padding(start = 14.dp)
+//                    )
+//                    Spacer(modifier = Modifier.weight(1f))
+//                }
             }
-            Spacer(modifier = Modifier.size(10.dp))
-            Button(
-                onClick = { navController.navigate("savingsBonus") },
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
-                Text("티끌 보너스")
+                Button(
+                    onClick = { navController.navigate("savingsApprove") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    Text("티끌 수락")
+                }
+                Spacer(modifier = Modifier.size(10.dp))
+
+                Button(
+                    onClick = { navController.navigate("savingsBonus") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    Text("티끌 보너스")
+                }
             }
         }
     }
 }
-
 

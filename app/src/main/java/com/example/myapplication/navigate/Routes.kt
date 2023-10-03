@@ -15,10 +15,12 @@ import androidx.navigation.compose.composable
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
+import com.example.myapplication.screens.ChildConfiscationTransferScreen
 import com.example.myapplication.screens.ChildMainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
+import com.example.myapplication.screens.ChildTaxTransferScreen
 import com.example.myapplication.screens.ChildWalletScreen
 import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
@@ -87,7 +89,7 @@ fun AppNavigation(navController: NavHostController){
         composable("savingsApprove") {
             SavingsApproveScreen(navController = navController)
         }
-        composable("savingsTransfer") {
+        composable("childSavingsTransfer") {
             ChildSavingsTransferScreen(navController = navController)
         }
         composable("savingsBonus"){
@@ -96,8 +98,12 @@ fun AppNavigation(navController: NavHostController){
         composable("childWallet"){
             ChildWalletScreen(navController = navController)
         }
-
-
+        composable("ChildTaxTransfer"){
+            ChildTaxTransferScreen(navController =navController)
+        }
+        composable("ChildConfiscationTransfer"){
+            ChildConfiscationTransferScreen(navController= navController)
+        }
 
     }
 }

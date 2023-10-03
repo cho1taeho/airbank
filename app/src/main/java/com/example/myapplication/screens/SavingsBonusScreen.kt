@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -93,33 +94,56 @@ import java.text.SimpleDateFormat
 fun SavingsBonusScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
-
+    val context = LocalContext.current
     Column (
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .padding(16.dp)
+            .fillMaxWidth()
+            .padding(20.dp, 20.dp, 20.dp, 20.dp)
+            .verticalScroll(rememberScrollState())
     ){
-        Text(
-            "${savingsData?.data?.data?.parentsAmount ?: "로딩 중..."}원",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold
-        )
-        savingsData?.data?.data?.let { data ->
-            val id = data.id
-            val amount = data.parentsAmount
-
+        Spacer(modifier = Modifier.size(5.dp))
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .height(470.dp)
+                .background(color = Color(0xFFD6F2FF))
+        ) {
             Text(
-                "티끌모으기 지원금 보내기",
+                "${savingsData?.data?.data?.parentsAmount ?: "로딩 중..."}원",
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFF00D2F3))
+                .clickable {
+                    val id = savingsData?.data?.data?.id
+                    val amount = savingsData?.data?.data?.parentsAmount
+
+                    if (id != null && amount != null) {
+                        viewModel.bonusSavings(id, BonusSavingsRequest(id = id, amount = amount))
+                        navController.navigate("BottomNavItem.Savings.screenRoute")
+                    } else {
+                        Toast.makeText(context, "송금 실패", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        ) {
+            Text(
+                "티끌모으기 지원금 송금하기",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clickable {
-                        viewModel.bonusSavings(id, BonusSavingsRequest(id = id, amount = amount))
-                    }
             )
-        } ?: Text(
-            "데이터 로딩 중...",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold
-        )
+        }
+
     }
 }

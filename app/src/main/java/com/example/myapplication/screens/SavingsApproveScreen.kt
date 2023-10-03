@@ -37,7 +37,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberImagePainter
 import com.example.myapplication.model.Resource
 import com.example.myapplication.model.State
 import com.example.myapplication.model.UpdateSavingsRequest
@@ -52,6 +54,9 @@ fun SavingsApproveScreen(navController: NavController) {
 
 
     savingsData?.let { data ->
+        val imageUrl = data?.data?.data?.savingsItem?.imageUrl
+        val painter = rememberImagePainter(data = imageUrl)
+
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,11 +90,12 @@ fun SavingsApproveScreen(navController: NavController) {
                     )
                     Spacer(modifier = Modifier.size(20.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.item),
+                        painter = painter,
                         contentDescription = null,
                         modifier = Modifier
                             .size(280.dp)
-                            .align(Alignment.CenterHorizontally)
+                            .align(Alignment.CenterHorizontally),
+                        contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
@@ -108,44 +114,44 @@ fun SavingsApproveScreen(navController: NavController) {
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(color = Color(0xFFD6F2FF))
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                ) {
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.shoppingcart),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(30.dp)
-                    )
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Text(
-                        "구매하기",
-                        fontSize = 19.sp,
-                        fontWeight = FontWeight.Bold
-
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Image(
-                        painter = painterResource(id = R.drawable.vector),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp)
-
-                    )
-
-                }
-            }
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(70.dp)
+//                    .clip(RoundedCornerShape(10.dp))
+//                    .background(color = Color(0xFFD6F2FF))
+//            ) {
+//                Row(
+//                    horizontalArrangement = Arrangement.Start,
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    modifier = Modifier
+//                        .fillMaxHeight()
+//                ) {
+//                    Spacer(modifier = Modifier.size(10.dp))
+//                    Image(
+//                        painter = painterResource(id = R.drawable.shoppingcart),
+//                        contentDescription = null,
+//                        modifier = Modifier
+//                            .size(30.dp)
+//                    )
+//                    Spacer(modifier = Modifier.size(10.dp))
+//                    Text(
+//                        "구매하기",
+//                        fontSize = 19.sp,
+//                        fontWeight = FontWeight.Bold
+//
+//                    )
+//                    Spacer(modifier = Modifier.weight(1f))
+//                    Image(
+//                        painter = painterResource(id = R.drawable.vector),
+//                        contentDescription = null,
+//                        modifier = Modifier
+//                            .size(20.dp)
+//
+//                    )
+//
+//                }
+//            }
 
             Spacer(modifier = Modifier.weight(1f))
 
