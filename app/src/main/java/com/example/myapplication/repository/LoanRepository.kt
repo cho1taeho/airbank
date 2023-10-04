@@ -1,5 +1,6 @@
 package com.example.myapplication.repository
 
+import android.util.Log
 import com.example.myapplication.api.ApiService
 import com.example.myapplication.model.LoanChargeRequest
 import com.example.myapplication.model.LoanChargeResponse
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class LoanRepository @Inject constructor(
     private val apiService: ApiService
 ){
+
+
+
     suspend fun getLoan(groupId: Int): Resource<LoanResponse> {
         val response = apiService.getLoan(groupId)
         return if (response.isSuccessful) {

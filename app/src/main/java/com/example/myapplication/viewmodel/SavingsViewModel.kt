@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.BonusSavingsRequest
 import com.example.myapplication.model.BonusSavingsResponse
 import com.example.myapplication.model.CancelSavingsRequest
@@ -40,13 +41,16 @@ class SavingsViewModel @Inject constructor(
 
     fun getSavings() = viewModelScope.launch {
         _savingsState.emit(Resource(State.LOADING, null, null))
+        val groupId = AirbankApplication.prefs.getString("group_id", "")
         try {
-            val response = savingsRepository.getSavings(1)
+
+            val response = savingsRepository.getSavings(groupId.toInt())
             _savingsState.emit(response)
-            Log.d("DEBUG", "_savingsState is set: ${_savingsState.value}")
+            Log.d("DEBUG", "_savingsState is set: ${_savingsState.value}, ${groupId}")
 
         } catch (e: Exception) {
             _savingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
+            Log.d("getSavingsError","${groupId}")
         }
     }
 

@@ -7,8 +7,8 @@ data class LoanResponse (
 ){
 
     data class Data(
-        val amount: Long,
-        val loanLimit: Long
+        val amount: Int,
+        val loanLimit: Int
     )
 }
 

@@ -411,7 +411,11 @@ fun Body(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFEFE4FF))
                     .clickable {
-                        navController.navigate("savings")
+                        when (savingsData?.status){
+                            State.SUCCESS -> navController.navigate("savings")
+                            State.ERROR -> navController.navigate("savingsApprove")
+                            else -> {}
+                        }
                     }
             ){
                 Column (
