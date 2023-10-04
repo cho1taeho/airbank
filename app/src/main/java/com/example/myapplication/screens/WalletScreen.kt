@@ -80,6 +80,7 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -97,7 +98,7 @@ fun WalletScreen(navController: NavController) {
     val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
     val loanViewModel: LoanViewModel = hiltViewModel()
     val loanData by loanViewModel.loanState.collectAsState(initial = null)
-
+    val mainName = AirbankApplication.prefs.getString("name", "")
 
     Column (
         modifier = Modifier
@@ -117,18 +118,18 @@ fun WalletScreen(navController: NavController) {
             ){
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "자식의 잔액",
+                    "잔액",
                     fontSize = 14.sp,
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "20,000,000",
+                    "${accountData?.data?.data?.amount}",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(
-                    "팡팡은행 이현도 님의 통장"
+                    "팡팡은행 ${mainName} 님의 통장"
                 )
             }
         }
@@ -140,6 +141,9 @@ fun WalletScreen(navController: NavController) {
 //                .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
+                .clickable{
+                    navController.navigate("BonusTransfer")
+                }
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
@@ -188,7 +192,7 @@ fun WalletScreen(navController: NavController) {
                     .padding(start = 16.dp)
             ){
                 Spacer(modifier = Modifier.size(10.dp))
-                Text("레이첼님의 기본 용돈")
+                Text("${mainName}님의 기본 용돈")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     "월 100,000원",
