@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -65,8 +66,15 @@ fun AddChildScreen(
                 navController.navigate(BottomNavItem.Main.screenRoute)
             })
         )
-    }
+        Spacer(modifier = Modifier.height(20.dp))
 
+        Button(onClick = {
+            viewModel.submit(phoneNumberValue)
+            navController.navigate(BottomNavItem.Main.screenRoute)
+        }) {
+            Text(text = "SUBMIT")
+        }
+    }
 }
 
 class AddChildViewModel @Inject constructor() : ViewModel() {

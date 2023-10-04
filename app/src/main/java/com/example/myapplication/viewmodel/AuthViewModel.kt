@@ -81,7 +81,6 @@ class AuthViewModel @Inject constructor() : ViewModel() {
                         withContext(Dispatchers.Main) {
                             navController.navigate(BottomNavItem.Main.screenRoute)
                         }
-
                     }
                 }
             } else {

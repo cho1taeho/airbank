@@ -95,9 +95,13 @@ data class GETGroupsResponse(
     @SerializedName("message")
     val message: String,
     @SerializedName("data")
-    val data: List<Data>
+    val data: Data
 ) {
     data class Data(
+        @SerializedName("members")
+        val members: List<Member>
+    ){
+      data class Member(
         @SerializedName("id")
         val id: Int,
         @SerializedName("groupId")
@@ -106,7 +110,7 @@ data class GETGroupsResponse(
         val name: String,
         @SerializedName("imageUrl")
         val imageUrl: String
-    )
+    )}
 }
 
 data class POSTGroupsRequest(

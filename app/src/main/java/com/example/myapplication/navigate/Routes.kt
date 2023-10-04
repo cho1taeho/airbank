@@ -4,12 +4,10 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,10 +31,8 @@ import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsApproveScreen
 import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen
-import com.example.myapplication.screens.SignInScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
-import com.example.myapplication.viewmodel.SavingsViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -47,10 +43,10 @@ fun AppNavigation(navController: NavHostController){
         composable(BottomNavItem.Main.screenRoute) {
             userRole = AirbankApplication.prefs.getString("role","")
             Log.d("userRole",userRole)
-            if (userRole != "CHILD"){
+            if (userRole == "CHILD"){
                 ChildMainScreen(navController = navController)
             }
-            else{
+            else if(userRole == "PARENT"){
                 MainScreen(navController = navController)
             }
         }
