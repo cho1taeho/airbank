@@ -5,8 +5,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.navigate.AppNavigation
 import com.example.myapplication.screens.BottomNavItem
@@ -56,17 +55,14 @@ fun AppMainContent(navController: NavHostController) {
 fun MyUI() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var isLoggedin by remember {mutableStateOf(false)}
     val currentRoute = navBackStackEntry?.destination?.route
     var title by remember {mutableStateOf("")}
-    LaunchedEffect(navController.currentDestination,isLoggedin){
-        val isLoggedIn = AirbankApplication.prefs.getString("name", "").isNotBlank()
-        Log.d("MYUI",AirbankApplication.prefs.getString("name", "")+isLoggedin.toString())
-        if (isLoggedin != isLoggedIn) {
-            isLoggedin = isLoggedIn
-        }
+    var nowon by remember { mutableStateOf("") }
+    val isLoggedin = true
+    LaunchedEffect(navController.currentDestination){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             title = BottomNavItem.fromRoute(destination.route.toString()).title
+            Log.d("navigateRoute",destination.route.toString())
         }
     }
     Scaffold(
@@ -153,6 +149,7 @@ fun MyUI() {
         Row(
             modifier = Modifier
                 .padding(it)
+                .background(Color(0xFFf3f3f3))
             , horizontalArrangement = Arrangement.Center
             , verticalAlignment = Alignment.CenterVertically
         ) {
