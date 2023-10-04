@@ -93,7 +93,6 @@ class AccountRepository @Inject constructor(
 
     suspend fun interestCheck(groupId: Int): Resource<InterestResponse>{
         val response = apiService.interestCheck(groupId)
-        Log.d("이자리","이자리${response?.code()}")
         return if (response.isSuccessful){
             Resource(State.SUCCESS,response.body(),"SUCCESS")
         } else{

@@ -17,6 +17,7 @@ import com.example.myapplication.screens.AddChildScreen
 import com.example.myapplication.screens.AuthScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildConfiscationTransferScreen
+import com.example.myapplication.screens.ChildLoanRepaymentScreen
 import com.example.myapplication.screens.ChildLoanStartScreen
 import com.example.myapplication.screens.ChildMainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
@@ -118,6 +119,10 @@ fun AppNavigation(navController: NavHostController){
 
         composable("ChildLoanStart"){
             ChildLoanStartScreen(navController = navController)
+        }
+
+        composable("ChildLoanRepayment"){
+            ChildLoanRepaymentScreen(navController = navController)
         }
     }
 }

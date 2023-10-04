@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
@@ -28,11 +33,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.State
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
+import java.text.NumberFormat
+import java.util.Locale
 
 
 @Composable
@@ -77,20 +86,27 @@ fun LoanScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(8.dp))
                         val loanRemaining = (data.data?.data?.loanLimit ?:0) - (data.data?.data?.amount ?:0)
+                        val loanLimit = data.data?.data?.loanLimit ?:0
+                        val amount = data.data?.data?.amount ?:0
+
+                        val formattedLoanRemaining = NumberFormat.getNumberInstance(Locale.US).format(loanRemaining)
+                        val formattedLoamLimit = NumberFormat.getNumberInstance(Locale.US).format(loanLimit)
+                        val formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(amount)
+
                         Text(
-                            "${loanRemaining}원",
+                            "${formattedLoanRemaining}원",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(
-                            "현도 금액: ${data.data?.data?.loanLimit}",
+                            "현도 금액: ${formattedLoamLimit}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
                         Spacer(modifier = Modifier.size(5.dp))
                         Text(
-                            "사용 금액: ${data.data?.data?.amount}",
+                            "사용 금액: ${formattedAmount}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
@@ -127,33 +143,83 @@ fun LoanScreen(navController: NavController) {
                         Spacer(modifier = Modifier.size(8.dp))
 
                         val interestful = (interestData?.data?.data?.amount ?:0) + (interestData?.data?.data?.overdueAmount ?:0)
+                        val amount = interestData?.data?.data?.amount ?:0
+                        val overdueAmount = interestData?.data?.data?.overdueAmount ?:0
+                        val formattedInterestful = NumberFormat.getNumberInstance(Locale.US).format(interestful)
+                        val formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(amount)
+                        val formattedOverdueAmount = NumberFormat.getNumberInstance(Locale.US).format(overdueAmount)
+
                         Text(
-                            "${interestful}원",
+                            "${formattedInterestful}원",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(
-                            "이번 달 이자: ${interestData?.data?.data?.amount}",
+                            "이번 달 이자: ${formattedAmount}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
                         Spacer(modifier = Modifier.size(5.dp))
                         Text(
-                            "연체 이자: ${interestData?.data?.data?.overdueAmount}",
+                            "연체 이자: ${formattedOverdueAmount}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
-                Column() {
-                    Button(
-                        onClick = { navController.navigate("ChildLoanStart") },
-                        modifier = Modifier
-                            .weight(1f)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("땡겨쓰기")
+
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(70.dp)
+                                .weight(1f)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(color = Color.LightGray)
+                                .clickable {
+                                    navController.navigate("ChildLoanRepayment")
+                                }
+                        ) {
+                            Text(
+                                "상환하기",
+                                color = Color(0xFF00D2F3),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(10.dp))
+
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .height(70.dp)
+                                .weight(1f)
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(color = Color(0xFF00D2F3))
+                                .clickable {
+                                    navController.navigate("ChildLoanStart")
+                                }
+                        ) {
+                            Text(
+                                "땡겨쓰기",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
                 Box(
