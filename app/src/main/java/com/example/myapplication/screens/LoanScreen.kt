@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Divider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +43,14 @@ fun LoanScreen(navController: NavController) {
     val loanData by loanViewModel.loanState.collectAsState()
     val accountViewModel: AccountViewModel = hiltViewModel()
     val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = groupId) {
+        if (groupId.isNotEmpty()) {
+            Log.d("LoanScreen", "LaunchedEffect triggered with groupId: $groupId")
+            accountViewModel.interestCheck(groupId.toInt())
+        }
+    }
+
 
     Column(
     ) {

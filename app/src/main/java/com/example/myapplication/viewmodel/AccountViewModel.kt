@@ -139,8 +139,10 @@ class AccountViewModel @Inject constructor(
         try {
             val response = accountRepository.interestCheck(groupId)
             _interestCheckState.emit(response)
+            Log.d("이자뷰","이자뷰 ${response?.data?.code}")
         } catch (e: Exception) {
             _interestCheckState.emit(Resource(State.ERROR, null, e.localizedMessage))
+            Log.d("이자뷰실패","이자뷰실패")
         }
     }
 
@@ -151,6 +153,7 @@ class AccountViewModel @Inject constructor(
         _interestRepaymentState.emit(Resource(State.LOADING, null, null))
         try {
             val response = accountRepository.interestRepayment(request)
+
             _interestRepaymentState.emit(response)
         } catch (e: Exception) {
             _interestRepaymentState.emit(Resource(State.ERROR, null, e.localizedMessage))
