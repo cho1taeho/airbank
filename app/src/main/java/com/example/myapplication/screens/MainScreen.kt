@@ -155,7 +155,7 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
         Spacer(modifier = Modifier.size(20.dp))
     }
 
-    ChildCard(mainImage = childs.first { it -> it.id == selected }.imageUrl, mainName = childs.first { it -> it.id == selected }.name)
+//    ChildCard(mainImage = childs.first { it -> it.id == selected }.imageUrl, mainName = childs.first { it -> it.id == selected }.name)
 }
 @Composable
 fun ChildCard(mainImage: String, mainName: String) {
