@@ -55,12 +55,11 @@ fun LoanScreen(navController: NavController) {
     Column(
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
         ) {
             loanData?.let { data ->
                 Box(
                     modifier = Modifier
+                        .padding(16.dp)
                         .fillMaxWidth()
                         .height(145.dp)
                         .clip(RoundedCornerShape(10.dp))
@@ -105,6 +104,8 @@ fun LoanScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.size(17.dp))
             Column(
+                modifier = Modifier
+                    .padding(16.dp)
             ) {
                 Box(
                     modifier = Modifier
