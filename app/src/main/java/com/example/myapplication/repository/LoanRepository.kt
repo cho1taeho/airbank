@@ -1,5 +1,6 @@
 package com.example.myapplication.repository
 
+import android.util.Log
 import com.example.myapplication.api.ApiService
 import com.example.myapplication.model.LoanChargeRequest
 import com.example.myapplication.model.LoanChargeResponse

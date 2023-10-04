@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.CreateSavingsItemResponse
 import com.example.myapplication.model.LoanChargeRequest
 import com.example.myapplication.model.LoanChargeResponse
@@ -37,8 +38,10 @@ class LoanViewModel @Inject constructor(
 
     fun getLoan() = viewModelScope.launch {
         _loanState.emit(Resource(State.LOADING, null, null))
+//        val groupId = AirbankApplication.prefs.getString("group_id", "")
+        val groupId = "1"
         try {
-            val response = loanRepository.getLoan(1)
+            val response = loanRepository.getLoan(groupId.toInt())
             _loanState.emit(response)
             Log.d("DEBUG", "_loanState is set: ${_loanState.value}")
         } catch (e: Exception) {

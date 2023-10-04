@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
@@ -21,6 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
@@ -29,6 +34,8 @@ import com.example.myapplication.viewmodel.LoanViewModel
 
 @Composable
 fun LoanScreen(navController: NavController) {
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
     val loanViewModel: LoanViewModel = hiltViewModel();
     val loanData by loanViewModel.loanState.collectAsState()
 
@@ -83,9 +90,8 @@ fun LoanScreen(navController: NavController) {
                 color = Color(0xffCBCBCB),
                 thickness = 1.dp
             )
+            Spacer(modifier = Modifier.size(17.dp))
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
             ) {
                 Box(
                     modifier = Modifier
@@ -125,6 +131,15 @@ fun LoanScreen(navController: NavController) {
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
+                Column() {
+                    Button(
+                        onClick = { navController.navigate("ChildLoanStart") },
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Text("땡겨쓰기")
+                    }
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,6 +162,7 @@ fun LoanScreen(navController: NavController) {
                         CreditPoint()
                     }
                 }
+
             }
         }
     }

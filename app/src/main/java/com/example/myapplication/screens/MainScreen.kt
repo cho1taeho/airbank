@@ -461,6 +461,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 if (getGroupsResponse != null) {
                     Log.d(tag, getGroupsResponse.toString())
                     childs = getGroupsResponse.data
+                    AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
+                    Log.d(tag, AirbankApplication.prefs.getString("group_id",""))
+
                 }
             } catch (e: Exception) {
                 Log.e(tag, e.toString())
