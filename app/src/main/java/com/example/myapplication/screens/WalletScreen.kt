@@ -214,7 +214,7 @@ fun WalletScreen(navController: NavController) {
         ){
             Column {
                 Spacer(modifier = Modifier.size(10.dp))
-                Text("레이첼님의 신용점수")
+                Text("${mainName}님의 신용점수")
                 ScoreBar(score = 512)
                 CreditPoint()
             }

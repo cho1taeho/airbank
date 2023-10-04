@@ -1,8 +1,6 @@
 package com.example.myapplication.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.AirbankApplication
@@ -59,6 +57,8 @@ class SavingsViewModel @Inject constructor(
     val createItemState: StateFlow<Resource<CreateSavingsItemResponse>> get() = _createItemState
 
     fun createSavingsItem(request: CreateSavingsItemRequest) = viewModelScope.launch {
+        val JSESSIONID = AirbankApplication.prefs.getString("JSESSIONID","")
+        Log.d("ViewModel", "Stored JSESSIONID: $JSESSIONID")
         _createItemState.emit(Resource(State.LOADING, null, null))
         try {
             val response = savingsRepository.createSavingsItem(request)
@@ -93,6 +93,8 @@ class SavingsViewModel @Inject constructor(
         try {
             val response = savingsRepository.cancelSavings(request)
             _cancelSavingsState.emit(response)
+            Log.d("CancelItem","티끌 모으기 실패: ${response.data?.message}")
+            Log.d("CancelItem","티끌 모으기 실패: ${response.data?.code}")
         } catch (e: Exception) {
             _cancelSavingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
