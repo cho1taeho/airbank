@@ -12,13 +12,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.layout.AppMainContent
 import com.example.myapplication.layout.MyUI
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,7 +36,6 @@ class MainActivity : ComponentActivity() {
                     var keyHash = Utility.getKeyHash(this)
                     Log.d("KeyHash",keyHash)
                 }
-
             }
         }
     }

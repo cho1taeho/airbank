@@ -74,7 +74,7 @@ fun MainScreen(navController: NavController) {
     Column {
         if (childs.isNotEmpty()){
             Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
-            ChildProfile()
+            ChildProfile(childs)
         } else {
             postNewChild(navController)
         }
@@ -121,7 +121,8 @@ fun postNewChild(navController: NavController){
 }
 
 @Composable
-fun ChildProfile() {
+fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
+
     val mainName = AirbankApplication.prefs.getString("name", "")
     val mainImage = AirbankApplication.prefs.getString("imageUrl", "")
 
@@ -160,47 +161,33 @@ fun ChildProfile() {
 //        }
 //    }
 
-    Row (
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
 
-    ){
-        Column (
-            horizontalAlignment  = Alignment.Start,
-//                modifier = Modifier.weight(1f)
+        Row (
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
         ) {
+            childs.forEach() {
 
-            Box(
-                modifier = Modifier
-                    .size(42.dp)
-                    .border(1.dp, Color(0xFFB4EBF7), CircleShape)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.karina),
-                    contentDescription = "Main Image",
-                    contentScale = ContentScale.Crop,
+                Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                )
+                        .size(42.dp)
+                        .border(1.dp, Color(0xFFB4EBF7), CircleShape)
+                ) {
+                    AsyncImage(
+                        model = it.imageUrl,
+                        contentDescription = "Main Image",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }
+                Text(it.name)
             }
-            Text(mainName)
         }
-//        Row (
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-////                modifier = Modifier.weight(1f)
-//        ){
-//            CircleWithImageAndBorder(image1, name1) {swapImages(image1, name1)}
-//            Spacer(Modifier.width(8.dp) )
-//            CircleWithImageAndBorder(image2, name2) {swapImages(image2, name2)}
-//            Spacer(Modifier.width(8.dp) )
-//            CircleWithImageAndBorder(image3, name3) {swapImages(image3, name3)}
-//
-//        }
-    }
+
     Spacer(modifier = Modifier.size(20.dp))
 
     ChildCard(mainImage = mainImage, mainName = mainName)
