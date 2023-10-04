@@ -19,12 +19,14 @@ import com.example.myapplication.screens.BonusTransferScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildConfiscationTransferScreen
 import com.example.myapplication.screens.ChildLoanRepaymentScreen
+import com.example.myapplication.screens.ChildLoanScreen
 import com.example.myapplication.screens.ChildLoanStartScreen
 import com.example.myapplication.screens.ChildMainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
 import com.example.myapplication.screens.ChildTaxTransferScreen
+import com.example.myapplication.screens.ChildTransactionHistoryScreen
 import com.example.myapplication.screens.ChildWalletScreen
 import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
@@ -127,6 +129,15 @@ fun AppNavigation(navController: NavHostController){
         }
         composable("BonusTransfer"){
             BonusTransferScreen(navController=navController)
+        }
+        composable("ChildLoan"){
+            ChildLoanScreen(navController = navController)
+        }
+        composable("Loan"){
+            LoanScreen(navController = navController)
+        }
+        composable("ChildTranscationHistory"){
+            ChildTransactionHistoryScreen(navController = navController)
         }
 
 

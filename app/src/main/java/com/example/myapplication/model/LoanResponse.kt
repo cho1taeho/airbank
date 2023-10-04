@@ -12,7 +12,6 @@ data class LoanResponse (
     )
 }
 
-
 data class LoanStartRequest(
     val amount: Int
 )

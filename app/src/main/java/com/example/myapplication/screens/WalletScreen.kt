@@ -80,7 +80,9 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -99,6 +101,15 @@ fun WalletScreen(navController: NavController) {
     val loanViewModel: LoanViewModel = hiltViewModel()
     val loanData by loanViewModel.loanState.collectAsState(initial = null)
     val mainName = AirbankApplication.prefs.getString("name", "")
+    val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
+
+    var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
+    LaunchedEffect(Unit, viewModel.childs){
+        viewModel.getGroup()
+        val mutablechilds = viewModel.childs
+        childs = mutablechilds
+    }
+
 
     Column (
         modifier = Modifier
@@ -123,14 +134,13 @@ fun WalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "${accountData?.data?.data?.amount}",
+                    "${accountData?.data?.data?.amount ?:0}",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    "팡팡은행 ${mainName} 님의 통장"
-                )
+                Text("팡팡은행 ${childs.firstOrNull()?.name ?: "Unknown"} 님의 통장")
+
             }
         }
         Spacer(modifier = Modifier.size(10.dp))
@@ -192,7 +202,7 @@ fun WalletScreen(navController: NavController) {
                     .padding(start = 16.dp)
             ){
                 Spacer(modifier = Modifier.size(10.dp))
-                Text("${mainName}님의 기본 용돈")
+                Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 기본 용돈")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
                     "월 100,000원",
@@ -214,7 +224,7 @@ fun WalletScreen(navController: NavController) {
         ){
             Column {
                 Spacer(modifier = Modifier.size(10.dp))
-                Text("레이첼님의 신용점수")
+                Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 신용점수")
                 ScoreBar(score = 512)
                 CreditPoint()
             }

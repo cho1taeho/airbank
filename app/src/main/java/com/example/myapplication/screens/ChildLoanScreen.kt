@@ -47,7 +47,7 @@ import java.util.Locale
 
 
 @Composable
-fun LoanScreen(navController: NavController) {
+fun ChildLoanScreen(navController: NavController) {
     var groupId by remember { mutableStateOf("") }
     groupId = AirbankApplication.prefs.getString("group_id", "")
     val loanViewModel: LoanViewModel = hiltViewModel();
@@ -114,6 +114,61 @@ fun LoanScreen(navController: NavController) {
                             "사용 금액: ${formattedAmount}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
+                        )
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(13.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(70.dp)
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color = Color.White)
+                            .clickable {
+                                navController.navigate("ChildLoanRepayment")
+                            }
+                    ) {
+                        Text(
+                            "상환하기",
+                            color = Color(0xFF00D2F3),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.size(10.dp))
+
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(70.dp)
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color = Color(0xFF00D2F3))
+                            .clickable {
+                                navController.navigate("ChildLoanStart")
+                            }
+                    ) {
+                        Text(
+                            "땡겨쓰기",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }

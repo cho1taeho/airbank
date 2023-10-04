@@ -2,6 +2,7 @@ package com.example.myapplication.screens
 
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
@@ -45,13 +48,14 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 import dagger.hilt.android.HiltAndroidApp
 import com.example.myapplication.model.SavingsResponse
 import com.example.myapplication.model.State
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 
 //@Preview
 
 @Composable
 fun ChildSavingsScreen(navController: NavController) {
-    val viewModel : SavingsViewModel = hiltViewModel()
+    val viewModel: SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
 
@@ -59,13 +63,13 @@ fun ChildSavingsScreen(navController: NavController) {
     Log.d("ChildSavingsScreen", "savingsData: $savingsData")
 
     if (savingsData?.status == State.ERROR) {
-        Column (
+        Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp, 20.dp, 20.dp, 20.dp)
-        ){
+        ) {
             Spacer(modifier = Modifier.size(5.dp))
             Box(
                 contentAlignment = Alignment.Center,
@@ -75,7 +79,7 @@ fun ChildSavingsScreen(navController: NavController) {
                     .height(350.dp)
                     .background(color = Color(0xFFD6F2FF))
 
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.plus),
                     contentDescription = null,
@@ -108,7 +112,9 @@ fun ChildSavingsScreen(navController: NavController) {
 
         savingsData?.let { data ->
             val imageUrl = data?.data?.data?.savingsItem?.imageUrl
-            val painter = rememberImagePainter(data = imageUrl)
+
+
+
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
@@ -143,31 +149,41 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(20.dp))
 
-                        Image(
-                            painter = painter,
-                            contentDescription = null,
+
+                        AsyncImage(
+                            model = imageUrl,
+                            contentDescription = "Savings Item",
+                            contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .size(280.dp)
+                                .size(270.dp)
                                 .align(Alignment.CenterHorizontally),
-                            contentScale = ContentScale.Crop//이미지 크기조절
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
-                            "${data.data?.data?.myAmount}원",
-                            fontSize = 25.sp,
+                            "${data.data?.data?.savingsItem?.amount ?: "0"}원",
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                         )
-                        Spacer(modifier = Modifier.size(8.dp))
+                        Spacer(modifier = Modifier.size(5.dp))
                         Text(
-                            "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
+                            "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.expiredAt}",
                             fontSize = 13.sp
                         )
                         Text(
-                            "요청금액 : ${data.data?.data?.savingsItem?.amount ?:"0"}원",
+                            "지원 금액 : ${data.data?.data?.parentsAmount ?: "0"}원",
+                            fontSize = 13.sp
+                        )
+                        Text(
+                            "모은 금액 : ${data?.data?.data?.totalAmount ?: "0"}원",
+                            fontSize = 13.sp
+                        )
+                        Text(
+                            "밀린 횟수 : ${data?.data?.data?.delayCount ?: "0"} 회",
                             fontSize = 13.sp
                         )
                     }
                 }
+                val context = LocalContext.current
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -175,7 +191,11 @@ fun ChildSavingsScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFFD6F2FF))
                         .clickable {
-                            navController.navigate("childSavingsTransfer")
+                            if (savingsData?.data?.data?.isPaid == false) {
+                                navController.navigate("childSavingsTransfer")
+                            } else {
+                                Toast.makeText(context, "이번달은 송금을 했습니다", Toast.LENGTH_SHORT).show()
+                            }
                         }
                 ) {
                     Row(
@@ -213,13 +233,19 @@ fun ChildSavingsScreen(navController: NavController) {
                 Spacer(modifier = Modifier.weight(1f))
 
 
-                val cancelSavingsState = viewModel.cancelSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
-
-                if (cancelSavingsState.status == State.SUCCESS) {
-                    navController.navigate("savingsApplication") {
-                        popUpTo("route_start_destination") { inclusive = true }
-                    }
-                }
+//                    val cancelSavingsState = viewModel.cancelSavingsState.collectAsState(
+//                        Resource(
+//                            State.LOADING,
+//                            null,
+//                            null
+//                        )
+//                    ).value
+//
+//                    if (cancelSavingsState.status == State.SUCCESS) {
+//                        navController.navigate("savingsApplication") {
+//                            popUpTo("route_start_destination") { inclusive = true }
+//                        }
+//                    }
 
 
 
@@ -230,11 +256,11 @@ fun ChildSavingsScreen(navController: NavController) {
                         .height(70.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFF00D2F3))
-                        .clickable {
-//                            navController.navigate("savingsApplication")
+                        .clickable {//
                             navController.navigate(BottomNavItem.Main.screenRoute)
-                            val groupId = AirbankApplication.prefs.getString("group_id", "")
-                            viewModel.cancelSavings(CancelSavingsRequest(id = groupId.toInt()))
+                            val id = savingsData?.data?.data?.id ?: 0
+                            viewModel.cancelSavings(CancelSavingsRequest(id = id.toInt()))
+                            Log.d("티끌아이디", "${id}")
                         }
                 ) {
                     Text(
@@ -244,8 +270,8 @@ fun ChildSavingsScreen(navController: NavController) {
                         fontWeight = FontWeight.Bold
                     )
                 }
+
             }
         }
     }
 }
-

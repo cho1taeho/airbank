@@ -156,6 +156,9 @@ fun ChildWalletScreen(navController: NavController) {
 //                .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
+                .clickable {
+                    navController.navigate("ChildTranscationHistory")
+                }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

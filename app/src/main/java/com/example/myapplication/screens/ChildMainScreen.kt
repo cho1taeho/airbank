@@ -68,6 +68,7 @@ fun ChildMainScreen(navController: NavController) {
     Column {
 //        ChildCard(mainImage = imagepath, mainName = name)
         ChildBody(navController = navController)
+        Spacer(modifier = Modifier.size(16.dp))
         Quiz()
     }
 }
@@ -129,7 +130,7 @@ fun ChildBody(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFE2ECFF))
                     .clickable {
-                        navController.navigate("loan")
+                        navController.navigate("ChildLoan")
                     }
             ){
                 Column (
@@ -208,14 +209,21 @@ fun ChildBody(navController: NavController) {
 @Composable
 fun Quiz(){
     Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .height(110.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .height(80.dp)
             .background(color = Color.Gray)
-//            .clickable()
+
     ){
-        Text("퀴즈")
+        Text(
+            "오늘의 퀴즈",
+            color = Color.White,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 

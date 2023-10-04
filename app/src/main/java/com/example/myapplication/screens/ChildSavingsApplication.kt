@@ -7,6 +7,7 @@ import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -134,11 +135,12 @@ fun ChildSavingsApplication(navController: NavController) {
             TextButton(
                 onClick = {
                     when {
-                        targetValue.text.isEmpty() -> snackbarMessage = "목표를 입력하세요."
-                        priceValue.text.isEmpty() -> snackbarMessage = "가격을 입력하세요."
-                        requestPriceValue.text.isEmpty() -> snackbarMessage = "요청 금액을 입력하세요."
-                        uri == null -> snackbarMessage = "첨부파일을 추가하세요."
-                        selectedMonths <= 0 -> snackbarMessage = "기간을 선택하세요."
+                        targetValue.text.isEmpty() -> Toast.makeText(context, "목표를 입력하세요.", Toast.LENGTH_SHORT).show()
+                        priceValue.text.isEmpty() -> Toast.makeText(context, "가격을 입력하세요.", Toast.LENGTH_SHORT).show()
+                        requestPriceValue.text.isEmpty() -> Toast.makeText(context, "요청 금액을 입력하세요.", Toast.LENGTH_SHORT).show()
+                        uri == null -> Toast.makeText(context, "첨부파일을 추가하세요.", Toast.LENGTH_SHORT).show()
+                        selectedMonths <= 0 -> Toast.makeText(context, "기간을 선택하세요.", Toast.LENGTH_SHORT).show()
+
                         else -> {
                             val createSavingsItemRequest = CreateSavingsItemRequest(
                                 name = targetValue.text,
@@ -235,7 +237,7 @@ fun ChildSavingsApplication(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
 
-        var selectedMonths by remember { mutableStateOf(3) }
+        var selectedMonths by remember { mutableStateOf(1) }
         var expanded by remember { mutableStateOf(false) }
         val scrollState = rememberScrollState()
         val futureCalendar: Calendar = Calendar.getInstance()
@@ -263,7 +265,7 @@ fun ChildSavingsApplication(navController: NavController) {
                 onDismissRequest = { expanded = false },
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
-                (3..12).forEach { num ->
+                (1..12).forEach { num ->
                     DropdownMenuItem(
                         text = { Text("$num") },
                         onClick = {

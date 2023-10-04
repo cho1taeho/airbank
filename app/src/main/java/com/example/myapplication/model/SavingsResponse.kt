@@ -15,6 +15,7 @@ data class SavingsResponse(
         val startedAt: String,
         val expiredAt: String,
         val endedAt: String,
+        val isPaid: Boolean,
         val status: String,
         val delayCount: Int,
         val savingsItem: SavingsItem
@@ -69,7 +70,7 @@ data class CancelSavingsRequest(
 
 data class CancelSavingsResponse(
     val code : String,
-    val messge : String,
+    val message : String,
     val data : Data
 ){
     data class Data(

@@ -1,6 +1,9 @@
 package com.example.myapplication.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,7 +54,15 @@ class LoanViewModel @Inject constructor(
     private val _loanStartState = MutableStateFlow<Resource<LoanStartResponse>>(Resource(State.LOADING, null, null))
     val loanStartState: StateFlow<Resource<LoanStartResponse>> get() = loanStartState
 
-    fun loanStart(request: LoanStartRequest) = viewModelScope.launch{
+    private val _loanAmount = mutableStateOf(TextFieldValue())
+    val loanAmount: MutableState<TextFieldValue> = _loanAmount
+
+    fun setLoanAmount(value: TextFieldValue) {
+        _loanAmount.value = value
+    }
+
+    fun loanStart() = viewModelScope.launch{
+        val request = LoanStartRequest(_loanAmount.value.text.toInt())
         _loanStartState.emit(Resource(State.LOADING, null,null))
         try {
             val response = loanRepository.loanStart(request)
