@@ -12,9 +12,10 @@ sealed class BottomNavItem(
             return when (route) {
                 "main" -> Main
                 "savings" -> Savings
-                "loan" -> Loan
+                "Loan" -> Loan
                 "wallet" -> Wallet
                 "my" -> MyPage
+                "ChildLoan" -> ChildLoan
 
                 // Add cases for other routes
                 else -> Main // Default to the main route
@@ -24,7 +25,8 @@ sealed class BottomNavItem(
     object Main : BottomNavItem("", R.drawable.ihome, "main")
     object Wallet : BottomNavItem("지갑", R.drawable.iwallet, "wallet")
     object Savings : BottomNavItem("티끌 모으기", R.drawable.isavings, "savings")
-    object Loan : BottomNavItem("땡겨 쓰기", R.drawable.iloan, "loan")
+    object Loan : BottomNavItem("땡겨 쓰기", R.drawable.iloan, "Loan")
+    object ChildLoan : BottomNavItem("땡겨 쓰기", R.drawable.iloan, "ChildLoan")
     object MyPage : BottomNavItem("마이 페이지", R.drawable.imypage, "my")
     object Notification :BottomNavItem("알림", androidx.core.R.drawable.notification_bg,"notification")
     object SignUp : BottomNavItem("회원가입",0,"SignUp")

@@ -172,29 +172,26 @@ fun SavingsScreen(navController: NavController) {
                 }
             }
             Spacer(modifier = Modifier.size(15.dp))
-            val context = LocalContext.current
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(color = Color(0xFF00D2F3))
-                    .clickable {
-                        if(savingsData?.data?.data?.myAmount == savingsData?.data?.data?.totalAmount) {
-                            navController.navigate("savingsBonus")
-                        } else {
-                            Toast.makeText(context, "아직 티끌모으기가 끝나지 않았습니다.", Toast.LENGTH_SHORT).show()
-                        }
 
-                    }
-            ) {
-                Text(
-                    "티끌 보너스 송금하기",
-                    color = Color.White,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            if (savingsData?.data?.data?.myAmount == savingsData?.data?.data?.totalAmount) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(70.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(color = Color(0xFF00D2F3))
+                        .clickable {
+                            navController.navigate("savingsBonus")
+                        }
+                ) {
+                    Text(
+                        "티끌 보너스 송금하기",
+                        color = Color.White,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }

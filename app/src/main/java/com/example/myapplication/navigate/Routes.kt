@@ -26,6 +26,7 @@ import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
 import com.example.myapplication.screens.ChildTaxTransferScreen
+import com.example.myapplication.screens.ChildTransactionHistoryScreen
 import com.example.myapplication.screens.ChildWalletScreen
 import com.example.myapplication.screens.FirstScreen
 import com.example.myapplication.screens.LoanScreen
@@ -35,6 +36,7 @@ import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsApproveScreen
 import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen
+import com.example.myapplication.screens.SavingsWaitingScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
 import kotlinx.coroutines.Dispatchers
@@ -135,7 +137,12 @@ fun AppNavigation(navController: NavHostController){
         composable("Loan"){
             LoanScreen(navController = navController)
         }
-
+        composable("ChildTranscationHistory"){
+            ChildTransactionHistoryScreen(navController = navController)
+        }
+        composable("SavingsWaiting"){
+            SavingsWaitingScreen(navController = navController)
+        }
 
     }
 }
