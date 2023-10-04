@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,6 +41,8 @@ import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun ChildLoanStartScreen(navController: NavController) {
@@ -69,8 +78,12 @@ fun CreditScore() {
 
 @Composable
 fun LoanAmount() {
-
     var requestPriceValue by remember { mutableStateOf(TextFieldValue()) }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Box(
         modifier = Modifier
@@ -97,11 +110,12 @@ fun LoanAmount() {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .focusRequester(focusRequester)
                     .background(color = Color(0xFFD6F2FF)),
                 label = { Text("땡겨쓸 금액을 입력 하세요.") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
-                )
+                ),
             )
         }
     }
@@ -132,27 +146,33 @@ fun LoanDetail() {
         loanData?.let { data ->
             val loanLimit = data.data?.data?.loanLimit ?: 0
             val amount = data.data?.data?.amount ?: 0
-            val remainingAmount = loanLimit - amount
+            val loanRemaining = loanLimit - amount ?:0
             val interestful = (interestData?.data?.data?.amount ?:0) + (interestData?.data?.data?.overdueAmount ?:0)
+
+            val formattedLoanRemaining = NumberFormat.getNumberInstance(Locale.US).format(loanRemaining)
+            val formattedLoamLimit = NumberFormat.getNumberInstance(Locale.US).format(loanLimit)
+            val formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(amount)
+            val formattedInterestful = NumberFormat.getNumberInstance(Locale.US).format(interestful)
+
 
             Column {
                 Text(
-                    "현도 금액: ${loanLimit}원",
+                    "현도 금액: ${formattedLoamLimit}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )
                 Text(
-                    "사용 금액: ${amount}원",
+                    "사용 금액: ${formattedAmount}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )
                 Text(
-                    "땡겨쓰기 가능 금액: ${remainingAmount}원",
+                    "땡겨쓰기 가능 금액: ${formattedLoanRemaining}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )
                 Text(
-                    "이자: ${interestful}원",
+                    "이자: ${formattedInterestful}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )

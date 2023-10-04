@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -68,7 +69,7 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 fun ChildSavingsApplication(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
-
+    val groupId = AirbankApplication.prefs.getString("group_id", "")
 
     var targetValue by remember { mutableStateOf(TextFieldValue()) }
     var priceValue by remember { mutableStateOf(TextFieldValue()) }
@@ -146,7 +147,7 @@ fun ChildSavingsApplication(navController: NavController) {
                                 parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
                                 imageUrl = uri.toString()
                             )
-                            Log.d("CreateItem", "티클 모으기: Sending Item: $createSavingsItemRequest")
+                            Log.d("CreateItem", "티클 모으기: Sending Item: $createSavingsItemRequest, ${groupId}그아")
                             viewModel.createSavingsItem(createSavingsItemRequest)
                             navController.navigate(BottomNavItem.Main.screenRoute)
                         }

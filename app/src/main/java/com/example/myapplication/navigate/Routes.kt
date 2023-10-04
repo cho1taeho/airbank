@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.screens.AddChildScreen
 import com.example.myapplication.screens.AuthScreen
+import com.example.myapplication.screens.BonusTransferScreen
 import com.example.myapplication.screens.BottomNavItem
 import com.example.myapplication.screens.ChildConfiscationTransferScreen
 import com.example.myapplication.screens.ChildLoanRepaymentScreen
@@ -124,6 +125,11 @@ fun AppNavigation(navController: NavHostController){
         composable("ChildLoanRepayment"){
             ChildLoanRepaymentScreen(navController = navController)
         }
+        composable("BonusTransfer"){
+            BonusTransferScreen(navController=navController)
+        }
+
+
     }
 }
 

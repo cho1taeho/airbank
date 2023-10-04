@@ -199,7 +199,8 @@ fun ChildCard(mainImage: String, mainName: String) {
                 Text("자녀 $mainName 님의\n지갑을 관리하고 있습니다.")
             }
             Text("신용점수")
-            ScoreBar(512)
+            val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
+            ScoreBar(creditPoint.toInt())
         }
     }
     Spacer(modifier = Modifier.size(20.dp))

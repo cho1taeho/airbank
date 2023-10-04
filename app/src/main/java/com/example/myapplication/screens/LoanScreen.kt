@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,7 +18,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -37,7 +40,6 @@ import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
-import com.example.myapplication.model.State
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import java.text.NumberFormat
@@ -62,6 +64,9 @@ fun LoanScreen(navController: NavController) {
 
 
     Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         Column(
         ) {
@@ -109,6 +114,61 @@ fun LoanScreen(navController: NavController) {
                             "사용 금액: ${formattedAmount}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
+                        )
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(13.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(70.dp)
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color = Color.White)
+                            .clickable {
+                                navController.navigate("ChildLoanRepayment")
+                            }
+                    ) {
+                        Text(
+                            "상환하기",
+                            color = Color(0xFF00D2F3),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.size(10.dp))
+
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(70.dp)
+                            .weight(1f)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(color = Color(0xFF00D2F3))
+                            .clickable {
+                                navController.navigate("ChildLoanStart")
+                            }
+                    ) {
+                        Text(
+                            "땡겨쓰기",
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -169,59 +229,6 @@ fun LoanScreen(navController: NavController) {
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .height(70.dp)
-                                .weight(1f)
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(color = Color.White)
-                                .clickable {
-                                    navController.navigate("ChildLoanRepayment")
-                                }
-                        ) {
-                            Text(
-                                "상환하기",
-                                color = Color(0xFF00D2F3),
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(10.dp))
-
-
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .height(70.dp)
-                                .weight(1f)
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(color = Color(0xFF00D2F3))
-                                .clickable {
-                                    navController.navigate("ChildLoanStart")
-                                }
-                        ) {
-                            Text(
-                                "땡겨쓰기",
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
