@@ -104,7 +104,7 @@ fun ChildSavingsApplication(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(22.dp)
+            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
 
     ) {

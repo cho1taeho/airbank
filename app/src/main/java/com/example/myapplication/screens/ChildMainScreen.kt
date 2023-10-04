@@ -41,13 +41,27 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
+import com.kakao.sdk.user.UserApiClient
 
 
 @Composable
 fun ChildMainScreen(navController: NavController) {
+
+    val name = AirbankApplication.prefs.getString("name","")
+    var imagepath = AirbankApplication.prefs.getString("imageUrl","")
+
+    UserApiClient.instance.me { user, _ ->
+        if (user!=null){
+            imagepath = user.properties?.get("profile_image") ?: ""
+        }
+    }
+    if (imagepath.isNullOrEmpty()) {
+        imagepath = "local"
+    }
     Column {
-        ChildCard(mainImage = R.drawable.karina, mainName = "카리나")
+        ChildCard(mainImage = imagepath, mainName = name)
         ChildBody(navController = navController)
         Quiz()
     }

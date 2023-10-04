@@ -80,6 +80,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.verticalScroll
 import coil.compose.rememberImagePainter
+import com.example.myapplication.model.CancelSavingsRequest
 
 @Composable
 fun SavingsScreen(navController: NavController) {
@@ -90,6 +91,8 @@ fun SavingsScreen(navController: NavController) {
     var numerator by remember { mutableStateOf(2) }
     var showDenominatorDropdown by remember { mutableStateOf(false) }
     var showNumeratorDropdown by remember { mutableStateOf(false) }
+
+
 
     savingsData?.let { data ->
         val imageUrl = data?.data?.data?.savingsItem?.imageUrl
@@ -156,58 +159,22 @@ fun SavingsScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.size(15.dp))
             Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(70.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(color = Color(0xFFD6F2FF))
-//                .clickable{
-//                    navController.navigate("childSavings")
-//                }
+                    .background(color = Color(0xFF00D2F3))
+                    .clickable {
+                        navController.navigate("savingsBonus")
+                    }
             ) {
-//                Column(
-//                    modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    Spacer(modifier = Modifier.weight(1f))
-//                    Text(
-//                        "현재 납입 금액 : 415,000",
-//                        fontSize = 22.sp,
-//                        modifier = Modifier
-//                            .padding(start = 14.dp)
-//                    )
-//                    Spacer(modifier = Modifier.size(9.dp))
-//                    Text(
-//                        "밀린 횟수 : 1회",
-//                        fontSize = 22.sp,
-//                        modifier = Modifier
-//                            .padding(start = 14.dp)
-//                    )
-//                    Spacer(modifier = Modifier.weight(1f))
-//                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                Button(
-                    onClick = { navController.navigate("savingsApprove") },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                ) {
-                    Text("티끌 수락")
-                }
-                Spacer(modifier = Modifier.size(10.dp))
-
-                Button(
-                    onClick = { navController.navigate("savingsBonus") },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                ) {
-                    Text("티끌 보너스")
-                }
+                Text(
+                    "티끌 보너스 송금하기",
+                    color = Color.White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }

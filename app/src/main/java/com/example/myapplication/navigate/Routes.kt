@@ -41,11 +41,12 @@ import com.example.myapplication.viewmodel.SavingsViewModel
 @Composable
 fun AppNavigation(navController: NavHostController){
     var userRole by remember { mutableStateOf("") }
-    userRole = AirbankApplication.prefs.getString("role","")
+
     NavHost(navController = navController, startDestination = "First") {
         composable(BottomNavItem.Main.screenRoute) {
+            userRole = AirbankApplication.prefs.getString("role","")
             Log.d("userRole",userRole)
-            if (userRole == "CHILD"){
+            if (userRole != "CHILD"){
                 ChildMainScreen(navController = navController)
             }
             else{

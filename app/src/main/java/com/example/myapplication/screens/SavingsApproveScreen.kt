@@ -183,6 +183,7 @@ fun SavingsApproveScreen(navController: NavController) {
                             val groupId = 1
                             val request = UpdateSavingsRequest(isAccept = true)
                             viewModel.updateSavings(groupId, request)
+                            navController.navigate("savings")
                         }
                 ) {
                     Text(
@@ -206,6 +207,7 @@ fun SavingsApproveScreen(navController: NavController) {
                             val groupId = 1
                             val request = UpdateSavingsRequest(isAccept = false)
                             viewModel.updateSavings(groupId, request)
+                            navController.navigate(BottomNavItem.Main.screenRoute)
                         }
                 ) {
                     Text(
