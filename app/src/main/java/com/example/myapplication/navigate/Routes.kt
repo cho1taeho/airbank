@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,11 +34,20 @@ import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun AppNavigation(navController: NavHostController){
-    var userRole by remember { mutableStateOf("") }
+    var userRole by remember { mutableStateOf("")}
+
+    LaunchedEffect(Unit) {
+        val userrole = withContext(Dispatchers.IO) {
+            AirbankApplication.prefs.getString("role", "") // 비동기 작업을 수행하여 SharedPreferences 값 가져오기
+        }
+        userRole = userrole
+    }
 
     NavHost(navController = navController, startDestination = "First") {
         composable(BottomNavItem.Main.screenRoute) {

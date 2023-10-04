@@ -2,11 +2,10 @@ package com.example.myapplication.repository
 
 import android.util.Log
 import com.example.myapplication.AirbankApplication
-import com.example.myapplication.model.GETGroupsResponse
-import com.example.myapplication.model.POSTLoginRequest
-import com.example.myapplication.model.POSTLoginResponse
 import com.example.myapplication.model.PATCHMembersRequest
 import com.example.myapplication.model.PATCHMembersResponse
+import com.example.myapplication.model.POSTLoginRequest
+import com.example.myapplication.model.POSTLoginResponse
 import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
@@ -74,7 +73,7 @@ class AuthRepository(private val scope: CoroutineScope) {
                     AirbankApplication.prefs.setString("name", getUserResponse.data.name)
                     AirbankApplication.prefs.setString("phoneNumber", getUserResponse.data.phoneNumber)
                     AirbankApplication.prefs.setString("creditScore", getUserResponse.data.creditScore.toString())
-                    AirbankApplication.prefs.setString("imageUrl", getUserResponse.data.imageUrl)
+                    AirbankApplication.prefs.setString("imageUrl", getUserResponse.data.imageUrl ?: "https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/nn/2022/06/24/202206241808393510_1.jpg")
                     AirbankApplication.prefs.setString("role", getUserResponse.data.role)
                 }else {
                     Log.d(tag,"Fail "+response.body().toString())
