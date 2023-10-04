@@ -39,12 +39,14 @@ data class CreateSavingsItemRequest(
 data class CreateSavingsItemResponse(
     val code: String,
     val message: String,
-    val data: SavingsItemData
-)
+    val data: Data
+){
+    data class Data(
+        val id: Int
+    )
+}
 
-data class SavingsItemData(
-    val id: Int
-)
+
 
 data class UpdateSavingsRequest(
     val isAccept: Boolean
