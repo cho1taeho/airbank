@@ -101,6 +101,19 @@ fun ChildWalletScreen(navController: NavController) {
     val loanViewModel: LoanViewModel = hiltViewModel()
     val loanData by loanViewModel.loanState.collectAsState(initial = null)
 
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
+
+    LaunchedEffect(key1 = groupId) {
+        if (groupId.isNotEmpty()){
+            accountViewModel.accountCheck()
+            accountViewModel.confiscationCheck(groupId.toInt())
+            accountViewModel.taxCheck(groupId.toInt())
+            loanViewModel.getLoan()
+        }
+    }
+
+
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -198,7 +211,7 @@ fun ChildWalletScreen(navController: NavController) {
                 Text("이번 달 세금")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "${taxData?.data?.data?.amount}원",
+                    "${taxData?.data?.data?.amount ?:0}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -238,7 +251,7 @@ fun ChildWalletScreen(navController: NavController) {
                 Text("대출금")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "${loanData?.data?.data?.amount}원",
+                    "${loanData?.data?.data?.amount ?:0}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -288,7 +301,7 @@ fun ChildWalletScreen(navController: NavController) {
                 Text("티끌 모으기")
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "${savingsData?.data?.data?.totalAmount}원",
+                    "${savingsData?.data?.data?.totalAmount ?:0}원",
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
