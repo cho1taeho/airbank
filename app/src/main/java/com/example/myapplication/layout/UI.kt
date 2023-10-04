@@ -101,9 +101,17 @@ fun MyUI() {
                 },
                 actions = {
                     IconButton(onClick = {
-                        navController.navigate(BottomNavItem.Notification.screenRoute){
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {saveState = true}
+                        if (navController.currentDestination?.route != BottomNavItem.Notification.screenRoute) {
+                            navController.navigate(BottomNavItem.Notification.screenRoute) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                            }
+                        } else {
+                            navController.navigate(BottomNavItem.Main.screenRoute) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
                             }
                         }
                     }) {

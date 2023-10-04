@@ -25,6 +25,7 @@ import com.example.myapplication.model.LoanRepaymentResponse
 import com.example.myapplication.model.LoanResponse
 import com.example.myapplication.model.LoanStartRequest
 import com.example.myapplication.model.LoanStartResponse
+import com.example.myapplication.model.NotificationResponse
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.model.SavingsRemitResponse
 import com.example.myapplication.model.SavingsResponse
@@ -106,7 +107,8 @@ interface ApiService {
     @POST("/loans/charge")
     suspend fun loanCharge(@Query("group_id") groupId: Int, @Body request: LoanChargeRequest): Response<LoanChargeResponse>
 
-
+    @GET("/notifications")
+    suspend fun getNotifications(@Query("group_id") groupId: Int): Response<NotificationResponse>
 
 }
 

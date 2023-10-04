@@ -129,7 +129,7 @@ fun ChildBody(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFE2ECFF))
                     .clickable {
-                        navController.navigate("loan")
+                        navController.navigate("ChildLoan")
                     }
             ){
                 Column (
