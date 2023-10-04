@@ -109,7 +109,9 @@ data class GETGroupsResponse(
         @SerializedName("name")
         val name: String,
         @SerializedName("imageUrl")
-        val imageUrl: String
+        val imageUrl: String,
+        @SerializedName("creditScore")
+        val creditScore: Int?
     )}
 }
 

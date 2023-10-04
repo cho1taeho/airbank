@@ -66,7 +66,7 @@ fun ChildMainScreen(navController: NavController) {
         imagepath = "local"
     }
     Column {
-        ChildCard(mainImage = imagepath, mainName = name)
+//        ChildCard(mainImage = imagepath, mainName = name)
         ChildBody(navController = navController)
         Quiz()
     }

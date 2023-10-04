@@ -75,7 +75,7 @@ fun MainScreen(navController: NavController) {
     Column {
         if (childs.isNotEmpty()){
             Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
-            ChildProfile(childs)
+            ChildProfile(childs,viewModel)
         } else {
             postNewChild(navController)
         }
@@ -122,7 +122,7 @@ fun postNewChild(navController: NavController){
 }
 
 @Composable
-fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
+fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainViewModel) {
 
     var selected by remember { mutableIntStateOf(0) }
 
@@ -132,16 +132,19 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
         modifier = Modifier
             .padding(horizontal = 16.dp)
     ) {
-        childs.forEach() {
+        childs.forEach() { child ->
+
             Column {
                 Box(
                     modifier = Modifier
                         .size(42.dp)
                         .border(1.dp, Color(0xFFB4EBF7), CircleShape)
-                        .clickable { selected = it.id }
+                        .clickable {
+                            viewModel.selected = child
+                        }
                 ) {
                     AsyncImage(
-                        model = it.imageUrl,
+                        model = child.imageUrl,
                         contentDescription = "Main Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -149,61 +152,63 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
                             .clip(CircleShape)
                     )
                 }
-                Text(it.name)
+                Text(child.name)
             }
         }
         Spacer(modifier = Modifier.size(20.dp))
     }
 
-//    ChildCard(mainImage = childs.first { it -> it.id == selected }.imageUrl, mainName = childs.first { it -> it.id == selected }.name)
+    ChildCard(viewModel)
 }
 @Composable
-fun ChildCard(mainImage: String, mainName: String) {
-//    var imagepath by remember { mutableStateOf("")}
-//    UserApiClient.instance.me { user, _ ->
-//        if (user!=null){
-//            imagepath = user.properties?.get("profile_image") ?: ""
-//        }
-//    }
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF5FCFEF))
-    ){
-        Column (
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+fun ChildCard(viewModel: MainViewModel) {
+
+    val selectChild = viewModel.selected
+    if(selectChild != null){
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color(0xFF5FCFEF))
         ){
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if(mainImage == "local"){
-                    Image(
-                        painter = painterResource(R.drawable.karina),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                    )
-                }else{
-                    AsyncImage(
-                        model = mainImage,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                    )
+            Column (
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ){
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if(selectChild.imageUrl.isEmpty()){
+                        Image(
+                            painter = painterResource(R.drawable.karina),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                        )
+                    }else{
+                        AsyncImage(
+                            model = selectChild?.imageUrl ?: "",
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    Text("자녀 ${selectChild.name} 님의\n지갑을 관리하고 있습니다.")
                 }
-                Spacer(Modifier.width(16.dp))
-                Text("자녀 $mainName 님의\n지갑을 관리하고 있습니다.")
+                Text("신용점수")
+                val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
+                ScoreBar(creditPoint.toInt())
             }
-            Text("신용점수")
-            val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
-            ScoreBar(creditPoint.toInt())
         }
+        Spacer(modifier = Modifier.size(20.dp))
     }
-    Spacer(modifier = Modifier.size(20.dp))
+    else{
+        Text(text = "ERROR")
+    }
+
 }
 @Composable
 fun ScoreBar(score: Int) {
@@ -385,7 +390,9 @@ fun Body(navController: NavController) {
 
 class MainViewModel @Inject constructor() : ViewModel() {
 
+    var selected: GETGroupsResponse.Data.Member? by mutableStateOf(null)
     var childs : List<GETGroupsResponse.Data.Member> = emptyList()
+
 
     fun getGroup() {
         val tag = "getGroup"
