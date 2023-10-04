@@ -80,6 +80,7 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -123,13 +124,14 @@ fun ChildWalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = accountData?.data?.data?.amount?.toString() ?: "로딩 중...",
+                    text = accountData?.data?.data?.amount?.toString() ?: "돈이 엄서ㅠ",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(10.dp))
+                val name = AirbankApplication.prefs.getString("name","")
                 Text(
-                    "팡팡은행 이현도 님의 통장"
+                    "팡팡은행 ${name} 님의 통장"
                 )
             }
         }
@@ -202,6 +204,7 @@ fun ChildWalletScreen(navController: NavController) {
                 )
             }
         }
+        Spacer(modifier = Modifier.size(10.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -264,6 +267,7 @@ fun ChildWalletScreen(navController: NavController) {
                 else -> Unit
             }
         }
+        Spacer(modifier = Modifier.size(10.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()

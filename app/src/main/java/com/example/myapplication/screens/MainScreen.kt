@@ -48,6 +48,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.network.HDRetrofitBuilder
@@ -118,43 +119,43 @@ fun postNewChild(navController: NavController){
 
 @Composable
 fun ChildProfile() {
-    var mainImage by remember { mutableIntStateOf(R.drawable.karina) }
-    var mainName by remember { mutableStateOf("카리나") }
+    val mainName = AirbankApplication.prefs.getString("name", "")
+    val mainImage = AirbankApplication.prefs.getString("imageUrl", "")
 
-    var image1 by remember { mutableIntStateOf(R.drawable.karina2) }
-    var name1 by remember { mutableStateOf("윈터") }
-
-    var image2 by remember { mutableIntStateOf(R.drawable.karina3) }
-    var name2 by remember { mutableStateOf("지젤") }
-
-    var image3 by remember { mutableIntStateOf(R.drawable.karina4) }
-    var name3 by remember { mutableStateOf("닝닝") }
-
-    fun swapImages(imageRes: Int, newName: String){
-        val tempImage = mainImage
-        val tempName = mainName
-
-        mainImage = imageRes
-        mainName = newName
-
-        when (imageRes) {
-            image1 -> {
-                image1 = tempImage
-                name1 = tempName
-            }
-
-            image2 -> {
-                image2 = tempImage
-                name2 = tempName
-            }
-
-            image3 -> {
-                image3 = tempImage
-                name3 = tempName
-            }
-
-        }
-    }
+//    var image1 by remember { mutableIntStateOf(R.drawable.karina2) }
+//    var name1 by remember { mutableStateOf("윈터") }
+//
+//    var image2 by remember { mutableIntStateOf(R.drawable.karina3) }
+//    var name2 by remember { mutableStateOf("지젤") }
+//
+//    var image3 by remember { mutableIntStateOf(R.drawable.karina4) }
+//    var name3 by remember { mutableStateOf("닝닝") }
+//
+//    fun swapImages(imageRes: String, newName: String){
+//        val tempImage = mainImage
+//        val tempName = mainName
+//
+//        mainImage = imageRes
+//        mainName = newName
+//
+//        when (imageRes) {
+//            image1 -> {
+//                image1 = tempImage
+//                name1 = tempName
+//            }
+//
+//            image2 -> {
+//                image2 = tempImage
+//                name2 = tempName
+//            }
+//
+//            image3 -> {
+//                image3 = tempImage
+//                name3 = tempName
+//            }
+//
+//        }
+//    }
 
     Row (
         horizontalArrangement = Arrangement.Start,
@@ -174,7 +175,7 @@ fun ChildProfile() {
                     .border(1.dp, Color(0xFFB4EBF7), CircleShape)
             ) {
                 Image(
-                    painter = painterResource(id = mainImage),
+                    painter = painterResource(R.drawable.karina),
                     contentDescription = "Main Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -184,18 +185,18 @@ fun ChildProfile() {
             }
             Text(mainName)
         }
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.weight(1f)
-        ){
-            CircleWithImageAndBorder(image1, name1) {swapImages(image1, name1)}
-            Spacer(Modifier.width(8.dp) )
-            CircleWithImageAndBorder(image2, name2) {swapImages(image2, name2)}
-            Spacer(Modifier.width(8.dp) )
-            CircleWithImageAndBorder(image3, name3) {swapImages(image3, name3)}
-
-        }
+//        Row (
+//            horizontalArrangement = Arrangement.Start,
+//            verticalAlignment = Alignment.CenterVertically,
+////                modifier = Modifier.weight(1f)
+//        ){
+//            CircleWithImageAndBorder(image1, name1) {swapImages(image1, name1)}
+//            Spacer(Modifier.width(8.dp) )
+//            CircleWithImageAndBorder(image2, name2) {swapImages(image2, name2)}
+//            Spacer(Modifier.width(8.dp) )
+//            CircleWithImageAndBorder(image3, name3) {swapImages(image3, name3)}
+//
+//        }
     }
     Spacer(modifier = Modifier.size(20.dp))
 
@@ -226,13 +227,13 @@ fun CircleWithImageAndBorder(imageRes: Int, name: String, onClick: () -> Unit) {
     }
 }
 @Composable
-fun ChildCard(mainImage: Int, mainName: String) {
-    var imagepath by remember { mutableStateOf("")}
-    UserApiClient.instance.me { user, _ ->
-        if (user!=null){
-            imagepath = user.properties?.get("profile_image") ?: ""
-        }
-    }
+fun ChildCard(mainImage: String, mainName: String) {
+//    var imagepath by remember { mutableStateOf("")}
+//    UserApiClient.instance.me { user, _ ->
+//        if (user!=null){
+//            imagepath = user.properties?.get("profile_image") ?: ""
+//        }
+//    }
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -246,9 +247,9 @@ fun ChildCard(mainImage: Int, mainName: String) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(imagepath.isEmpty()){
+                if(mainImage == "local"){
                     Image(
-                        painter = painterResource(id = mainImage),
+                        painter = painterResource(R.drawable.karina),
                         contentDescription = null,
                         modifier = Modifier
                             .size(40.dp)
@@ -256,7 +257,7 @@ fun ChildCard(mainImage: Int, mainName: String) {
                     )
                 }else{
                     AsyncImage(
-                        model = imagepath,
+                        model = mainImage,
                         contentDescription = null,
                         modifier = Modifier
                             .size(40.dp)
