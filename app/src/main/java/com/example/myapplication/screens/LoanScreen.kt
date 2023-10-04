@@ -62,7 +62,7 @@ fun LoanScreen(navController: NavController) {
         }
     }
 
-
+    Log.d("땡겨id","${groupId}희찬아")
     Column(
         modifier = Modifier
             .fillMaxSize()

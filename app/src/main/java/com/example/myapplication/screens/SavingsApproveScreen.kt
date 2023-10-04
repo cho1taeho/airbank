@@ -37,9 +37,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.Resource
 import com.example.myapplication.model.State
 import com.example.myapplication.model.UpdateSavingsRequest
@@ -50,12 +55,11 @@ import com.example.myapplication.model.UpdateSavingsResponse
 fun SavingsApproveScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
-
-
+    val groupId = AirbankApplication.prefs.getString("group_id", "")
 
     savingsData?.let { data ->
         val imageUrl = data?.data?.data?.savingsItem?.imageUrl
-        val painter = rememberImagePainter(data = imageUrl)
+        Log.d("수락id","${groupId}희찬아")
 
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
@@ -78,7 +82,7 @@ fun SavingsApproveScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        "${data.data?.data?.savingsItem?.name}",
+                        "${data.data?.data?.savingsItem?.name ?:"카리나"}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
@@ -89,81 +93,50 @@ fun SavingsApproveScreen(navController: NavController) {
 
                     )
                     Spacer(modifier = Modifier.size(20.dp))
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Savings Item",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(280.dp)
+                            .size(270.dp)
                             .align(Alignment.CenterHorizontally),
-                        contentScale = ContentScale.Crop
                     )
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        "${data.data?.data?.myAmount}원",
-                        fontSize = 25.sp,
+                        "${data.data?.data?.savingsItem?.amount ?: "0"}원",
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                     Text(
-                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
+                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.expiredAt}",
                         fontSize = 13.sp
                     )
                     Text(
-                        "요청금액 : ${data.data?.data?.savingsItem?.amount}원",
+                        "지원 금액 : ${data.data?.data?.parentsAmount ?: "0"}원",
+                        fontSize = 13.sp
+                    )
+                    Text(
+                        "모은 금액 : ${data?.data?.data?.totalAmount ?: "0"}원",
+                        fontSize = 13.sp
+                    )
+                    Text(
+                        "밀린 횟수 : ${data?.data?.data?.delayCount ?: "0"} 회",
                         fontSize = 13.sp
                     )
                 }
             }
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(70.dp)
-//                    .clip(RoundedCornerShape(10.dp))
-//                    .background(color = Color(0xFFD6F2FF))
-//            ) {
-//                Row(
-//                    horizontalArrangement = Arrangement.Start,
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    modifier = Modifier
-//                        .fillMaxHeight()
-//                ) {
-//                    Spacer(modifier = Modifier.size(10.dp))
-//                    Image(
-//                        painter = painterResource(id = R.drawable.shoppingcart),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .size(30.dp)
-//                    )
-//                    Spacer(modifier = Modifier.size(10.dp))
-//                    Text(
-//                        "구매하기",
-//                        fontSize = 19.sp,
-//                        fontWeight = FontWeight.Bold
 //
-//                    )
-//                    Spacer(modifier = Modifier.weight(1f))
-//                    Image(
-//                        painter = painterResource(id = R.drawable.vector),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .size(20.dp)
-//
-//                    )
-//
-//                }
-//            }
 
             Spacer(modifier = Modifier.weight(1f))
 
-            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
-
-            if (updateSavingsState.status == State.SUCCESS) {
-                navController.navigate("SavingsScreen") {
-                    popUpTo("route_start_destination") { inclusive = true }
-                }
-            }
-
-
+//            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
+//
+//            if (updateSavingsState.status == State.SUCCESS) {
+//                navController.navigate("SavingsScreen") {
+//                    popUpTo("route_start_destination") { inclusive = true }
+//                }
+//            }
 
 
             Row(
@@ -172,6 +145,7 @@ fun SavingsApproveScreen(navController: NavController) {
                     .height(70.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -180,9 +154,10 @@ fun SavingsApproveScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFFD6F2FF))
                         .clickable {
-                            val groupId = 1
+
                             val request = UpdateSavingsRequest(isAccept = true)
-                            viewModel.updateSavings(groupId, request)
+                            viewModel.updateSavings(groupId.toInt(), request)
+
                             navController.navigate("savings")
                         }
                 ) {
@@ -204,9 +179,9 @@ fun SavingsApproveScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0xFFD6F2FF))
                         .clickable {
-                            val groupId = 1
+
                             val request = UpdateSavingsRequest(isAccept = false)
-                            viewModel.updateSavings(groupId, request)
+                            viewModel.updateSavings(groupId.toInt(), request)
                             navController.navigate(BottomNavItem.Main.screenRoute)
                         }
                 ) {

@@ -350,10 +350,12 @@ fun Body(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFEFE4FF))
                     .clickable {
-                        when (savingsData?.status) {
-                            State.SUCCESS -> navController.navigate("savings")
-                            State.ERROR -> navController.navigate("savingsApprove")
-                            else -> {}
+                        if (savingsData?.data?.data?.status == null) {
+                            navController.navigate("SavingsWaiting")
+                        } else if(savingsData?.data?.data?.status == "PENDING") {
+                            navController.navigate("SavingsWaiting")
+                        } else if(savingsData?.data?.data?.status == "PROCEEDING") {
+                            navController.navigate("savings")
                         }
                     }
             ){

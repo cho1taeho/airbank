@@ -36,6 +36,7 @@ import com.example.myapplication.screens.NotificationScreen
 import com.example.myapplication.screens.SavingsApproveScreen
 import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen
+import com.example.myapplication.screens.SavingsWaitingScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
 import kotlinx.coroutines.Dispatchers
@@ -139,7 +140,9 @@ fun AppNavigation(navController: NavHostController){
         composable("ChildTranscationHistory"){
             ChildTransactionHistoryScreen(navController = navController)
         }
-
+        composable("SavingsWaiting"){
+            SavingsWaitingScreen(navController = navController)
+        }
 
     }
 }

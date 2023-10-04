@@ -56,7 +56,7 @@ fun ChildMainScreen(navController: NavController) {
         group_id = mutablegroupid
     }
 
-
+    Log.d("현도id","${group_id}희찬아")
     UserApiClient.instance.me { user, _ ->
         if (user!=null){
             imagepath = user.properties?.get("profile_image") ?: ""
