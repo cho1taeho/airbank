@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,7 +53,9 @@ import coil.compose.AsyncImage
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.GETGroupsResponse
+import com.example.myapplication.model.State
 import com.example.myapplication.network.HDRetrofitBuilder
+import com.example.myapplication.viewmodel.SavingsViewModel
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -317,6 +321,10 @@ fun ScoreBar(score: Int) {
 
 @Composable
 fun Body(navController: NavController) {
+    val viewModel: SavingsViewModel = hiltViewModel()
+    val savingsData by viewModel.savingsState.collectAsState(initial = null)
+
+
 
     Row (
         modifier = Modifier
@@ -412,7 +420,11 @@ fun Body(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFEFE4FF))
                     .clickable {
-                        navController.navigate("savings")
+                        when (savingsData?.status){
+                            State.SUCCESS -> navController.navigate("savings")
+                            State.ERROR -> navController.navigate("savingsApprove")
+                            else -> {}
+                        }
                     }
             ){
                 Column (

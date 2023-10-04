@@ -17,6 +17,9 @@ import javax.inject.Inject
 class LoanRepository @Inject constructor(
     private val apiService: ApiService
 ){
+
+
+
     suspend fun getLoan(groupId: Int): Resource<LoanResponse> {
         val response = apiService.getLoan(groupId)
         return if (response.isSuccessful) {

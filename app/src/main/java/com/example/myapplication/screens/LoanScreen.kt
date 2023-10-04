@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 
 
@@ -38,7 +39,8 @@ fun LoanScreen(navController: NavController) {
     groupId = AirbankApplication.prefs.getString("group_id", "")
     val loanViewModel: LoanViewModel = hiltViewModel();
     val loanData by loanViewModel.loanState.collectAsState()
-
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
 
     Column(
     ) {
@@ -65,8 +67,9 @@ fun LoanScreen(navController: NavController) {
                             fontSize = 16.sp,
                         )
                         Spacer(modifier = Modifier.size(8.dp))
+                        val loanRemaining = (data.data?.data?.loanLimit ?:0) - (data.data?.data?.amount ?:0)
                         Text(
-                            "2,500,000원",
+                            "${loanRemaining}원",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -111,20 +114,22 @@ fun LoanScreen(navController: NavController) {
                             fontSize = 16.sp,
                         )
                         Spacer(modifier = Modifier.size(8.dp))
+
+                        val interestful = (interestData?.data?.data?.amount ?:0) + (interestData?.data?.data?.overdueAmount ?:0)
                         Text(
-                            "150,000원",
+                            "${interestful}원",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(
-                            "이번 달 이자: ",
+                            "이번 달 이자: ${interestData?.data?.data?.amount}",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
                         Spacer(modifier = Modifier.size(5.dp))
                         Text(
-                            "연체 이자: ",
+                            "연체 이자: ${interestData?.data?.data?.overdueAmount}",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
@@ -162,7 +167,6 @@ fun LoanScreen(navController: NavController) {
                         CreditPoint()
                     }
                 }
-
             }
         }
     }
