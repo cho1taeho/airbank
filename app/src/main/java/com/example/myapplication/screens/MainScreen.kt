@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -65,7 +66,7 @@ fun MainScreen(navController: NavController) {
     val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
 
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit, viewModel.childs){
         viewModel.getGroup()
         val mutablechilds = viewModel.childs
         childs = mutablechilds
@@ -123,57 +124,21 @@ fun postNewChild(navController: NavController){
 @Composable
 fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
 
-    val mainName = AirbankApplication.prefs.getString("name", "")
-    val mainImage = AirbankApplication.prefs.getString("imageUrl", "")
+    var selected by remember { mutableIntStateOf(0) }
 
-//    var image1 by remember { mutableIntStateOf(R.drawable.karina2) }
-//    var name1 by remember { mutableStateOf("윈터") }
-//
-//    var image2 by remember { mutableIntStateOf(R.drawable.karina3) }
-//    var name2 by remember { mutableStateOf("지젤") }
-//
-//    var image3 by remember { mutableIntStateOf(R.drawable.karina4) }
-//    var name3 by remember { mutableStateOf("닝닝") }
-//
-//    fun swapImages(imageRes: String, newName: String){
-//        val tempImage = mainImage
-//        val tempName = mainName
-//
-//        mainImage = imageRes
-//        mainName = newName
-//
-//        when (imageRes) {
-//            image1 -> {
-//                image1 = tempImage
-//                name1 = tempName
-//            }
-//
-//            image2 -> {
-//                image2 = tempImage
-//                name2 = tempName
-//            }
-//
-//            image3 -> {
-//                image3 = tempImage
-//                name3 = tempName
-//            }
-//
-//        }
-//    }
-
-
-        Row (
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-        ) {
-            childs.forEach() {
-
+    Row (
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+    ) {
+        childs.forEach() {
+            Column {
                 Box(
                     modifier = Modifier
                         .size(42.dp)
                         .border(1.dp, Color(0xFFB4EBF7), CircleShape)
+                        .clickable { selected = it.id }
                 ) {
                     AsyncImage(
                         model = it.imageUrl,
@@ -187,34 +152,10 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>) {
                 Text(it.name)
             }
         }
-
-    Spacer(modifier = Modifier.size(20.dp))
-
-    ChildCard(mainImage = mainImage, mainName = mainName)
-}
-@Composable
-fun CircleWithImageAndBorder(imageRes: Int, name: String, onClick: () -> Unit) {
-    Column (
-        horizontalAlignment  = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(42.dp)
-                .clip(CircleShape)
-                .border(1.dp, Color.Black, CircleShape)
-                .clickable(onClick = onClick)
-        ){
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
-        }
-        Text(name)
+        Spacer(modifier = Modifier.size(20.dp))
     }
+
+    ChildCard(mainImage = childs.first { it -> it.id == selected }.imageUrl, mainName = childs.first { it -> it.id == selected }.name)
 }
 @Composable
 fun ChildCard(mainImage: String, mainName: String) {
