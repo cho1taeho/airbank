@@ -36,6 +36,7 @@ import android.util.Log
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,6 +52,9 @@ fun SavingsApproveScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
 
+    LaunchedEffect(key1 = null) {
+        viewModel.getSavings()
+    }
 
 
     savingsData?.let { data ->
@@ -155,13 +159,13 @@ fun SavingsApproveScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
-
-            if (updateSavingsState.status == State.SUCCESS) {
-                navController.navigate("SavingsScreen") {
-                    popUpTo("route_start_destination") { inclusive = true }
-                }
-            }
+//            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
+//
+//            if (updateSavingsState.status == State.SUCCESS) {
+//                navController.navigate("SavingsScreen") {
+//                    popUpTo("route_start_destination") { inclusive = true }
+//                }
+//            }
 
 
 

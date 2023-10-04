@@ -96,7 +96,9 @@ fun SavingsScreen(navController: NavController) {
     var showDenominatorDropdown by remember { mutableStateOf(false) }
     var showNumeratorDropdown by remember { mutableStateOf(false) }
 
-
+    LaunchedEffect(key1 = null) {
+        viewModel.getSavings()
+    }
 
     savingsData?.let { data ->
         val imageUrl = data?.data?.data?.savingsItem?.imageUrl

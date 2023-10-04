@@ -252,6 +252,10 @@ fun Body(navController: NavController) {
     val savingsViewModel: SavingsViewModel = hiltViewModel()
     val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
 
+    LaunchedEffect(key1 = null) {
+        savingsViewModel.getSavings()
+    }
+
     Row (
         modifier = Modifier
             .fillMaxWidth()

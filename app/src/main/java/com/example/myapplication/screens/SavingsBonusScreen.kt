@@ -95,6 +95,11 @@ fun SavingsBonusScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
     val context = LocalContext.current
+    LaunchedEffect(key1 = null) {
+        viewModel.getSavings()
+    }
+
+
     Column (
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
