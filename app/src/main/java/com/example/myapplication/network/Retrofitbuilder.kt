@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(HDRetrofitBuilder.provideOkHttpClient(HDRetrofitBuilder.AppInterceptor()))
                 .build()
                 .create(ApiService::class.java)
         }
