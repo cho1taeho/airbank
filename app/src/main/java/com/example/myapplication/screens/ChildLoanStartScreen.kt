@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 
 @Composable
@@ -93,7 +96,7 @@ fun LoanAmount() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = Color(0xFFD6F2FF)),
-                label = { Text("요청 가격을 입력하세요.") },
+                label = { Text("땡겨쓸 금액을 입력 하세요.") },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 )
@@ -104,8 +107,19 @@ fun LoanAmount() {
 
 @Composable
 fun LoanDetail() {
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
     val loanViewModel: LoanViewModel = hiltViewModel()
     val loanData by loanViewModel.loanState.collectAsState()
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = groupId) {
+        if (groupId.isNotEmpty()) {
+            Log.d("ChildLoanStart", "LaunchedEffect triggered with groupId: $groupId")
+            accountViewModel.interestCheck(groupId.toInt())
+        }
+    }
 
     Column() {
         Text(
@@ -117,32 +131,29 @@ fun LoanDetail() {
             val loanLimit = data.data?.data?.loanLimit ?: 0
             val amount = data.data?.data?.amount ?: 0
             val remainingAmount = loanLimit - amount
+            val interestful = (interestData?.data?.data?.amount ?:0) + (interestData?.data?.data?.overdueAmount ?:0)
 
             Column {
                 Text(
-                    "현도 금액: $loanLimit",
+                    "현도 금액: ${loanLimit}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )
                 Text(
-                    "사용 금액: $amount",
+                    "사용 금액: ${amount}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )
-
-                if (remainingAmount >= 0.0) {
-                    Text(
-                        "땡겨쓰기 가능 금액: $remainingAmount",
-                        fontSize = 14.sp,
-                        color = Color(0xff515151)
-                    )
-                } else {
-                    Text(
-                        "땡겨쓰기 가능 금액: 0.0",
-                        fontSize = 14.sp,
-                        color = Color(0xff515151)
-                    )
-                }
+                Text(
+                    "땡겨쓰기 가능 금액: ${remainingAmount}원",
+                    fontSize = 14.sp,
+                    color = Color(0xff515151)
+                )
+                Text(
+                    "이자: ${interestful}원",
+                    fontSize = 14.sp,
+                    color = Color(0xff515151)
+                )
             }
         }
     }

@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.CancelSavingsRequest
 import com.example.myapplication.model.CancelSavingsResponse
@@ -231,8 +232,8 @@ fun ChildSavingsScreen(navController: NavController) {
                         .clickable {
 //                            navController.navigate("savingsApplication")
                             navController.navigate(BottomNavItem.Main.screenRoute)
-                            val groupId = 1
-                            viewModel.cancelSavings(CancelSavingsRequest(id = groupId))
+                            val groupId = AirbankApplication.prefs.getString("group_id", "")
+                            viewModel.cancelSavings(CancelSavingsRequest(id = groupId.toInt()))
                         }
                 ) {
                     Text(

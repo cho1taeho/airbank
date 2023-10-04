@@ -185,7 +185,4 @@ class AccountViewModel @Inject constructor(
             _confiscationTransferState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
     }
-
-
-
 }
