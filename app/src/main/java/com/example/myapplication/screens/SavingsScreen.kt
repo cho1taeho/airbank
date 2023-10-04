@@ -48,6 +48,7 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -79,6 +80,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.verticalScroll
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.myapplication.model.CancelSavingsRequest
 
@@ -86,6 +88,8 @@ import com.example.myapplication.model.CancelSavingsRequest
 fun SavingsScreen(navController: NavController) {
     val viewModel: SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState()
+
+
 
     var denominator by remember { mutableStateOf(4) }
     var numerator by remember { mutableStateOf(2) }
@@ -96,7 +100,7 @@ fun SavingsScreen(navController: NavController) {
 
     savingsData?.let { data ->
         val imageUrl = data?.data?.data?.savingsItem?.imageUrl
-        val painter = rememberImagePainter(data = imageUrl)
+
 
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
@@ -130,34 +134,43 @@ fun SavingsScreen(navController: NavController) {
 
                     )
                     Spacer(modifier = Modifier.size(20.dp))
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
+
+
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Savings Item",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(280.dp)
-                            .align(Alignment.CenterHorizontally)
+                            .size(270.dp)
+                            .align(Alignment.CenterHorizontally),
                     )
-
-
                     Spacer(modifier = Modifier.size(15.dp))
                     Text(
-                        "${data.data?.data?.myAmount}원",
-                        fontSize = 25.sp,
+                        "${data.data?.data?.savingsItem?.amount ?: "0"}원",
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                     )
-                    Spacer(modifier = Modifier.size(8.dp))
+                    Spacer(modifier = Modifier.size(5.dp))
                     Text(
-                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.endedAt}",
+                        "기간 : ${data.data?.data?.startedAt} ~ ${data.data?.data?.expiredAt}",
                         fontSize = 13.sp
                     )
                     Text(
-                        "요청금액 :${data.data?.data?.savingsItem?.amount ?:"0"}원",
+                        "지원 금액 : ${data.data?.data?.parentsAmount ?: "0"}원",
+                        fontSize = 13.sp
+                    )
+                    Text(
+                        "모은 금액 : ${data?.data?.data?.totalAmount ?: "0"}원",
+                        fontSize = 13.sp
+                    )
+                    Text(
+                        "밀린 횟수 : ${data?.data?.data?.delayCount ?: "0"} 회",
                         fontSize = 13.sp
                     )
                 }
             }
             Spacer(modifier = Modifier.size(15.dp))
+            val context = LocalContext.current
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -166,7 +179,12 @@ fun SavingsScreen(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFF00D2F3))
                     .clickable {
-                        navController.navigate("savingsBonus")
+                        if(savingsData?.data?.data?.myAmount == savingsData?.data?.data?.totalAmount) {
+                            navController.navigate("savingsBonus")
+                        } else {
+                            Toast.makeText(context, "아직 티끌모으기가 끝나지 않았습니다.", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
             ) {
                 Text(

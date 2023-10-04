@@ -54,6 +54,8 @@ class SavingsRepository @Inject constructor(
 
     suspend fun cancelSavings(request: CancelSavingsRequest): Resource<CancelSavingsResponse> {
         val response = apiService.cancelSavings(request)
+        Log.d("CancelItem", "티끌캔슬c ${response.code()}")
+        Log.d("CancelItem", "티끌캔슬m ${response.message()}")
         return if (response.isSuccessful) {
             Resource(State.SUCCESS, response.body(), "SUCCESS !")
         } else {
