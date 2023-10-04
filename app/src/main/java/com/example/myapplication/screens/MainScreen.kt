@@ -124,7 +124,6 @@ fun postNewChild(navController: NavController){
 @Composable
 fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainViewModel) {
 
-    var selected by remember { mutableIntStateOf(0) }
 
     Row (
         horizontalArrangement = Arrangement.Start,
@@ -154,8 +153,8 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
                 }
                 Text(child.name)
             }
+            Spacer(modifier = Modifier.size(20.dp))
         }
-        Spacer(modifier = Modifier.size(20.dp))
     }
 
     ChildCard(viewModel)
