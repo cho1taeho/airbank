@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,11 +38,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
@@ -141,6 +144,7 @@ fun LoanAmount(viewModel: LoanViewModel) {
 
 @Composable
 fun LoanButton(navController: NavController, viewModel: LoanViewModel) {
+    val context = LocalContext.current
 
     Box(
         contentAlignment = Alignment.Center,
@@ -150,9 +154,12 @@ fun LoanButton(navController: NavController, viewModel: LoanViewModel) {
             .clip(RoundedCornerShape(10.dp))
             .background(color = Color(0xFF00D2F3))
             .clickable {
-                viewModel.loanStart()
-                // 컨펌
-                navController.navigate("ChildLoan")
+                if (viewModel.loanAmount.value.text.isDigitsOnly() && viewModel.loanAmount.value.text != "") {
+                    viewModel.loanStart()
+                    navController.navigate("ChildLoan")
+                } else {
+                    Toast.makeText(context,"금액을 숫자로 입력해 주세요.",Toast.LENGTH_SHORT).show()
+                }
             }
     ) {
         Text(
