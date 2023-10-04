@@ -62,12 +62,13 @@ fun MyUI() {
     LaunchedEffect(navController.currentDestination){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             title = BottomNavItem.fromRoute(destination.route.toString()).title
-            Log.d("navigateRoute",destination.route.toString())
+            Log.d("navigateRoute",destination.toString())
+            nowon = destination.route.toString()
         }
     }
     Scaffold(
         topBar = {
-            if(isLoggedin){
+            if(nowon!="First"){
             CenterAlignedTopAppBar(
                 title = {
                     Text(
@@ -115,7 +116,7 @@ fun MyUI() {
             )
         }},
         bottomBar = {
-            if (isLoggedin){
+            if (nowon!="First"){
             NavigationBar(
                 containerColor = Color(0xFFB4EBF7),
                 content = {
