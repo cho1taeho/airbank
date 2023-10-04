@@ -106,7 +106,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(470.dp)
+                .height(200.dp)
                 .background(color = Color(0xFFD6F2FF))
         ) {
             Text(
@@ -115,7 +115,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 fontWeight = FontWeight.Bold
             )
         }
-        val id = savingsData?.data?.data?.id
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
