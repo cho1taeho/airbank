@@ -17,6 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +36,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
-import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.network.HDRetrofitBuilder
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +46,16 @@ import javax.inject.Inject
 @Composable
 fun ChildMainScreen(navController: NavController) {
     val viewModel : ChildMainViewModel = viewModel()
-
     val name = AirbankApplication.prefs.getString("name","")
     var imagepath = AirbankApplication.prefs.getString("imageUrl","")
+
+    var group_id by remember { mutableIntStateOf(0) }
+    LaunchedEffect(Unit){
+        viewModel.getGroup()
+        val mutablegroupid = viewModel.groupid
+        group_id = mutablegroupid
+    }
+
 
     UserApiClient.instance.me { user, _ ->
         if (user!=null){
@@ -210,25 +221,20 @@ fun Quiz(){
 
 class ChildMainViewModel @Inject constructor() : ViewModel() {
 
-    var childs : List<GETGroupsResponse.Data> = emptyList()
-    init {
-        getGroup()
-    }
-    private fun getGroup() {
+    var groupid = 0
+
+    fun getGroup() {
         val tag = "getGroup"
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = HDRetrofitBuilder.HDapiService().getGroups()
-                val getGroupsResponse = response.body()
-                if (getGroupsResponse != null) {
-                    Log.d(tag, getGroupsResponse.toString())
-                    childs = getGroupsResponse.data
-                    AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
-                    Log.d(tag,"group_id = "+AirbankApplication.prefs.getString("group_id",""))
-                }
-            } catch (e: Exception) {
-                Log.e(tag, e.toString())
-            }
+                if (response.body() != null) {
+                    val getGroupsResponse = response.body()!!.data
+                    groupid = getGroupsResponse.members.first().groupId
+                    AirbankApplication.prefs.setString("group_id",groupid.toString())
+                    Log.d(tag,groupid.toString())
+                } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
+            } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }
         }
     }
 }

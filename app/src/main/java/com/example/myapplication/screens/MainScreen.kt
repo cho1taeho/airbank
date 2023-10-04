@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,7 +51,6 @@ import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.network.HDRetrofitBuilder
-import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,8 +60,9 @@ import javax.inject.Inject
 fun MainScreen(navController: NavController) {
     val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
 
-    var childs by remember { mutableStateOf<List<GETGroupsResponse.Data>>(emptyList()) }
+    var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit){
+        viewModel.getGroup()
         val mutablechilds = viewModel.childs
         childs = mutablechilds
     }
@@ -445,28 +444,23 @@ fun Body(navController: NavController) {
 }
 
 
-
 class MainViewModel @Inject constructor() : ViewModel() {
 
-    var childs : List<GETGroupsResponse.Data> = emptyList()
-    init {
-        getGroup()
-    }
-    private fun getGroup() {
+    var childs : List<GETGroupsResponse.Data.Member> = emptyList()
+
+    fun getGroup() {
         val tag = "getGroup"
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = HDRetrofitBuilder.HDapiService().getGroups()
-                val getGroupsResponse = response.body()
-                if (getGroupsResponse != null) {
-                    Log.d(tag, getGroupsResponse.toString())
-                    childs = getGroupsResponse.data
-                }
-            } catch (e: Exception) {
-                Log.e(tag, e.toString())
-            }
+                if (response.body() != null) {
+                    val getGroupsResponse = response.body()!!.data
+                    childs = getGroupsResponse.members
+                    AirbankApplication.prefs.setString(tag,childs.first().groupId.toString())
+                    Log.d(tag,childs.first().groupId.toString())
+                } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
+            } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }
         }
     }
 }
-
 
