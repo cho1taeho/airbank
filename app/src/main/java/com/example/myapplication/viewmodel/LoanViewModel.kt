@@ -38,8 +38,7 @@ class LoanViewModel @Inject constructor(
 
     fun getLoan() = viewModelScope.launch {
         _loanState.emit(Resource(State.LOADING, null, null))
-//        val groupId = AirbankApplication.prefs.getString("group_id", "")
-        val groupId = "1"
+        val groupId = AirbankApplication.prefs.getString("group_id", "")
         try {
             val response = loanRepository.getLoan(groupId.toInt())
             _loanState.emit(response)
