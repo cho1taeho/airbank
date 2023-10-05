@@ -41,24 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
-import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.CancelSavingsRequest
-import com.example.myapplication.model.CancelSavingsResponse
-import com.example.myapplication.model.Resource
 import com.example.myapplication.viewmodel.SavingsViewModel
-import dagger.hilt.android.HiltAndroidApp
-import com.example.myapplication.model.SavingsResponse
-import com.example.myapplication.model.State
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-
-//@Preview
 
 @Composable
 fun ChildSavingsScreen(navController: NavController) {
@@ -155,14 +142,13 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(20.dp))
 
-
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Savings Item",
-                            contentScale = ContentScale.Crop,
+                        Image(
+                            painter = painterResource(R.drawable.gucci),
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(270.dp)
-                                .align(Alignment.CenterHorizontally),
+                                .clip(RoundedCornerShape(14.dp))
+
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
@@ -303,15 +289,16 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(20.dp))
 
-
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Savings Item",
-                            contentScale = ContentScale.Crop,
+                        Image(
+                            painter = painterResource(R.drawable.gucci),
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(270.dp)
-                                .align(Alignment.CenterHorizontally),
+                                .clip(RoundedCornerShape(14.dp))
+
                         )
+
+
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
                             "${data.data?.data?.savingsItem?.amount ?: "0"}원",

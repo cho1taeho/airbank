@@ -377,10 +377,12 @@ fun ChildSavingsApplication(navController: NavController) {
                                 name = targetValue.text,
                                 amount = priceValue.text.toIntOrNull() ?: 0,
                                 month = selectedMonths,
-                                parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0
+                                parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
+                                imageUrl = uri.toString()
                             )
                             Log.d("이미지", "${uri}")
-//                            viewModel.createSavingsItem(createSavingsItemRequest)
+
+                            viewModel.createSavingsItem(createSavingsItemRequest)
                             Log.d(
                                 "CreateItem",
                                 "티클 모으기: Sending Item: $createSavingsItemRequest, 그룹id: ${groupId}"
@@ -408,20 +410,4 @@ fun ChildSavingsApplication(navController: NavController) {
         }
     }
 }
-
-fun createMultipartBodyPart(contentResolver: ContentResolver, uri: Uri, paramName: String): MultipartBody.Part {
-    val inputStream = contentResolver.openInputStream(uri)
-    val bytes = inputStream?.readBytes()
-
-    // 파일 확장자를 기반으로 MediaType을 결정할 수 있습니다.
-    val contentType = contentResolver.getType(uri)?.toMediaTypeOrNull()
-
-    // 파일의 내용을 RequestBody로 변환합니다.
-    val requestBody = bytes?.toRequestBody(contentType)
-
-    // MultipartBody.Part를 생성합니다.
-    return MultipartBody.Part.createFormData(paramName, "image", requestBody!!)
-}
-
-
 
