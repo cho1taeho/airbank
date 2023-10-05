@@ -161,6 +161,6 @@ class ChildRuleViewModel @Inject constructor() : ViewModel(){
                 Log.d(tag,postresponsedata.toString())
             }
         }
-        navController.popBackStack()
+        navController.navigate(BottomNavItem.Main.screenRoute)
     }
 }
