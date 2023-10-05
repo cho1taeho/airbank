@@ -51,7 +51,7 @@ interface ApiService {
 
     @Multipart
     @POST("/savings/item")
-    suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest, @Part image: MultipartBody.Part): Response<CreateSavingsItemResponse>
+    suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest): Response<CreateSavingsItemResponse>
     @PATCH("/savings/confirm")
     suspend fun updateSavings(@Query("group_id") groupId: Int, @Body request: UpdateSavingsRequest): Response<UpdateSavingsResponse>
     @PATCH("/savings/cancel")

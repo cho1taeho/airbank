@@ -304,14 +304,16 @@ fun ChildSavingsScreen(navController: NavController) {
                         Spacer(modifier = Modifier.size(20.dp))
 
 
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Savings Item",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(270.dp)
-                                .align(Alignment.CenterHorizontally),
-                        )
+
+//                        AsyncImage(
+//                            model = imageUrl,
+//                            contentDescription = "Savings Item",
+//                            contentScale = ContentScale.Crop,
+//                            modifier = Modifier
+//                                .size(270.dp)
+//                                .align(Alignment.CenterHorizontally),
+//                        )
+
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
                             "${data.data?.data?.savingsItem?.amount ?: "0"}원",

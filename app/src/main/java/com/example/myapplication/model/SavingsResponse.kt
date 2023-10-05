@@ -34,7 +34,8 @@ data class CreateSavingsItemRequest(
     val name: String,
     val amount: Int,
     val month: Int,
-    val parentsAmount: Int
+    val parentsAmount: Int,
+    val imageUrl: String
 )
 
 
