@@ -78,9 +78,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.AccountHistoryCheckResponse
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -96,7 +98,15 @@ fun ChildTransactionHistoryScreen(navController: NavController){
     val accountViewModel: AccountViewModel = hiltViewModel()
     val accountData by accountViewModel.accountHistoryState.collectAsState(initial = null)
 
-    var selectedBox by remember { mutableStateOf(-1) }
+    var selectedBox by remember { mutableStateOf(0) }
+
+    LaunchedEffect(selectedBox) {
+        when(selectedBox) {
+            0 -> accountViewModel.accountHistory("main")
+            1 -> accountViewModel.accountHistory("loan")
+            2 -> accountViewModel.accountHistory("savings")
+        }
+    }
 
 
     Column (
@@ -167,19 +177,227 @@ fun ChildTransactionHistoryScreen(navController: NavController){
             }
         }
         Spacer(modifier = Modifier.size(16.dp))
-        Histories(accountViewModel)
+
+        when (selectedBox) {
+            0 -> MainHistory()
+            1 -> LoanHistory()
+            2 -> SavingsHistory()
+        }
+
+    }
+}
+
+@Composable
+fun MainHistory(){
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountHistoryState.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = null){
+        accountViewModel.accountHistory("main")
+    }
+
+    accountData?.data?.data?.accountHistory?.let { transactions ->
+
+        if (transactions.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                for (transaction in transactions) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFFEDEDED)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(
+                                text = "금액: ${transaction.amount}",
+                                style = TextStyle(color = Color.Black),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "날짜: ${transaction.apiCreatedAt}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                            Text(
+                                text = "거래 유형: ${transaction.transactionType}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            }
+        }
+
+    } ?: run {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+        }
+    }
+}
+
+@Composable
+fun LoanHistory() {
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountHistoryState.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = null){
+        accountViewModel.accountHistory("loan")
+    }
+
+    accountData?.data?.data?.accountHistory?.let { transactions ->
+
+        if (transactions.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                for (transaction in transactions) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFFEDEDED)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(
+                                text = "금액: ${transaction.amount}",
+                                style = TextStyle(color = Color.Black),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "날짜: ${transaction.apiCreatedAt}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                            Text(
+                                text = "거래 유형: ${transaction.transactionType}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            }
+        }
+
+    } ?: run {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+        }
+    }
+}
+
+@Composable
+fun SavingsHistory() {
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountHistoryState.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = null){
+        accountViewModel.accountHistory("savings")
+    }
+
+    accountData?.data?.data?.accountHistory?.let { transactions ->
+
+        if (transactions.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+
+                for (transaction in transactions) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFFEDEDED)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(
+                                text = "금액: ${transaction.amount}",
+                                style = TextStyle(color = Color.Black),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "날짜: ${transaction.apiCreatedAt}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                            Text(
+                                text = "거래 유형: ${transaction.transactionType}",
+                                style = TextStyle(color = Color.Gray),
+                                fontSize = 10.sp
+                            )
+                        }
+                    }
+                }
+
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            }
+        }
+
+    } ?: run {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+        }
     }
 
 }
 
-@Composable
-fun Histories(viewModel: AccountViewModel) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(75.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(color = Color.White)
-            .padding(top = 16.dp)
-    )
-}

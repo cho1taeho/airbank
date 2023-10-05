@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -21,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,7 +45,9 @@ import coil.compose.AsyncImage
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.GETGroupsResponse
+import com.example.myapplication.model.State
 import com.example.myapplication.network.HDRetrofitBuilder
+import com.example.myapplication.viewmodel.AccountViewModel
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -126,6 +131,19 @@ fun ChildCard(name: String, img: String, creditScore: Int) {
 
 @Composable
 fun ChildBody(navController: NavController) {
+    val accountViewModel: AccountViewModel = hiltViewModel()
+    val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
+    val confiscationCheckState by accountViewModel.confiscationCheckState.collectAsState(initial = null)
+
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
+    LaunchedEffect(key1 = groupId) {
+        if (groupId.isNotEmpty()){
+            accountViewModel.accountCheck()
+            accountViewModel.confiscationCheck(groupId.toInt())
+            accountViewModel.taxCheck(groupId.toInt())
+        }
+    }
 
     Row (
         modifier = Modifier
@@ -180,8 +198,21 @@ fun ChildBody(navController: NavController) {
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFE2ECFF))
-                    .clickable {
-                        navController.navigate("ChildLoan")
+                    .let { modifier ->
+                        when (confiscationCheckState?.status) {
+                            State.SUCCESS -> {
+                                if (confiscationCheckState?.data?.data?.startedAt != null) {
+                                    modifier.clickable {
+                                        navController.navigate("ChildConfiscationTransfer")
+                                    }
+                                } else {
+                                    modifier.clickable {
+                                        navController.navigate("ChildLoan")
+                                    }
+                                }
+                            }
+                            else -> modifier
+                        }
                     }
             ){
                 Column (
@@ -199,9 +230,7 @@ fun ChildBody(navController: NavController) {
                         fontSize = 12.sp,
                         lineHeight = 17.sp,
                     )
-
                 }
-
                 Image(
                     painter = painterResource(id = R.drawable.loan),
                     contentDescription = null,
@@ -210,6 +239,28 @@ fun ChildBody(navController: NavController) {
                         .offset(x = 18.dp)
                         .align(Alignment.BottomEnd)
                 )
+                when (confiscationCheckState?.status) {
+                    State.SUCCESS -> {
+                        if (confiscationCheckState?.data?.data?.startedAt != null) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Gray.copy(alpha = 0.5f))
+                            ) {
+                                Text(
+                                    "압류중",
+                                    color = Color.White,
+                                    fontSize = 23.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
+                    State.ERROR -> {
+                    }
+                    else -> Unit
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
