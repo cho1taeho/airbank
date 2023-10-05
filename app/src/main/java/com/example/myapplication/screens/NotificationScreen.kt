@@ -92,6 +92,22 @@ fun NotificationScreen(navController: NavController) {
                                     .clickable {
                                         if (notification.notificationType == "GROUP_CONFIRM") {
                                             navController.navigate("GroupConfirm")
+                                        } else if (notification.notificationType == "TAX") {
+                                            navController.navigate("ChildWallet")
+                                        } else if (notification.notificationType == "LOAN") {
+                                            navController.navigate("ChildLoan")
+                                        } else if (notification.notificationType == "INTEREST") {
+                                            navController.navigate("ChildLoan")
+                                        } else if (notification.notificationType == "ALLOWANCE") {
+                                            navController.navigate("ChildWallet")
+                                        } else if (notification.notificationType == "CONFISCATION") {
+                                            navController.navigate("ChildWallet")
+                                        } else if (notification.notificationType == "SAVINGS") {
+                                            navController.navigate("childSavings")
+                                        } else if (notification.notificationType == "SAVINGS_CONFIRM") {
+                                            navController.navigate("SavingsScreen")
+                                        } else if (notification.notificationType == "SAVINGS_REWARD_CONFIRM") {
+                                            navController.navigate("SavingsScreen")
                                         }
                                     }
                                 ,
@@ -107,7 +123,6 @@ fun NotificationScreen(navController: NavController) {
                                 )
                                 Column {
                                     Text(
-//                                        text = "${notification.notificationType}",
                                         text = when (notification.notificationType){
                                             "TAX" -> "세금"
                                             "INTEREST" -> "이자"
