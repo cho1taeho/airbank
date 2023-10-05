@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,15 +88,16 @@ fun NotificationScreen(navController: NavController) {
                                     .fillMaxWidth()
                                     .padding(8.dp)
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0xFF00D2F3))
+                                    .background(Color.White)
                                     .clickable {
-                                               if(notification.notificationType == "GROUP_CONFIRM"){
-                                                   navController.navigate("GroupConfirm")
-                                               }
+                                        if (notification.notificationType == "GROUP_CONFIRM") {
+                                            navController.navigate("GroupConfirm")
+                                        }
                                     }
                                 ,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Spacer(modifier = Modifier.size(8.dp))
                                 Icon(
                                     painter = getImageForNotificationType(notification.notificationType),
                                     contentDescription = null,
@@ -105,7 +107,22 @@ fun NotificationScreen(navController: NavController) {
                                 )
                                 Column {
                                     Text(
-                                        text = "${notification.notificationType}",
+//                                        text = "${notification.notificationType}",
+                                        text = when (notification.notificationType){
+                                            "TAX" -> "세금"
+                                            "INTEREST" -> "이자"
+                                            "BONUS" -> "보너스"
+                                            "ALLOWANCE" -> "용돈"
+                                            "MISSION" -> "미션"
+                                            "CONFISCATION" -> "압류"
+                                            "LOAN" -> "땡겨 쓰기"
+                                            "SAVINGS" -> "티끌 모으기"
+                                            "SAVINGS_CONFIRM" -> "티끌 모으기"
+                                            "SAVINGS_REWARD_CONFIRM" -> "티끌 모으기"
+                                            "GROUP" -> "그룹"
+                                            "GROUP_CONFIRM" -> "그룹"
+                                            else -> notification.notificationType
+                                        },
                                         style = TextStyle(color = Color.Black),
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold

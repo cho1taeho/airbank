@@ -69,13 +69,38 @@ fun AppNavigation(navController: NavHostController){
             }
         }
         composable(BottomNavItem.Savings.screenRoute) {
-            SavingsScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildSavingsScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+                SavingsScreen(navController = navController)
+            }
+
+
         }
         composable(BottomNavItem.Loan.screenRoute) {
-            LoanScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildLoanScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+                LoanScreen(navController = navController)
+            }
+
         }
         composable(BottomNavItem.Wallet.screenRoute) {
-            WalletScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildWalletScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+                WalletScreen(navController = navController)
+            }
+
         }
         composable(BottomNavItem.MyPage.screenRoute){
             MyPageScreen(navController = navController)

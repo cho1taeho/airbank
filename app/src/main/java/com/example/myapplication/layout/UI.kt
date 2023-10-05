@@ -144,7 +144,7 @@ fun MyUI() {
         bottomBar = {
             if (nowon!="First"){
             NavigationBar(
-                containerColor = Color(0xFFB4EBF7),
+                containerColor = Color(0xFFF4F4F4),
                 content = {
                     val items = listOf(
                         BottomNavItem.Main,
