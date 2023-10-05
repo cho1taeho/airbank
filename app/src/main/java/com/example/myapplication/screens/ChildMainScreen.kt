@@ -284,20 +284,6 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
     var childs : List<GETGroupsResponse.Data.Member> = emptyList()
     var child: GETGroupsResponse.Data.Member? by mutableStateOf(null)
 
-//    fun getGroup() {
-//        val tag = "getGroup"
-//        viewModelScope.launch(Dispatchers.IO) {
-//            try {
-//                val response = HDRetrofitBuilder.HDapiService().getGroups()
-//                if (response.body() != null) {
-//                    val getGroupsResponse = response.body()!!.data
-//                    groupid = getGroupsResponse.members.first().groupId
-//                    AirbankApplication.prefs.setString("group_id",groupid.toString())
-//                    Log.d(tag,groupid.toString())
-//                } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
-//            } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }
-//        }
-//    }
     fun getGroup() {
         val tag = "getGroup"
         viewModelScope.launch(Dispatchers.IO) {
@@ -306,7 +292,10 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                 if (response.body() != null) {
                     val getGroupsResponse = response.body()!!.data
                     childs = getGroupsResponse.members
-                    if (childs.isNullOrEmpty()){Log.e("ChildMainViewModel","Child empty")}
+                    if (childs.isNullOrEmpty()){
+                        Log.e("ChildMainViewModel","Child empty, get Temporary id")
+                        getGroupEnroll()
+                    }
                     else{
                         AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
                         child = childs.first()
@@ -314,6 +303,27 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                     }
                 } else { Log.e("ChildMainViewModel", "Response not successful: ${response.code()}") }
             } catch (e: Exception) { Log.e("ChildMainViewModel", "Error: ${e.message}")  }
+        }
+    }
+
+    fun getGroupEnroll() {
+        val tag = "GroupEnroll"
+        if(groupid!=0){return}
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = HDRetrofitBuilder.HDapiService().getGroupsEnroll()
+                if (response.body() != null) {
+                    val getGroupsEnrollResponse = response.body()
+                    val id = getGroupsEnrollResponse?.data?.id ?: 0
+                    Log.d(tag, "id= $id")
+                    groupid = id
+                    AirbankApplication.prefs.setString("group_id",groupid.toString())
+                } else {
+                    Log.e(tag, "Response not successful: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error: ${e.message}")
+            }
         }
     }
 }

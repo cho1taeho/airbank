@@ -31,6 +31,7 @@ import com.example.myapplication.screens.ChildTaxTransferScreen
 import com.example.myapplication.screens.ChildTransactionHistoryScreen
 import com.example.myapplication.screens.ChildWalletScreen
 import com.example.myapplication.screens.FirstScreen
+import com.example.myapplication.screens.GroupConfirmScreen
 import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.MyPageScreen
@@ -150,6 +151,9 @@ fun AppNavigation(navController: NavHostController){
         }
         composable("ChildRule"){
             ChildRuleScreen(navController= navController)
+        }
+        composable("GroupConfirm"){
+            GroupConfirmScreen(navController=navController)
         }
 
 

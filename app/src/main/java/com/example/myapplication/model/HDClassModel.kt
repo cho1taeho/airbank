@@ -226,3 +226,17 @@ data class PATCHGroupsFundResponse(
         val loanLimit: Int
     )
 }
+
+data class GETGroupsEnrollResponse(
+    @SerializedName("code")
+    val code: Int,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("data")
+    val data: Data
+) {
+    data class Data(
+        @SerializedName("id")
+        val id: Int
+    )
+}

@@ -74,7 +74,7 @@ fun phonenumberform(navController: NavController,viewModel: AddChildViewModel) {
                 if (newValue.length <= 11 && newValue.isDigitsOnly()) {
                     phoneNumberValue = newValue
                     showError = true
-                    if(newValue.isEmpty() || newValue.length == 11){
+                    if(newValue.isEmpty() || (newValue.length == 11 && newValue.startsWith("010"))){
                         showError = false
                     }
                 }
@@ -105,7 +105,12 @@ fun phonenumberform(navController: NavController,viewModel: AddChildViewModel) {
     }
 
 
-    Button(onClick = {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 8.dp),
+        enabled = !showError,
+        onClick = {
         viewModel.submit(phoneNumberValue)
         navController.navigate(BottomNavItem.Main.screenRoute)
     }) {

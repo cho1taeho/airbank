@@ -1,5 +1,6 @@
 package com.example.myapplication.api
 
+import com.example.myapplication.model.GETGroupsEnrollResponse
 import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.model.GETLogoutResponse
 import com.example.myapplication.model.GETMembersResponse
@@ -48,6 +49,8 @@ interface HDApiService {
     @GET("/groups/fund")
     suspend fun getGroupsFund(@Query("group_id") groupId: Int): Response<PATCHGroupsFundResponse>
 
+    @GET("/groups/enroll")
+    suspend fun getGroupsEnroll():Response<GETGroupsEnrollResponse>
 }
 
 

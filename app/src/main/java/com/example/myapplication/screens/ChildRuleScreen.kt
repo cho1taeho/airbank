@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -47,17 +48,20 @@ fun ChildRuleScreen( navController: NavController
             .padding(16.dp, 16.dp)
             .fillMaxSize()
     ) {
-        Row() {
+        Row {
             OutlinedTextField(
                 value = allowanceAmount,
                 onValueChange = { allowanceAmount = it },
                 label = { Text(text = "용돈") },
                 modifier = Modifier
                     .widthIn(max = 150.dp)
-                    .weight(1f)
+                    .weight(1f),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number // 숫자 키패드를 보이도록 설정
+                ),
             )
         }
-        Row() {
+        Row {
             OutlinedTextField(
                 value = allowanceDate,
                 onValueChange = { allowanceDate = it },
@@ -82,7 +86,7 @@ fun ChildRuleScreen( navController: NavController
                 ),
             )
         }
-        Row() {
+        Row {
             OutlinedTextField(
                 value = loanLimit,
                 onValueChange = { loanLimit = it },
@@ -110,19 +114,20 @@ fun ChildRuleScreen( navController: NavController
 
         Button(
             onClick = {
-                val fundRequest: POSTGroupsFundRequest = POSTGroupsFundRequest(
+                val fundRequest = POSTGroupsFundRequest(
                     taxRate = taxRate.toInt(),
                     allowanceAmount = allowanceAmount.toInt(),
                     allowanceDate = allowanceDate.toInt(),
                     confiscationRate = confiscationRate.toInt(),
                     loanLimit = loanLimit.toInt()
                 )
-                val group_id = AirbankApplication.prefs.getString("group_id","").toInt()
-                if (!fundRequest.equals(POSTGroupsFundRequest(0,0,0,0,0)) && group_id != 0){
-                    viewModel.handlesubmit(navController,fundRequest,group_id)
+                val groupid = AirbankApplication.prefs.getString("group_id", "").toInt()
+                if (fundRequest != POSTGroupsFundRequest(0, 0, 0, 0, 0) && groupid != 0) {
+                    viewModel.handlesubmit(navController, fundRequest, groupid)
                 }
             },
             modifier = Modifier.padding(top = 16.dp)
+                .fillMaxWidth()
 
         ) {
             Text("SUBMIT")
@@ -131,15 +136,15 @@ fun ChildRuleScreen( navController: NavController
 }
 
 class ChildRuleViewModel @Inject constructor() : ViewModel(){
-    fun handlesubmit(navController: NavController, fundRequest: POSTGroupsFundRequest, group_id: Int){
+    fun handlesubmit(navController: NavController, fundRequest: POSTGroupsFundRequest, groupid: Int){
         val tag = "ChildRule"
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d(tag,"fundrequest: "+fundRequest.toString())
-            Log.d(tag,"group_id: "+group_id.toString())
-            val response = HDRetrofitBuilder.HDapiService().postGroupsFund(fundRequest,group_id)
+            Log.d(tag, "fundrequest: $fundRequest")
+            Log.d(tag, "group_id: $groupid")
+            val response = HDRetrofitBuilder.HDapiService().postGroupsFund(fundRequest,groupid)
             val postresponsedata = response.body()
             if(postresponsedata == null){
-                val response2 = HDRetrofitBuilder.HDapiService().patchGroupsFund(fundRequest,group_id)
+                val response2 = HDRetrofitBuilder.HDapiService().patchGroupsFund(fundRequest,groupid)
                 val patchresponsedata = response2.body()
                 Log.d(tag,patchresponsedata.toString())
                 if(patchresponsedata != null) { //PATCH
