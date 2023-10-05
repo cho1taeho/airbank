@@ -135,6 +135,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
             )
+
         }
     }
 }

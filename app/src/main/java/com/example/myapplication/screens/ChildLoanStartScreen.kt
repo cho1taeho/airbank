@@ -173,7 +173,7 @@ fun LoanButton(navController: NavController, viewModel: LoanViewModel) {
         Text(
             "땡겨쓰기",
             color = Color.White,
-            fontSize = 16.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
     }

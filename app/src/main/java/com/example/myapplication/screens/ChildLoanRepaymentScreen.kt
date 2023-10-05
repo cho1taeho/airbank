@@ -103,7 +103,7 @@ fun LoanRepaymentButton(navController: NavController, viewModel: LoanViewModel) 
         Text(
             "상환하기",
             color = Color.White,
-            fontSize = 16.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
     }

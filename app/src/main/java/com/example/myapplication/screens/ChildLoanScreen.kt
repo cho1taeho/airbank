@@ -145,7 +145,7 @@ fun ChildLoanScreen(navController: NavController) {
                         Text(
                             "상환하기",
                             color = Color(0xFF00D2F3),
-                            fontSize = 16.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -167,7 +167,7 @@ fun ChildLoanScreen(navController: NavController) {
                         Text(
                             "땡겨쓰기",
                             color = Color.White,
-                            fontSize = 16.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
