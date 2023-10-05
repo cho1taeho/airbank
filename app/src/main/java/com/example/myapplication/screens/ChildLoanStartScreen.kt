@@ -90,7 +90,7 @@ fun CreditScore() {
         val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
         Text(
 
-            "신용점수: ${creditPoint}p",
+            "신용점수: ${creditPoint}",
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
         )
