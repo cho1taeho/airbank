@@ -38,6 +38,7 @@ fun GroupConfirmScreen( navController: NavController
 ) {
     val viewModel: GroupConfirmViewModel = viewModel()
     val group_id: Int = AirbankApplication.prefs.getString("tempid","").toInt()
+    AirbankApplication.prefs.setString("tempid","")
     LaunchedEffect(Unit){
         viewModel.getgroupsfund(group_id)
     }
