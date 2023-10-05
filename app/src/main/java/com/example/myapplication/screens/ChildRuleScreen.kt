@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -44,6 +45,7 @@ fun ChildRuleScreen( navController: NavController
     Column(
         modifier = Modifier
             .padding(16.dp, 16.dp)
+            .fillMaxSize()
     ) {
         Row() {
             OutlinedTextField(
@@ -154,6 +156,6 @@ class ChildRuleViewModel @Inject constructor() : ViewModel(){
                 Log.d(tag,postresponsedata.toString())
             }
         }
-        navController.navigate(BottomNavItem.MyPage.screenRoute)
+        navController.popBackStack()
     }
 }
