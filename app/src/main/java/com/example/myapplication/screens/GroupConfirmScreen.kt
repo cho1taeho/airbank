@@ -197,7 +197,7 @@ class GroupConfirmViewModel @Inject constructor() : ViewModel(){
             if(response.isSuccessful){
                 Log.d(tag,response.toString())
                 withContext(Dispatchers.Main){
-                    navController.navigate(BottomNavItem.Main.screenRoute)
+                    navController.currentBackStack
                 }
             }else{
                 Log.e(tag,"submit failed")
