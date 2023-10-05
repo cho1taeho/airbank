@@ -51,6 +51,7 @@ import com.example.myapplication.viewmodel.AccountViewModel
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -63,7 +64,7 @@ fun ChildMainScreen(navController: NavController) {
 
     var group_id by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit){
-        viewModel.getGroup()
+        viewModel.getGroup(navController)
         val mutablegroupid = viewModel.groupid
         group_id = mutablegroupid
     }
@@ -332,10 +333,11 @@ fun Quiz(){
 class ChildMainViewModel @Inject constructor() : ViewModel() {
 
     var groupid by mutableIntStateOf(0)
+    var tempid by mutableIntStateOf(0)
     var childs : List<GETGroupsResponse.Data.Member> = emptyList()
     var child: GETGroupsResponse.Data.Member? by mutableStateOf(null)
 
-    fun getGroup() {
+    fun getGroup(navController: NavController) {
         val tag = "getGroup"
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -345,7 +347,8 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                     childs = getGroupsResponse.members
                     if (childs.isNullOrEmpty()){
                         Log.e("ChildMainViewModel","Child empty, get Temporary id")
-                        getGroupEnroll()
+                        groupid = 0
+                        getGroupEnroll(navController = navController)
                     }
                     else{
                         AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
@@ -357,7 +360,7 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun getGroupEnroll() {
+    fun getGroupEnroll(navController: NavController) {
         val tag = "GroupEnroll"
         if(groupid!=0){return}
         viewModelScope.launch(Dispatchers.IO) {
@@ -367,8 +370,12 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                     val getGroupsEnrollResponse = response.body()
                     val id = getGroupsEnrollResponse?.data?.id ?: 0
                     Log.d(tag, "id= $id")
-                    groupid = id
-                    AirbankApplication.prefs.setString("group_id",groupid.toString())
+                    tempid = id
+                    withContext(Dispatchers.Main){
+                        navController.navigate("GroupConfirm")
+                    }
+
+//                    AirbankApplication.prefs.setString("group_id",groupid.toString())
                 } else {
                     Log.e(tag, "Response not successful: ${response.code()}")
                 }
