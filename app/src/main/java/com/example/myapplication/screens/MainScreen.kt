@@ -286,7 +286,7 @@ fun Body(navController: NavController) {
     LaunchedEffect(key1 = null) {
         savingsViewModel.getSavings()
     }
-
+    Log.d("티끌 상태","${savingsData?.data?.data?.status}요")
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -384,7 +384,7 @@ fun Body(navController: NavController) {
                         if (savingsData?.data?.data?.status == null) {
                             navController.navigate("SavingsWaiting")
                         } else if (savingsData?.data?.data?.status == "PENDING") {
-                            navController.navigate("SavingsWaiting")
+                            navController.navigate("savingsApprove")
                         } else if (savingsData?.data?.data?.status == "PROCEEDING") {
                             navController.navigate("savings")
                         }
