@@ -141,7 +141,9 @@ fun BonusTransferScreen(navController: NavController){
                     navController.navigate(BottomNavItem.Wallet.screenRoute)
                     val request = BonusRequest(amount = inputAmount.toInt())
                     val groupId = AirbankApplication.prefs.getString("group_id", "")
+                    Log.d("보너스송금","${groupId}")
                     accountViewModel.bonusTransfer(groupId.toInt(),request)
+
                 }
         ) {
             Text(

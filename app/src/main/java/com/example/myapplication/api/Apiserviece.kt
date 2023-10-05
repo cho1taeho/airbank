@@ -107,7 +107,7 @@ interface ApiService {
     @POST("/loans/charge")
     suspend fun loanCharge(@Query("group_id") groupId: Int, @Body request: LoanChargeRequest): Response<LoanChargeResponse>
 
-    @GET("/notifications")
+    @GET("/notification")
     suspend fun getNotifications(@Query("group_id") groupId: Int): Response<NotificationResponse>
 
 }
