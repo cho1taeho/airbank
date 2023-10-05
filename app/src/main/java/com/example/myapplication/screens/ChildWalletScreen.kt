@@ -157,7 +157,7 @@ fun ChildWalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
                 .clickable {
-                    navController.navigate("ChildTranscationHistory")
+                    navController.navigate("ChildTransactionHistory")
                 }
         ) {
             Row(

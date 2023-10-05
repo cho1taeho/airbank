@@ -73,6 +73,7 @@ fun ChildMainScreen(navController: NavController) {
         imagepath = "local"
     }
     Column {
+        Spacer(modifier = Modifier.size(16.dp))
         ChildCard(name,imagepath,creditScore)
         ChildBody(navController = navController)
         Spacer(modifier = Modifier.size(16.dp))
@@ -86,7 +87,7 @@ fun ChildCard(name: String, img: String, creditScore: Int) {
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF5FCFEF))
+            .background(Color(0xFFD6F2FF))
     ){
         Column (
             modifier = Modifier.padding(16.dp),
@@ -113,9 +114,9 @@ fun ChildCard(name: String, img: String, creditScore: Int) {
                     )
                 }
                 Spacer(Modifier.width(16.dp))
-                Text("자녀 ${name ?: ""} 님의\n지갑을 관리하고 있습니다.")
+                Text("자녀 ${name ?: ""} 님!\n반가워요!",
+                    fontSize = 20.sp)
             }
-            Text("신용점수")
             val creditPoint = creditScore ?: 0
             ScoreBar(creditPoint)
         }
@@ -140,7 +141,7 @@ fun ChildBody(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFFFE9E8))
                 .clickable {
-                    navController.navigate("childWallet")
+                    navController.navigate("ChildWallet")
                 }
         ){
             Column (

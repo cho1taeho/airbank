@@ -109,7 +109,7 @@ fun AppNavigation(navController: NavHostController){
         composable("savingsBonus"){
             SavingsBonusScreen(navController = navController)
         }
-        composable("childWallet"){
+        composable("ChildWallet"){
             ChildWalletScreen(navController = navController)
         }
         composable("ChildTaxTransfer"){
@@ -139,7 +139,7 @@ fun AppNavigation(navController: NavHostController){
         composable("Loan"){
             LoanScreen(navController = navController)
         }
-        composable("ChildTranscationHistory"){
+        composable("ChildTransactionHistory"){
             ChildTransactionHistoryScreen(navController = navController)
         }
         composable("SavingsWaiting"){

@@ -110,31 +110,6 @@ fun ChildTransactionHistoryScreen(navController: NavController){
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.arrowleft),
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        navController.navigate("childWallet")
-                    }
-            )
-
-            Text(
-                "거래 내역",
-                fontSize = 20.sp
-            )
-            Text(
-                " "
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
                 .height(25.dp)
         ){
             Box(
@@ -144,7 +119,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                     .height(25.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 0) Color(0xFF00D2F3) else Color.White)
-                    .clickable{
+                    .clickable {
                         selectedBox = 0
                         accountViewModel.accountHistory("main")
                     }
@@ -163,7 +138,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                     .height(25.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 1) Color(0xFF00D2F3) else Color.White)
-                    .clickable{
+                    .clickable {
                         selectedBox = 1
                         accountViewModel.accountHistory("loan")
                     }
@@ -180,7 +155,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                     .height(25.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 2) Color(0xFF00D2F3) else Color.White)
-                    .clickable{
+                    .clickable {
                         selectedBox = 2
                         accountViewModel.accountHistory("savings")
                     }
@@ -191,8 +166,6 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                 )
             }
         }
-
-
     }
 
 
