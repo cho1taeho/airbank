@@ -89,7 +89,7 @@ fun MainScreen(navController: NavController) {
 fun postNewChild(navController: NavController){
     Box(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(16.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(Color(0xFFD6F2FF))
             .width(351.dp)
