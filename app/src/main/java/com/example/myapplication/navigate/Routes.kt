@@ -36,6 +36,7 @@ import com.example.myapplication.screens.LoanScreen
 import com.example.myapplication.screens.MainScreen
 import com.example.myapplication.screens.MyPageScreen
 import com.example.myapplication.screens.NotificationScreen
+import com.example.myapplication.screens.PreviewPerformanceChart
 import com.example.myapplication.screens.SavingsApproveScreen
 import com.example.myapplication.screens.SavingsBonusScreen
 import com.example.myapplication.screens.SavingsScreen

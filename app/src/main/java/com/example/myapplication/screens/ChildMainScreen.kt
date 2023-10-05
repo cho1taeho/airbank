@@ -375,7 +375,6 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                         navController.navigate("GroupConfirm")
                     }
 
-//                    AirbankApplication.prefs.setString("group_id",groupid.toString())
                 } else {
                     Log.e(tag, "Response not successful: ${response.code()}")
                 }
