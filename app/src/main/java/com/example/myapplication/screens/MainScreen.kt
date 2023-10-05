@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,7 +75,7 @@ fun MainScreen(navController: NavController) {
     Column {
         if (childs.isNotEmpty()){
             Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
-            ChildProfile(childs,viewModel)
+            ChildProfile(childs,viewModel,navController)
         } else {
             postNewChild(navController)
         }
@@ -120,7 +122,7 @@ fun postNewChild(navController: NavController){
 }
 
 @Composable
-fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainViewModel) {
+fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainViewModel, navController: NavController) {
 
 
     Row (
@@ -136,7 +138,11 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
                     modifier = Modifier
                         .size(42.dp)
                         .clip(RoundedCornerShape(31.5.dp))
-                        .border(1.dp, Color(0xFFB4EBF7), CircleShape)
+                        .border(
+                            1.dp,
+                            color = if (child == viewModel.selected) Color(0xFFB4EBF7) else Color.Transparent,
+                            CircleShape
+                        )
                         .clickable {
                             viewModel.selected = child
                         }
@@ -162,8 +168,26 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
             }
             Spacer(modifier = Modifier.size(20.dp))
         }
+        Column {
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(RoundedCornerShape(31.5.dp))
+                    .border(0.1.dp, Color(0xFF3B3D3D), CircleShape)
+                    .clickable {
+                        navController.navigate("addChild")
+                    }
+            ) {
+                Image(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(text = "")
+        }
     }
-
     ChildCard(viewModel)
 }
 @Composable
