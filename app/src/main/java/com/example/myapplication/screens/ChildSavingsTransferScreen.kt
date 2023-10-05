@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -119,6 +120,8 @@ fun ChildSavingsTransferScreen(navController: NavController) {
             )
         }
 
+        val context = LocalContext.current
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -127,10 +130,18 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
-                    navController.navigate("childSavings")
                     val request = SavingsRemitRequest(groupId.toInt())
-
                     viewModel.remitSavings(request)
+
+                    AlertDialog
+                        .Builder(context)
+                        .setTitle("티끌모으기")
+                        .setMessage("티끌을 보냈습니다.")
+                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                            dialog.dismiss()
+                            navController.navigate("childSavings")
+                        }.show()
+
                 }
         ) {
             Text(

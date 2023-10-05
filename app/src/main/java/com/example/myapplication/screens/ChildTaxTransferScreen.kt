@@ -101,7 +101,7 @@ fun ChildTaxTransferScreen(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
             .verticalScroll(rememberScrollState())
     ){
@@ -124,9 +124,10 @@ fun ChildTaxTransferScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
-                    navController.navigate("childWallet")
-                    val request = TaxTransferRequest(taxCheckData?.data?.data?.amount ?: 0)
+                    val request = TaxTransferRequest(
+                        taxCheckData?.data?.data?.amount ?: 0)
                     viewModel.taxTransfer(request)
+                    navController.navigate("childWallet")
                 }
         ) {
             Text(
