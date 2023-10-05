@@ -72,7 +72,10 @@ fun MainScreen(navController: NavController) {
         childs = mutablechilds
     }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         if (childs.isNotEmpty()){
             Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
             ChildProfile(childs,viewModel,navController)

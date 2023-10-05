@@ -78,7 +78,10 @@ fun ChildMainScreen(navController: NavController) {
     if (imagepath.isNullOrEmpty()) {
         imagepath = "local"
     }
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Spacer(modifier = Modifier.size(16.dp))
         ChildCard(name,imagepath,creditScore)
         ChildBody(navController = navController)
