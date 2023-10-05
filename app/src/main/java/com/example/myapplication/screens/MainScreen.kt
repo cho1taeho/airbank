@@ -77,7 +77,13 @@ fun MainScreen(navController: NavController) {
             .fillMaxSize()
     ) {
         if (childs.isNotEmpty()){
-            Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+            Text("관리중인 자녀 ", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular)) ))
+            Text(childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))), color = Color(0xFF00D2F3) )
+            }
             ChildProfile(childs,viewModel,navController)
         } else {
             postNewChild(navController)

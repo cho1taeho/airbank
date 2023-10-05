@@ -126,17 +126,8 @@ fun SavingsApproveScreen(navController: NavController) {
                     )
                 }
             }
-//
 
             Spacer(modifier = Modifier.weight(1f))
-
-//            val updateSavingsState = viewModel.updateSavingsState.collectAsState(Resource(State.LOADING, null, null)).value
-//
-//            if (updateSavingsState.status == State.SUCCESS) {
-//                navController.navigate("SavingsScreen") {
-//                    popUpTo("route_start_destination") { inclusive = true }
-//                }
-//            }
 
 
             Row(
@@ -152,7 +143,7 @@ fun SavingsApproveScreen(navController: NavController) {
                         .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(10.dp))
-                        .background(color = Color(0xFFD6F2FF))
+                        .background(color = Color(0xFF00D2F3))
                         .clickable {
 
                             val request = UpdateSavingsRequest(isAccept = true)
@@ -177,7 +168,7 @@ fun SavingsApproveScreen(navController: NavController) {
                         .weight(1f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(10.dp))
-                        .background(color = Color(0xFFD6F2FF))
+                        .background(color = Color.White)
                         .clickable {
 
                             val request = UpdateSavingsRequest(isAccept = false)
@@ -187,7 +178,7 @@ fun SavingsApproveScreen(navController: NavController) {
                 ) {
                     Text(
                         "거절하기",
-                        color = Color.White,
+                        color = Color(0xFF00D2F3),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )

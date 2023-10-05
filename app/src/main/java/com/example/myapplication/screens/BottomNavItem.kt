@@ -23,6 +23,9 @@ sealed class BottomNavItem(
                 "childSavings" -> ChildSavings
                 "savingsApplication" -> ChildSavingsApplication
                 "savingsApprove" -> SavingsApprove
+                "savingsBonus" -> SavingsBonus
+                "SavingsWaiting" -> SavingsWaiting
+                "BonusTransfer" -> BonusTransfer
 
                 // Add cases for other routes
                 else -> Main // Default to the main route
@@ -33,6 +36,10 @@ sealed class BottomNavItem(
     object Wallet : BottomNavItem("지갑 관리하기", R.drawable.iwallet, "wallet")
     object ChildWallet : BottomNavItem("내 지갑", R.drawable.iwallet, "ChildWallet")
     object Savings : BottomNavItem("티끌 모으기", R.drawable.isavings, "savings")
+    object SavingsBonus : BottomNavItem("티끌 모으기", R.drawable.isavings, "savingsBonus")
+    object SavingsWaiting : BottomNavItem("티끌 모으기", R.drawable.isavings, "SavingsWaiting")
+    object BonusTransfer : BottomNavItem("보너스", R.drawable.isavings, "BonusTransfer")
+
     object ChildSavings : BottomNavItem("티끌 모으기", R.drawable.isavings, "childSavings")
     object ChildSavingsApplication : BottomNavItem("티끌 모으기", R.drawable.isavings, "savingsApplication")
     object SavingsApprove : BottomNavItem("티끌 모으기", R.drawable.isavings, "savingsApprove")
