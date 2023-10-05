@@ -23,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 
@@ -57,12 +58,12 @@ class SavingsViewModel @Inject constructor(
     private val _createItemState = MutableStateFlow<Resource<CreateSavingsItemResponse>>(Resource(State.LOADING, null, null))
     val createItemState: StateFlow<Resource<CreateSavingsItemResponse>> get() = _createItemState
 
-    fun createSavingsItem(request: CreateSavingsItemRequest) = viewModelScope.launch {
+    fun createSavingsItem(request: CreateSavingsItemRequest, image: MultipartBody.Part) = viewModelScope.launch {
         val JSESSIONID = AirbankApplication.prefs.getString("JSESSIONID","")
         Log.d("ViewModel", "Stored JSESSIONID: $JSESSIONID")
         _createItemState.emit(Resource(State.LOADING, null, null))
         try {
-            val response = savingsRepository.createSavingsItem(request)
+            val response = savingsRepository.createSavingsItem(request, image)
             Log.d("CreateItem","티클 모으기 성공: ${response.data}")
             _createItemState.emit(response)
 

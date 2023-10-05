@@ -1,7 +1,11 @@
 package com.example.myapplication.screens
 
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +53,10 @@ import dagger.hilt.android.HiltAndroidApp
 import com.example.myapplication.model.SavingsResponse
 import com.example.myapplication.model.State
 import com.google.android.material.progressindicator.CircularProgressIndicator
-
+import java.io.ByteArrayInputStream
+import java.io.IOException
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 
 //@Preview
 
@@ -195,7 +202,9 @@ fun ChildSavingsScreen(navController: NavController) {
                             if (savingsData?.data?.data?.isPaid == false) {
                                 navController.navigate("childSavingsTransfer")
                             } else {
-                                Toast.makeText(context, "이번달은 송금을 했습니다", Toast.LENGTH_SHORT).show()
+                                Toast
+                                    .makeText(context, "이번달은 송금을 했습니다", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                 ) {
@@ -261,7 +270,6 @@ fun ChildSavingsScreen(navController: NavController) {
     } else if(savingsData?.data?.data?.status == "PENDING") {
         savingsData?.let { data ->
             val imageUrl = data?.data?.data?.savingsItem?.imageUrl
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -351,4 +359,16 @@ fun ChildSavingsScreen(navController: NavController) {
             }
         }
     }
+}
+
+fun decodeBase64ToImage(base64String: String): Bitmap? {
+    val decodedBytes: ByteArray
+    try {
+        decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+        val inputStream = ByteArrayInputStream(decodedBytes)
+        return BitmapFactory.decodeStream(inputStream)
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return null
 }

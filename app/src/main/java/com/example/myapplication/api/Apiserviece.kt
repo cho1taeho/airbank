@@ -34,11 +34,14 @@ import com.example.myapplication.model.TaxTransferRequest
 import com.example.myapplication.model.TaxTransferResponse
 import com.example.myapplication.model.UpdateSavingsRequest
 import com.example.myapplication.model.UpdateSavingsResponse
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 
@@ -46,8 +49,9 @@ interface ApiService {
     @GET("/savings/current")
     suspend fun getSavings(@Query("group_id") groupId: Int): Response<SavingsResponse>
 
+    @Multipart
     @POST("/savings/item")
-    suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest): Response<CreateSavingsItemResponse>
+    suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest, @Part image: MultipartBody.Part): Response<CreateSavingsItemResponse>
     @PATCH("/savings/confirm")
     suspend fun updateSavings(@Query("group_id") groupId: Int, @Body request: UpdateSavingsRequest): Response<UpdateSavingsResponse>
     @PATCH("/savings/cancel")

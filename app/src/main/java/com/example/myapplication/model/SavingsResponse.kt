@@ -1,6 +1,6 @@
 package com.example.myapplication.model
 
-import java.time.LocalDateTime
+import android.media.Image
 
 
 data class SavingsResponse(
@@ -26,7 +26,7 @@ data class SavingsResponse(
     data class SavingsItem(
         val name: String,
         val amount: Int,
-        val imageUrl: String
+        val imageUrl: String?
     )
 }
 
@@ -34,8 +34,7 @@ data class CreateSavingsItemRequest(
     val name: String,
     val amount: Int,
     val month: Int,
-    val parentsAmount: Int,
-    val imageUrl: String
+    val parentsAmount: Int
 )
 
 
