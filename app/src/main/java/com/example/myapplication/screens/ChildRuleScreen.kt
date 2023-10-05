@@ -1,6 +1,7 @@
 package com.example.myapplication.screens
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -121,9 +122,12 @@ fun ChildRuleScreen( navController: NavController
                     confiscationRate = confiscationRate.toInt(),
                     loanLimit = loanLimit.toInt()
                 )
-                val groupid = AirbankApplication.prefs.getString("group_id", "").toInt()
-                if (fundRequest != POSTGroupsFundRequest(0, 0, 0, 0, 0) && groupid != 0) {
-                    viewModel.handlesubmit(navController, fundRequest, groupid)
+                val groupid = AirbankApplication.prefs.getString("group_id", "0").toInt()
+                if (fundRequest != POSTGroupsFundRequest(0, 0, 0, 0, 0) ) {
+                    if(groupid != 0){
+                        viewModel.handlesubmit(navController, fundRequest, groupid)
+                    }
+                    navController.popBackStack()
                 }
             },
             modifier = Modifier.padding(top = 16.dp)
@@ -161,6 +165,7 @@ class ChildRuleViewModel @Inject constructor() : ViewModel(){
                 Log.d(tag,postresponsedata.toString())
             }
         }
+
         navController.navigate(BottomNavItem.Main.screenRoute)
     }
 }

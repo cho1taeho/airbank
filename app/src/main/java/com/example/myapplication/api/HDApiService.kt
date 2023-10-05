@@ -1,5 +1,6 @@
 package com.example.myapplication.api
 
+import com.example.myapplication.model.GETCreditHistoryResponse
 import com.example.myapplication.model.GETGroupsEnrollResponse
 import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.model.GETLogoutResponse
@@ -51,6 +52,10 @@ interface HDApiService {
 
     @GET("/groups/enroll")
     suspend fun getGroupsEnroll():Response<GETGroupsEnrollResponse>
+
+    @GET("/members/credit-history")
+    suspend fun getCreditHistory(@Query("group_id") groupId: Int):Response<GETCreditHistoryResponse>
+
 }
 
 

@@ -37,7 +37,7 @@ import javax.inject.Inject
 fun GroupConfirmScreen( navController: NavController
 ) {
     val viewModel: GroupConfirmViewModel = viewModel()
-    val group_id: Int = AirbankApplication.prefs.getString("tempid","").toInt()
+    val group_id: Int = AirbankApplication.prefs.getString("tempid","0").toInt()
     AirbankApplication.prefs.setString("tempid","")
     LaunchedEffect(Unit){
         viewModel.getgroupsfund(group_id)
@@ -119,41 +119,42 @@ fun GroupConfirmScreen( navController: NavController
                 enabled = false
             )
         }
-        Row(){
-            Button(
-                onClick = {
-                    val fundRequest = PATCHGroupsConfirmRequest(
-                        isAccept = true
-                    )
-                    val group_id = AirbankApplication.prefs.getString("group_id","").toInt()
-                    if (group_id != 0){
-                        viewModel.handlesubmit(navController,fundRequest,group_id)
-                    }
-                },
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .weight(1f)
-            ) {
-                Text("수락")
-            }
-            Spacer(modifier = Modifier.width(20.dp))
-            Button(
-                onClick = {
-                    val fundRequest = PATCHGroupsConfirmRequest(
-                        isAccept = false
-                    )
-                    if (group_id != 0){
-                        viewModel.handlesubmit(navController,fundRequest,group_id)
-                    }
-                },
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .weight(1f)
-            ) {
-                Text("거절")
+        if(AirbankApplication.prefs.getString("tempid","").isNotEmpty()){
+            Row(){
+                Button(
+                    onClick = {
+                        val fundRequest = PATCHGroupsConfirmRequest(
+                            isAccept = true
+                        )
+                        val group_id = AirbankApplication.prefs.getString("group_id","").toInt()
+                        if (group_id != 0){
+                            viewModel.handlesubmit(navController,fundRequest,group_id)
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .weight(1f)
+                ) {
+                    Text("수락")
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Button(
+                    onClick = {
+                        val fundRequest = PATCHGroupsConfirmRequest(
+                            isAccept = false
+                        )
+                        if (group_id != 0){
+                            viewModel.handlesubmit(navController,fundRequest,group_id)
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .weight(1f)
+                ) {
+                    Text("거절")
+                }
             }
         }
-
     }
 }
 

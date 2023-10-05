@@ -25,15 +25,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.text.ParseException
 import java.util.*
-
+import javax.inject.Inject
 
 
 @Composable
 fun PreviewPerformanceChart() {
+
+    val viewModel : CreditScoreViewModel = viewModel()
+
     Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
 
     ) {
@@ -88,7 +92,7 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
     ){
         Canvas(
             modifier = Modifier
-                .width((xStep * parsedData.size * 200f ).dp)  // 각 데이터 포인트마다 40dp의 간격을 둔다고 가정
+                .width((xStep * parsedData.size * 200f).dp)  // 각 데이터 포인트마다 40dp의 간격을 둔다고 가정
                 .height(1000.dp)
                 .padding(16.dp)
         ) {
@@ -144,4 +148,9 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
         }
 
     }
+}
+
+
+class CreditScoreViewModel @Inject constructor() : ViewModel() {
+
 }

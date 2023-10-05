@@ -109,24 +109,35 @@ fun MyPageScreen(navController: NavController) {
                     fontWeight = FontWeight.Medium))
         }
 
-        Button(
-            onClick = { navController.navigate("ChildRule") }, // Use the ViewModel for logout
-            modifier = Modifier
-                .widthIn(min = 200.dp)
-//                .background(Color(0xFFD6F2FF))
+        if(userrole == "PARENT")
+        {
+            Button(
+                onClick = { navController.navigate("ChildRule") }, // Use the ViewModel for logout
+                modifier = Modifier
+                    .widthIn(min = 200.dp)
 
-        ) {
-//            Text(text = "자녀 규칙 설정", color = Color(0xFF515151) )
-            Text(text = "자녀 규칙 설정" )
+            ) {
+                Text(text = "자녀 규칙 설정" )
 
+            }
+        }
+        if(userrole == "CHILD")
+        {
+            Button(
+                onClick = { navController.navigate("GroupConfirm") }, // Use the ViewModel for logout
+                modifier = Modifier
+                    .widthIn(min = 200.dp)
+
+            ) {
+                Text(text = "이용 규칙 확인" )
+
+            }
         }
         Button(
             onClick = { performLogout(navController, viewModel) }, // Use the ViewModel for logout
             modifier = Modifier
                 .widthIn(min = 200.dp)
-//                .background(Color(0xFFF0F0F0)),
         ) {
-//            Text(text = "로그아웃" , color = Color(0xFF515151))
             Text(text = "로그아웃" )
         }
     }

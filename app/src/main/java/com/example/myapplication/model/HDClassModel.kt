@@ -240,3 +240,23 @@ data class GETGroupsEnrollResponse(
         val id: Int
     )
 }
+
+data class GETCreditHistoryResponse(
+    @SerializedName("code")
+    val code: Int,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("data")
+    val data: Data
+) {
+    data class Data(
+        @SerializedName("members")
+        val creditHistories: List<creditHistory>
+    ){
+        data class creditHistory(
+            @SerializedName("creditScore")
+            val creditScore: Int,
+            @SerializedName("createdAt")
+            val createdAt: String
+        )}
+}
