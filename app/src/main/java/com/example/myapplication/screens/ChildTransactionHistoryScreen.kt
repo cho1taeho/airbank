@@ -253,7 +253,7 @@ fun MainHistory(){
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            Text(text = "거래내역이 없습니다1.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
         }
     }
 }
@@ -324,7 +324,7 @@ fun LoanHistory() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            Text(text = "거래내역이 없습니다1.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
         }
     }
 }
@@ -395,7 +395,7 @@ fun SavingsHistory() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
+            Text(text = "거래내역이 없습니다1.", style = TextStyle(color = Color.Gray, fontSize = 16.sp))
         }
     }
 
