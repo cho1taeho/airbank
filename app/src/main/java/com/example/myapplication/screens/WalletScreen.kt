@@ -102,15 +102,18 @@ fun WalletScreen(navController: NavController) {
     val loanData by loanViewModel.loanState.collectAsState(initial = null)
     val mainName = AirbankApplication.prefs.getString("name", "")
     val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
-
+   
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit, viewModel.childs){
         viewModel.getGroup()
         val mutablechilds = viewModel.childs
         childs = mutablechilds
     }
-
-
+    LaunchedEffect(key1 = null ){
+        accountViewModel.accountCheck()
+    }
+    
+    
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -139,7 +142,7 @@ fun WalletScreen(navController: NavController) {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text("팡팡은행 ${childs.firstOrNull()?.name ?: "Unknown"} 님의 통장")
+                Text("팡팡은행 ${mainName} 님의 통장")
 
             }
         }
@@ -151,7 +154,7 @@ fun WalletScreen(navController: NavController) {
 //                .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
-                .clickable{
+                .clickable {
                     navController.navigate("BonusTransfer")
                 }
         ){
