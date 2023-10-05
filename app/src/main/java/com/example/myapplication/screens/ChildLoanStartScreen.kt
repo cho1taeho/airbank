@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import android.app.AlertDialog
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -156,7 +157,14 @@ fun LoanButton(navController: NavController, viewModel: LoanViewModel) {
             .clickable {
                 if (viewModel.loanAmount.value.text.isDigitsOnly() && viewModel.loanAmount.value.text != "") {
                     viewModel.loanStart()
-                    navController.navigate("ChildLoan")
+                    AlertDialog
+                        .Builder(context)
+                        .setTitle("땡겨쓰기")
+                        .setMessage("땡겨쓰기가 완료되었습니다.")
+                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                            dialog.dismiss()
+                            navController.navigate("ChildLoan")
+                        }.show()
                 } else {
                     Toast.makeText(context,"금액을 숫자로 입력해 주세요.",Toast.LENGTH_SHORT).show()
                 }
