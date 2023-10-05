@@ -196,7 +196,7 @@ fun MainHistory(){
         accountViewModel.accountHistory("main")
     }
 
-    accountData?.data?.data?.accountHistory?.let { transactions ->
+    accountData?.data?.data?.accountHistoryElement?.let { transactions ->
 
         if (transactions.isNotEmpty()) {
             Column(
@@ -267,7 +267,7 @@ fun LoanHistory() {
         accountViewModel.accountHistory("loan")
     }
 
-    accountData?.data?.data?.accountHistory?.let { transactions ->
+    accountData?.data?.data?.accountHistoryElement?.let { transactions ->
 
         if (transactions.isNotEmpty()) {
             Column(
@@ -338,7 +338,7 @@ fun SavingsHistory() {
         accountViewModel.accountHistory("savings")
     }
 
-    accountData?.data?.data?.accountHistory?.let { transactions ->
+    accountData?.data?.data?.accountHistoryElement?.let { transactions ->
 
         if (transactions.isNotEmpty()) {
             Column(
