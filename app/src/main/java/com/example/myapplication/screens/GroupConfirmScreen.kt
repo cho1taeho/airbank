@@ -37,14 +37,8 @@ import javax.inject.Inject
 fun GroupConfirmScreen( navController: NavController
 ) {
     val viewModel: GroupConfirmViewModel = viewModel()
-
-    var group_id by remember { mutableIntStateOf(0) }
-
+    val group_id: Int = AirbankApplication.prefs.getString("tempid","").toInt()
     LaunchedEffect(Unit){
-        val mutablegroupid = AirbankApplication.prefs.getString("group_id","")
-        if(mutablegroupid.isNotEmpty()){
-            group_id = mutablegroupid.toInt()
-        }
         viewModel.getgroupsfund(group_id)
     }
 
@@ -147,7 +141,6 @@ fun GroupConfirmScreen( navController: NavController
                     val fundRequest = PATCHGroupsConfirmRequest(
                         isAccept = false
                     )
-                    val group_id = AirbankApplication.prefs.getString("group_id","").toInt()
                     if (group_id != 0){
                         viewModel.handlesubmit(navController,fundRequest,group_id)
                     }

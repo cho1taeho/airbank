@@ -374,6 +374,7 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
                     val id = getGroupsEnrollResponse?.data?.id ?: 0
                     Log.d(tag, "id= $id")
                     tempid = id
+                    AirbankApplication.prefs.setString("tempid",tempid.toString())
                     withContext(Dispatchers.Main){
                         navController.navigate("GroupConfirm")
                     }
