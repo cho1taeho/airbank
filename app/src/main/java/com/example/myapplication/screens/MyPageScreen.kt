@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -54,7 +54,6 @@ fun MyPageScreen(navController: NavController) {
 
     UserApiClient.instance.me { user, _ ->
         if (user!=null){
-//            imagepath = user.properties?.get("profile_image") ?: ""
             imagepath = AirbankApplication.prefs.getString("imageUrl", "")
             username = AirbankApplication.prefs.getString("name", "")
             userrole = AirbankApplication.prefs.getString("role", "")
@@ -82,11 +81,10 @@ fun MyPageScreen(navController: NavController) {
                     .fillMaxSize()
             )
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.Start)
+                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = username,
@@ -112,10 +110,24 @@ fun MyPageScreen(navController: NavController) {
         }
 
         Button(
-            onClick = { performLogout(navController, viewModel) }, // Use the ViewModel for logout
-            modifier = Modifier.padding(16.dp)
+            onClick = { navController.navigate("ChildRule") }, // Use the ViewModel for logout
+            modifier = Modifier
+                .widthIn(min = 200.dp)
+//                .background(Color(0xFFD6F2FF))
+
         ) {
-            Text(text = "로그아웃")
+//            Text(text = "자녀 규칙 설정", color = Color(0xFF515151) )
+            Text(text = "자녀 규칙 설정" )
+
+        }
+        Button(
+            onClick = { performLogout(navController, viewModel) }, // Use the ViewModel for logout
+            modifier = Modifier
+                .widthIn(min = 200.dp)
+//                .background(Color(0xFFF0F0F0)),
+        ) {
+//            Text(text = "로그아웃" , color = Color(0xFF515151))
+            Text(text = "로그아웃" )
         }
     }
 

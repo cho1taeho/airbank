@@ -22,6 +22,7 @@ import com.example.myapplication.screens.ChildLoanRepaymentScreen
 import com.example.myapplication.screens.ChildLoanScreen
 import com.example.myapplication.screens.ChildLoanStartScreen
 import com.example.myapplication.screens.ChildMainScreen
+import com.example.myapplication.screens.ChildRuleScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
@@ -146,6 +147,9 @@ fun AppNavigation(navController: NavHostController){
         }
         composable("ChildSavingsWaiting"){
             ChildSavingsWaitingScreen(navController = navController)
+        }
+        composable("ChildRule"){
+            ChildRuleScreen(navController= navController)
         }
 
 
