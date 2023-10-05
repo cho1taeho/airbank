@@ -166,8 +166,20 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                 )
             }
         }
+        Spacer(modifier = Modifier.size(16.dp))
+        Histories(accountViewModel)
     }
 
+}
 
-
+@Composable
+fun Histories(viewModel: AccountViewModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(75.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(color = Color.White)
+            .padding(top = 16.dp)
+    )
 }
