@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,7 +52,6 @@ import coil.compose.AsyncImage
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.GETGroupsResponse
-import com.example.myapplication.model.State
 import com.example.myapplication.network.HDRetrofitBuilder
 import com.example.myapplication.viewmodel.SavingsViewModel
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +66,7 @@ fun MainScreen(navController: NavController) {
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit, viewModel.childs){
         viewModel.getGroup()
-        val mutablechilds = viewModel.childs
+        val mutablechilds = viewModel.childs ?: emptyList()
         childs = mutablechilds
     }
 
@@ -137,19 +135,28 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
                 Box(
                     modifier = Modifier
                         .size(42.dp)
+                        .clip(RoundedCornerShape(31.5.dp))
                         .border(1.dp, Color(0xFFB4EBF7), CircleShape)
                         .clickable {
                             viewModel.selected = child
                         }
                 ) {
-                    AsyncImage(
-                        model = child.imageUrl,
-                        contentDescription = "Main Image",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                    )
+                    if(child.imageUrl != null){
+                        AsyncImage(
+                            model = child.imageUrl,
+                            contentDescription = "Main Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }else{
+                        Image(
+                            painter = painterResource(id = R.drawable.karina4),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier= Modifier.fillMaxSize()
+                        )
+                    }
                 }
                 Text(child.name)
             }
@@ -161,54 +168,50 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
 }
 @Composable
 fun ChildCard(viewModel: MainViewModel) {
-
-    val selectChild = viewModel.selected
-    if(selectChild != null){
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color(0xFF5FCFEF))
+    var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
+    selectChild = viewModel.selected ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color(0xFF5FCFEF))
+    ){
+        Column (
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
-            Column (
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ){
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if(selectChild.imageUrl.isEmpty()){
-                        Image(
-                            painter = painterResource(R.drawable.karina),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                        )
-                    }else{
-                        AsyncImage(
-                            model = selectChild?.imageUrl ?: "",
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                        )
-                    }
-                    Spacer(Modifier.width(16.dp))
-                    Text("자녀 ${selectChild.name} 님의\n지갑을 관리하고 있습니다.")
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if(selectChild?.imageUrl.isNullOrEmpty()){
+                    Image(
+                        painter = painterResource(R.drawable.karina),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
+                }else{
+                    AsyncImage(
+                        model = selectChild?.imageUrl ?: "",
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                    )
                 }
-                Text("신용점수")
-                val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
-                ScoreBar(creditPoint.toInt())
+                Spacer(Modifier.width(16.dp))
+                Text("자녀 ${selectChild?.name ?: ""} 님의\n지갑을 관리하고 있습니다.")
             }
+            Text("신용점수")
+//            val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
+            val creditPoint = selectChild?.creditScore ?: 0
+            ScoreBar(creditPoint)
         }
-        Spacer(modifier = Modifier.size(20.dp))
     }
-    else{
-        Text(text = "ERROR")
-    }
-
+    Spacer(modifier = Modifier.size(20.dp))
 }
+
 @Composable
 fun ScoreBar(score: Int) {
     val maxScore = 1000
@@ -356,9 +359,9 @@ fun Body(navController: NavController) {
                     .clickable {
                         if (savingsData?.data?.data?.status == null) {
                             navController.navigate("SavingsWaiting")
-                        } else if(savingsData?.data?.data?.status == "PENDING") {
+                        } else if (savingsData?.data?.data?.status == "PENDING") {
                             navController.navigate("SavingsWaiting")
-                        } else if(savingsData?.data?.data?.status == "PROCEEDING") {
+                        } else if (savingsData?.data?.data?.status == "PROCEEDING") {
                             navController.navigate("savings")
                         }
                     }
@@ -407,8 +410,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 if (response.body() != null) {
                     val getGroupsResponse = response.body()!!.data
                     childs = getGroupsResponse.members
-                    AirbankApplication.prefs.setString(tag,childs.first().groupId.toString())
-                    Log.d(tag,childs.first().groupId.toString())
+                    if (childs.isNullOrEmpty()){Log.e("MainViewModel","Childs are empty")}
+                    else{
+                        AirbankApplication.prefs.setString(tag,childs.first().groupId.toString())
+                        Log.d(tag,childs.first().groupId.toString())
+                    }
                 } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
             } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }
         }

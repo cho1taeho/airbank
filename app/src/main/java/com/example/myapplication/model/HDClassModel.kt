@@ -21,8 +21,8 @@ data class POSTLoginResponse(
 data class POSTLoginRequest(
     @SerializedName("oauthIdentifier")
     val oauthIdentifier : String,
-    @SerializedName("imageURL")
-    val imageURL : String,
+    @SerializedName("imageUrl")
+    val imageUrl : String,
     @SerializedName("isDefaultImage")
     val isDefaultImage : Boolean
 )

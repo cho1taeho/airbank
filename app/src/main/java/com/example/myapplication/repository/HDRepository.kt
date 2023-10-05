@@ -34,7 +34,7 @@ class AuthRepository(private val scope: CoroutineScope) {
 
                     val postLoginRequest = POSTLoginRequest(
                         oauthIdentifier = oauthIdentifier,
-                        imageURL = profileImageUrl,
+                        imageUrl = profileImageUrl,
                         isDefaultImage = isDefaultImage
                     )
 
