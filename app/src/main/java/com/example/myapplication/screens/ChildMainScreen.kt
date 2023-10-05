@@ -52,8 +52,9 @@ import javax.inject.Inject
 @Composable
 fun ChildMainScreen(navController: NavController) {
     val viewModel : ChildMainViewModel = viewModel()
-    val name = AirbankApplication.prefs.getString("name","")
+    var name = AirbankApplication.prefs.getString("name","")
     var imagepath = AirbankApplication.prefs.getString("imageUrl","")
+    var creditScore = AirbankApplication.prefs.getString("creditScore","").toInt()
 
     var group_id by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit){
@@ -72,7 +73,7 @@ fun ChildMainScreen(navController: NavController) {
         imagepath = "local"
     }
     Column {
-        ChildCard(viewModel)
+        ChildCard(name,imagepath,creditScore)
         ChildBody(navController = navController)
         Spacer(modifier = Modifier.size(16.dp))
         Quiz()
@@ -80,9 +81,7 @@ fun ChildMainScreen(navController: NavController) {
 }
 
 @Composable
-fun ChildCard(viewModel: ChildMainViewModel) {
-    var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
-    selectChild = viewModel.child ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
+fun ChildCard(name: String, img: String, creditScore: Int) {
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -96,7 +95,7 @@ fun ChildCard(viewModel: ChildMainViewModel) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(selectChild?.imageUrl.isNullOrEmpty()){
+                if(img.isEmpty()){
                     Image(
                         painter = painterResource(R.drawable.karina),
                         contentDescription = null,
@@ -106,7 +105,7 @@ fun ChildCard(viewModel: ChildMainViewModel) {
                     )
                 }else{
                     AsyncImage(
-                        model = selectChild?.imageUrl ?: "",
+                        model = img ?: "",
                         contentDescription = null,
                         modifier = Modifier
                             .size(40.dp)
@@ -114,11 +113,10 @@ fun ChildCard(viewModel: ChildMainViewModel) {
                     )
                 }
                 Spacer(Modifier.width(16.dp))
-                Text("자녀 ${selectChild?.name ?: ""} 님의\n지갑을 관리하고 있습니다.")
+                Text("자녀 ${name ?: ""} 님의\n지갑을 관리하고 있습니다.")
             }
             Text("신용점수")
-//            val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
-            val creditPoint = selectChild?.creditScore ?: 0
+            val creditPoint = creditScore ?: 0
             ScoreBar(creditPoint)
         }
     }
