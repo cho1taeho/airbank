@@ -84,7 +84,14 @@ fun AppNavigation(navController: NavHostController){
                 ChildSavingsScreen(navController = navController)
             }
             else if(userRole == "PARENT"){
-                SavingsScreen(navController = navController)
+                if (savingsData?.data?.data?.status == null) {
+                    navController.navigate("SavingsWaiting")
+                } else if (savingsData?.data?.data?.status == "PENDING") {
+                    navController.navigate("savingsApprove")
+                } else if (savingsData?.data?.data?.status == "PROCEEDING") {
+                    navController.navigate("savings")
+                }
+//                SavingsScreen(navController = navController)
             }
 
 
@@ -107,15 +114,9 @@ fun AppNavigation(navController: NavHostController){
                 ChildWalletScreen(navController = navController)
             }
             else if(userRole == "PARENT"){
-                if (savingsData?.data?.data?.status == null) {
-                    navController.navigate("SavingsWaiting")
-                } else if (savingsData?.data?.data?.status == "PENDING") {
-                    navController.navigate("savingsApprove")
-                } else if (savingsData?.data?.data?.status == "PROCEEDING") {
-                    navController.navigate("savings")
-                }
 
-//                WalletScreen(navController = navController)
+
+                WalletScreen(navController = navController)
             }
 
         }
