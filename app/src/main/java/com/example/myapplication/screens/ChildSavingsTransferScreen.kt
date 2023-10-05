@@ -79,6 +79,7 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
@@ -91,6 +92,8 @@ import java.text.SimpleDateFormat
 fun ChildSavingsTransferScreen(navController: NavController) {
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
+    val groupId = AirbankApplication.prefs.getString("group_id","")
+
 
     Column (
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
@@ -125,7 +128,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
                     navController.navigate("childSavings")
-                    val request = SavingsRemitRequest(savingsData?.data?.data?.id ?:0)
+                    val request = SavingsRemitRequest(groupId.toInt())
 
                     viewModel.remitSavings(request)
                 }

@@ -110,6 +110,7 @@ class SavingsViewModel @Inject constructor(
         try {
             val response = savingsRepository.remitSavings(request)
             _remitSavingsState.emit(response)
+
         } catch (e: Exception) {
             _remitSavingsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
