@@ -77,7 +77,16 @@ class LoanViewModel @Inject constructor(
     private val _loanRepayment = MutableStateFlow<Resource<LoanRepaymentResponse>>(Resource(State.LOADING, null, null))
     val loanRepayment: StateFlow<Resource<LoanRepaymentResponse>> get() = loanRepayment
 
-    fun loanRepayment(request: LoanRepaymentRequest) = viewModelScope.launch{
+
+    private val _loanRepaymentAmount = mutableStateOf(TextFieldValue())
+    val loanRepaymentAmount: MutableState<TextFieldValue> = _loanRepaymentAmount
+
+    fun setLoanRepaymentAmount(value: TextFieldValue) {
+        _loanRepaymentAmount.value = value
+    }
+
+    fun loanRepayment() = viewModelScope.launch{
+        val request = LoanRepaymentRequest(_loanRepaymentAmount.value.text.toInt())
         _loanRepayment.emit(Resource(State.LOADING, null,null))
         try {
             val response = loanRepository.loanRepayment(request)
