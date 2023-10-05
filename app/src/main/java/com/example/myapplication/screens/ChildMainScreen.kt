@@ -141,7 +141,7 @@ fun ChildBody(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFFFE9E8))
                 .clickable {
-                    navController.navigate("childWallet")
+                    navController.navigate("ChildWallet")
                 }
         ){
             Column (

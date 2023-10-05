@@ -67,7 +67,7 @@ interface ApiService {
 
     //계좌 내역 조회
     @GET("/accounts/history")
-    suspend fun accountHistory(@Query("accountType") accountType: String): Response<AccountHistoryCheckResponse>
+    suspend fun accountHistory(@Query("account_type") accountType: String): Response<AccountHistoryCheckResponse>
 
     //계좌 잔액 조회
     @GET("/accounts")
