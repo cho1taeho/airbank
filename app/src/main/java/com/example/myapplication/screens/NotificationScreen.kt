@@ -97,7 +97,7 @@ import java.text.SimpleDateFormat
 fun NotificationScreen(navController: NavController) {
     val viewModel: SavingsViewModel = hiltViewModel()
     val notificationData by viewModel.getNotificationsState.collectAsState(initial = null)
-    Log.d("알림페이지","${notificationData?.data?.data?.notifications}")
+    Log.d("알림페이지","${notificationData?.data?.data?.notificationElements}")
     val groupId = AirbankApplication.prefs.getString("group_id", "")
 
     LaunchedEffect(key1 = groupId){
@@ -106,11 +106,12 @@ fun NotificationScreen(navController: NavController) {
         }
     }
 
-    notificationData?.data?.data?.notifications?.let { notifications ->
+    notificationData?.data?.data?.notificationElements?.let { notifications ->
 
 
         if (notifications.isNotEmpty()) {
             val groupedByDate = notifications.groupBy { it.createdAt.toString().substring(0, 10) }
+            val sortedDates = groupedByDate.keys.sortedDescending()
 
             Column(
                 modifier = Modifier
@@ -119,65 +120,54 @@ fun NotificationScreen(navController: NavController) {
                     .verticalScroll(rememberScrollState())
             ) {
 
-                for ((date, dailyNotifications) in groupedByDate) {
+                for (date in sortedDates) {
+                    val dailyNotifications = groupedByDate[date] ?: continue
+                    val sortedNotifications = dailyNotifications.sortedByDescending { it.createdAt }
+
                     Text(
                         text = date,
                         modifier = Modifier.padding(8.dp),
                         style = TextStyle(color = Color.Black)
                     )
 
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(dailyNotifications.size * 40.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(color = Color(0xFF00D2F3))
-                            .clickable {
-
-                            }
+                            .padding(8.dp)
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            for (notification in dailyNotifications) {
-                                Box(
+                        for (notification in sortedNotifications) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(Color(0xFF00D2F3)),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    painter = getImageForNotificationType(notification.notificationType),
+                                    contentDescription = null,
                                     modifier = Modifier
-                                        .weight(1f)
-                                        .padding(8.dp)
-                                        .background(Color(0xFF00D2F3), RoundedCornerShape(50))
                                         .size(40.dp)
-                                ) {
-                                    Icon(
-                                        painter = getImageForNotificationType(notification.notificationType),
-                                        contentDescription = null,
-                                        modifier = Modifier.fillMaxSize()
-                                    )
-                                }
-
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .weight(3f),
-                                    verticalArrangement = Arrangement.Center
-                                ) {
+                                        .padding(end = 8.dp)
+                                )
+                                Column {
                                     Text(
                                         text = "${notification.notificationType}",
                                         style = TextStyle(color = Color.Black),
-                                        fontSize = 14.sp,
+                                        fontSize = 12.sp,
                                         fontWeight = FontWeight.Bold
-
                                     )
                                     Text(
                                         "${notification.content}",
                                         style = TextStyle(color = Color.Black),
-                                        fontSize = 11.sp
+                                        fontSize = 10.sp
                                     )
                                     Text(
                                         hoursAgo(notification.createdAt),
                                         style = TextStyle(
                                             color = Color.Gray,
-                                            fontSize = 11.sp
+                                            fontSize = 8.sp
                                         )
                                     )
                                 }

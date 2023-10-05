@@ -1,6 +1,7 @@
 package com.example.myapplication.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.myapplication.AirbankApplication
@@ -20,9 +21,10 @@ class NotificationWorker @AssistedInject constructor(
     val groupId = AirbankApplication.prefs.getString("group_id", "")
     override suspend fun doWork(): Result {
         val response = savingsRepository.getNotifications(groupId.toInt())
-        val notifications = response.data?.data?.notifications
+        val notifications = response.data?.data?.notificationElements
         if (notifications?.any { it.activated } == true) {
             updateAlarm = true
+            Log.d("NotificationWorker", "알림신청했습니다.")
         } else {
             updateAlarm = false
         }

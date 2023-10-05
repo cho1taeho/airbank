@@ -122,7 +122,7 @@ data class NotificationResponse (
     val data: Data
 ){
     data class Data(
-        val notifications: List<Notification>
+        val notificationElements: List<Notification>
     ){
         data class Notification(
             val content: String,
