@@ -49,7 +49,6 @@ interface ApiService {
     @GET("/savings/current")
     suspend fun getSavings(@Query("group_id") groupId: Int): Response<SavingsResponse>
 
-    @Multipart
     @POST("/savings/item")
     suspend fun createSavingsItem(@Body request: CreateSavingsItemRequest): Response<CreateSavingsItemResponse>
     @PATCH("/savings/confirm")

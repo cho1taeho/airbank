@@ -68,6 +68,7 @@ class SavingsViewModel @Inject constructor(
             _createItemState.emit(response)
 
         } catch (e: Exception) {
+            Log.d("티끌 에러 타입", e.message.toString())
             Log.d("CreateItem","티클 모으기 실패")
             _createItemState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
