@@ -22,7 +22,7 @@ data class AccountHistoryCheckResponse(
     val data: Data
 ) {
     data class Data(
-        val accountHistory: List<Transaction>
+        val accountHistoryElement: List<Transaction>
     ) {
         data class Transaction(
             val id: Int,
