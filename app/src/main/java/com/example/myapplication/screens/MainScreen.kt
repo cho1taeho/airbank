@@ -270,7 +270,7 @@ fun ScoreBar(score: Int) {
                 modifier = Modifier
                     .fillMaxWidth(scoreWidth)
                     .height(15.dp)
-                    .background(Color.Green)
+                    .background(Color(0xFF00D2F3))
                     .clip(RoundedCornerShape(10.dp))
             )
         }
@@ -279,7 +279,7 @@ fun ScoreBar(score: Int) {
 
         Text(
             buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Green,fontSize = 22.sp ,fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(color = Color(0xFF00D2F3),fontSize = 22.sp ,fontWeight = FontWeight.Bold)) {
                     append("$score")
                 }
                 append("/1000 P")

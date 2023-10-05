@@ -205,6 +205,7 @@ fun WalletScreen(navController: NavController) {
 
 @Preview
 @Composable
+
 fun CreditPoint() {
     val list = listOf(500f, 600f, 450f, 480f, 650f, 700f)
     val zipList: List<Pair<Float, Float>> = list.zipWithNext()
