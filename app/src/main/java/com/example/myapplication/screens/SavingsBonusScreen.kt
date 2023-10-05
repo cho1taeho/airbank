@@ -81,6 +81,7 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.BonusSavingsRequest
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -134,9 +135,10 @@ fun SavingsBonusScreen(navController: NavController) {
                 .clickable {
                     val id = savingsData?.data?.data?.id
                     val amount = savingsData?.data?.data?.parentsAmount
+                    val gropuId = AirbankApplication.prefs.getString("group_Id","")
 
                     if (id != null && amount != null) {
-                        viewModel.bonusSavings(id, BonusSavingsRequest(id = id, amount = amount))
+                        viewModel.bonusSavings(gropuId.toInt(), BonusSavingsRequest(id = id))
                         navController.navigate("BottomNavItem.Savings.screenRoute")
                     } else {
                         Toast.makeText(context, "송금 실패", Toast.LENGTH_SHORT).show()

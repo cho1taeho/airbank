@@ -96,8 +96,7 @@ data class SavingsRemitResponse(
 }
 
 data class BonusSavingsRequest(
-    val id : Int,
-    val amount : Int
+    val id : Int
 )
 
 data class BonusSavingsResponse(
