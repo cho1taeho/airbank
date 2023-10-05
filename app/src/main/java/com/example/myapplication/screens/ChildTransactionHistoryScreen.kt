@@ -177,7 +177,7 @@ fun MainHistory() {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(Color(0xFF00D2F3)),
+                                .background(Color.White),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(
@@ -223,7 +223,7 @@ fun MainHistory() {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "거래내역이 없습니다.", style = TextStyle(color = Color.Black, fontSize = 16.sp))
+                Text(text = "계좌 거래내역이 없습니다.", style = TextStyle(color = Color.Black, fontSize = 16.sp))
             }
         }
     } ?: run {
@@ -231,7 +231,7 @@ fun MainHistory() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "거래내역이 없습니다1.", style = TextStyle(color = Color.Black, fontSize = 16.sp))
+            Text(text = "계좌 거래내역이 없습니다.", style = TextStyle(color = Color.Black, fontSize = 16.sp))
         }
     }
 }
@@ -282,7 +282,7 @@ fun LoanHistory() {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(Color(0xFF00D2F3)),
+                                .background(Color.White),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(
@@ -387,7 +387,7 @@ fun SavingsHistory() {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(Color(0xFF00D2F3)),
+                                .background(Color.White),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(

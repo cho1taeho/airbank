@@ -89,9 +89,7 @@ fun WalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
                 .padding(horizontal = 16.dp)
-                .clickable{
-                    navController.navigate("ChildTransactionHistory")
-                }
+
         ){
             Column (
                 modifier = Modifier
