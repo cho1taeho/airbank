@@ -17,6 +17,7 @@ import com.example.myapplication.model.State
 import com.example.myapplication.model.UpdateSavingsRequest
 import com.example.myapplication.model.UpdateSavingsResponse
 import dagger.hilt.android.HiltAndroidApp
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 
@@ -33,8 +34,8 @@ class SavingsRepository @Inject constructor(
         }
     }
 
-    suspend fun createSavingsItem(request: CreateSavingsItemRequest): Resource<CreateSavingsItemResponse> {
-        val response = apiService.createSavingsItem(request)
+    suspend fun createSavingsItem(request: CreateSavingsItemRequest, image: MultipartBody.Part): Resource<CreateSavingsItemResponse> {
+        val response = apiService.createSavingsItem(request, image)
         Log.d("CreateItem", "티클 ${response.code()}")
         Log.d("CreateItem", "티클 ${response.message()}")
         return if (response.isSuccessful) {

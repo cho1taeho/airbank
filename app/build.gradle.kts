@@ -96,6 +96,10 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.kakao.sdk:v2-user:2.16.0") // 카카오 로그인
     implementation("androidx.work:work-runtime-ktx:2.8.0")
+
+    // Base64
+    implementation("androidx.compose.ui:ui:1.0.0")
+    implementation("androidx.compose.ui:ui-tooling:1.0.0")
 }
 
 kapt {
