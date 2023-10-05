@@ -93,6 +93,8 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun SavingsBonusScreen(navController: NavController) {
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
     val context = LocalContext.current
@@ -135,10 +137,10 @@ fun SavingsBonusScreen(navController: NavController) {
                 .clickable {
                     val id = savingsData?.data?.data?.id
                     val amount = savingsData?.data?.data?.parentsAmount
-                    val gropuId = AirbankApplication.prefs.getString("group_Id","")
 
+                    Log.d("티끌보너스 송금","${groupId},${id}얍")
                     if (id != null && amount != null) {
-                        viewModel.bonusSavings(gropuId.toInt(), BonusSavingsRequest(id = id))
+                        viewModel.bonusSavings(groupId.toInt(), BonusSavingsRequest(id = id))
                         navController.navigate("BottomNavItem.Savings.screenRoute")
                     } else {
                         Toast.makeText(context, "송금 실패", Toast.LENGTH_SHORT).show()
