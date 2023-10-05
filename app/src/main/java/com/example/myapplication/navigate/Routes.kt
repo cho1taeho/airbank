@@ -25,6 +25,7 @@ import com.example.myapplication.screens.ChildMainScreen
 import com.example.myapplication.screens.ChildSavingsApplication
 import com.example.myapplication.screens.ChildSavingsScreen
 import com.example.myapplication.screens.ChildSavingsTransferScreen
+import com.example.myapplication.screens.ChildSavingsWaitingScreen
 import com.example.myapplication.screens.ChildTaxTransferScreen
 import com.example.myapplication.screens.ChildTransactionHistoryScreen
 import com.example.myapplication.screens.ChildWalletScreen
@@ -143,6 +144,10 @@ fun AppNavigation(navController: NavHostController){
         composable("SavingsWaiting"){
             SavingsWaitingScreen(navController = navController)
         }
+        composable("ChildSavingsWaiting"){
+            ChildSavingsWaitingScreen(navController = navController)
+        }
+
 
     }
 }

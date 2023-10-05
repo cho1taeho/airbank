@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import android.net.Uri
+import android.net.http.UrlRequest.Status
 import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -79,62 +80,24 @@ import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.myapplication.model.CancelSavingsRequest
-import com.example.myapplication.model.SavingsRemitRequest
-import com.example.myapplication.model.TaxTransferRequest
+import com.example.myapplication.AirbankApplication
 import com.example.myapplication.viewmodel.AccountViewModel
+import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
+import com.example.myapplication.model.State
 
 @Composable
-fun ChildTaxTransferScreen(navController: NavController) {
-    val viewModel : AccountViewModel = hiltViewModel()
-    val accountData by viewModel.taxTransferState.collectAsState(initial = null)
-    val taxCheckData by viewModel.taxCheckState.collectAsState(initial = null)
+fun ChildSavingsWaitingScreen(navController: NavController){
+    val savingsViewModel: SavingsViewModel = hiltViewModel()
+    val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
 
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp, 20.dp, 20.dp, 20.dp)
-            .verticalScroll(rememberScrollState())
-    ){
-        Spacer(modifier = Modifier.size(5.dp))
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .height(200.dp)
-                .background(color = Color(0xFFD6F2FF))
-        ){
-            Text("${taxCheckData?.data?.data?.amount}")
-        }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(70.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = Color(0xFF00D2F3))
-                .clickable {
-                    navController.navigate("childWallet")
-                    val request = TaxTransferRequest(taxCheckData?.data?.data?.amount ?: 0)
-                    viewModel.taxTransfer(request)
-                }
-        ) {
-            Text(
-                "납세하기",
-                color = Color.White,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
+
+
+
 }

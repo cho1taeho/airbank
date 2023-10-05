@@ -142,6 +142,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                 modifier = Modifier
                     .weight(1f)
                     .height(25.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 0) Color(0xFF00D2F3) else Color.White)
                     .clickable{
                         selectedBox = 0
@@ -160,6 +161,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                 modifier = Modifier
                     .weight(1f)
                     .height(25.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 1) Color(0xFF00D2F3) else Color.White)
                     .clickable{
                         selectedBox = 1
@@ -176,6 +178,7 @@ fun ChildTransactionHistoryScreen(navController: NavController){
                 modifier = Modifier
                     .weight(1f)
                     .height(25.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .background(if (selectedBox == 2) Color(0xFF00D2F3) else Color.White)
                     .clickable{
                         selectedBox = 2
