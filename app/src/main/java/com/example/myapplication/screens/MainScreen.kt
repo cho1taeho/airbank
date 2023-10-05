@@ -199,6 +199,7 @@ fun ChildCard(viewModel: MainViewModel) {
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(Color(0xFF5FCFEF))
+
     ){
         Column (
             modifier = Modifier.padding(16.dp),
