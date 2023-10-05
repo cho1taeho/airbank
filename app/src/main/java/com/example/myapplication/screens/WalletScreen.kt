@@ -61,6 +61,8 @@ fun WalletScreen(navController: NavController) {
     val loanData by loanViewModel.loanState.collectAsState(initial = null)
     val mainName = AirbankApplication.prefs.getString("name", "")
     val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
+    var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
+    selectChild = viewModel.selected ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
 
     val buffer = AirbankApplication.prefs.getString("allowanceAmount","0").toInt()
     val decimal = DecimalFormat("#,###")
@@ -195,7 +197,8 @@ fun WalletScreen(navController: NavController) {
             Column {
                 Spacer(modifier = Modifier.size(10.dp))
                 Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 신용점수")
-                ScoreBar(score = 512)
+                val creditPoint = selectChild?.creditScore ?: 0
+                ScoreBar(creditPoint)
                 CreditPoint()
             }
         }
