@@ -84,6 +84,8 @@ class SavingsRepository @Inject constructor(
 
     suspend fun getNotifications(groupId: Int): Resource<NotificationResponse> {
         val response = apiService.getNotifications(groupId)
+        Log.d("알림", "알림코드 ${response.code()}")
+        Log.d("알림", "알림메세지 ${response.message()}")
         return if (response.isSuccessful) {
             Resource(State.SUCCESS, response.body(),"SUCCESS!")
         } else{

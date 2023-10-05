@@ -97,8 +97,18 @@ import java.text.SimpleDateFormat
 fun NotificationScreen(navController: NavController) {
     val viewModel: SavingsViewModel = hiltViewModel()
     val notificationData by viewModel.getNotificationsState.collectAsState(initial = null)
+    Log.d("알림페이지","${notificationData?.data?.data?.notifications}")
+    val groupId = AirbankApplication.prefs.getString("group_id", "")
+
+    LaunchedEffect(key1 = groupId){
+        if(groupId.isNotEmpty()) {
+            viewModel.getNotifications(groupId.toInt())
+        }
+    }
 
     notificationData?.data?.data?.notifications?.let { notifications ->
+
+
         if (notifications.isNotEmpty()) {
             val groupedByDate = notifications.groupBy { it.createdAt.toString().substring(0, 10) }
 

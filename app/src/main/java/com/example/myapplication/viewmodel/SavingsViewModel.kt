@@ -137,6 +137,8 @@ class SavingsViewModel @Inject constructor(
         try{
             val response = savingsRepository.getNotifications(groupId)
             _getNotificationsState.emit(response)
+            Log.d("알림뷰","알림메: ${response.data?.message}")
+            Log.d("알림뷰","알림코: ${response.data?.code}")
         } catch(e: Exception) {
             _getNotificationsState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }

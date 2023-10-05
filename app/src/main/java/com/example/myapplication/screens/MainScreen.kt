@@ -63,7 +63,7 @@ import javax.inject.Inject
 
 @Composable
 fun MainScreen(navController: NavController) {
-    val viewModel: MainViewModel = viewModel() // Create an instance of AuthViewModel
+    val viewModel: MainViewModel = viewModel()
 
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit, viewModel.childs){
