@@ -80,6 +80,7 @@ fun WalletScreen(navController: NavController) {
     
     Column (
         modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp)
     ){
         Box(
@@ -89,6 +90,7 @@ fun WalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xffD6F2FF))
                 .padding(horizontal = 16.dp)
+
         ){
             Column (
                 modifier = Modifier

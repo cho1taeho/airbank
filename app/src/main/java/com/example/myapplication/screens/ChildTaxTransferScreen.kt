@@ -114,7 +114,7 @@ fun ChildTaxTransferScreen(navController: NavController) {
                 .height(200.dp)
                 .background(color = Color(0xFFD6F2FF))
         ){
-            Text("${taxCheckData?.data?.data?.amount}")
+            Text("${taxCheckData?.data?.data?.amount ?:0}")
         }
         Box(
             contentAlignment = Alignment.Center,

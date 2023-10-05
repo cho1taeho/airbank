@@ -1,7 +1,11 @@
 package com.example.myapplication.screens
 
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,21 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
-import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.CancelSavingsRequest
-import com.example.myapplication.model.CancelSavingsResponse
-import com.example.myapplication.model.Resource
 import com.example.myapplication.viewmodel.SavingsViewModel
-import dagger.hilt.android.HiltAndroidApp
-import com.example.myapplication.model.SavingsResponse
-import com.example.myapplication.model.State
-import com.google.android.material.progressindicator.CircularProgressIndicator
-
-
-//@Preview
+import java.io.ByteArrayInputStream
+import java.io.IOException
 
 @Composable
 fun ChildSavingsScreen(navController: NavController) {
@@ -148,14 +142,13 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(20.dp))
 
-
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Savings Item",
-                            contentScale = ContentScale.Crop,
+                        Image(
+                            painter = painterResource(R.drawable.gucci),
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(270.dp)
-                                .align(Alignment.CenterHorizontally),
+                                .clip(RoundedCornerShape(14.dp))
+
                         )
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
@@ -195,7 +188,9 @@ fun ChildSavingsScreen(navController: NavController) {
                             if (savingsData?.data?.data?.isPaid == false) {
                                 navController.navigate("childSavingsTransfer")
                             } else {
-                                Toast.makeText(context, "이번달은 송금을 했습니다", Toast.LENGTH_SHORT).show()
+                                Toast
+                                    .makeText(context, "이번달은 송금을 했습니다", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                 ) {
@@ -261,7 +256,6 @@ fun ChildSavingsScreen(navController: NavController) {
     } else if(savingsData?.data?.data?.status == "PENDING") {
         savingsData?.let { data ->
             val imageUrl = data?.data?.data?.savingsItem?.imageUrl
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -295,15 +289,16 @@ fun ChildSavingsScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(20.dp))
 
-
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Savings Item",
-                            contentScale = ContentScale.Crop,
+                        Image(
+                            painter = painterResource(R.drawable.gucci),
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(270.dp)
-                                .align(Alignment.CenterHorizontally),
+                                .clip(RoundedCornerShape(14.dp))
+
                         )
+
+
                         Spacer(modifier = Modifier.size(15.dp))
                         Text(
                             "${data.data?.data?.savingsItem?.amount ?: "0"}원",
@@ -351,4 +346,16 @@ fun ChildSavingsScreen(navController: NavController) {
             }
         }
     }
+}
+
+fun decodeBase64ToImage(base64String: String): Bitmap? {
+    val decodedBytes: ByteArray
+    try {
+        decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+        val inputStream = ByteArrayInputStream(decodedBytes)
+        return BitmapFactory.decodeStream(inputStream)
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return null
 }

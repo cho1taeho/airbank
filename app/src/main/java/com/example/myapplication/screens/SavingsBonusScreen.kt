@@ -93,6 +93,8 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun SavingsBonusScreen(navController: NavController) {
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
     val viewModel : SavingsViewModel = hiltViewModel()
     val savingsData by viewModel.savingsState.collectAsState(initial = null)
     val context = LocalContext.current
@@ -102,28 +104,45 @@ fun SavingsBonusScreen(navController: NavController) {
 
 
     Column (
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp, 20.dp, 20.dp, 20.dp)
+            .fillMaxSize()
+            .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ){
-        Spacer(modifier = Modifier.size(5.dp))
+        Spacer(modifier = Modifier.size(30.dp))
+        Text(
+            "티끌 모으기",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            "지원금을 송금해주세요",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(30.dp))
         Box(
-            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(200.dp)
-                .background(color = Color(0xFFD6F2FF))
+                .background(color = Color.White)
         ) {
-            Text(
-                "${savingsData?.data?.data?.parentsAmount ?: "로딩 중..."}원",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Column(
+                modifier = Modifier
+                    .padding(13.dp)
+            ) {
+                Text(
+                    "${savingsData?.data?.data?.parentsAmount ?: "로딩 중..."}원",
+                    fontSize = 20.sp,
+//                    fontWeight = FontWeight.Bold
+                )
+            }
         }
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Transparent)
+        )
 
         Box(
             contentAlignment = Alignment.Center,
@@ -135,19 +154,22 @@ fun SavingsBonusScreen(navController: NavController) {
                 .clickable {
                     val id = savingsData?.data?.data?.id
                     val amount = savingsData?.data?.data?.parentsAmount
-                    val gropuId = AirbankApplication.prefs.getString("group_Id","")
 
+                    Log.d("티끌보너스 송금", "${groupId},${id}얍")
                     if (id != null && amount != null) {
-                        viewModel.bonusSavings(gropuId.toInt(), BonusSavingsRequest(id = id))
-                        navController.navigate("BottomNavItem.Savings.screenRoute")
+                        viewModel.bonusSavings(groupId.toInt(), BonusSavingsRequest(id = id))
+                        navController.navigate(BottomNavItem.Main.screenRoute)
                     } else {
-                        Toast.makeText(context, "송금 실패", Toast.LENGTH_SHORT).show()
+                        Toast
+                            .makeText(context, "송금 실패", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
         ) {
             Text(
-                "티끌 지원금 송금하기",
-                fontSize = 26.sp,
+                "지원금 송금하기",
+                color = Color.White,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
             )
         }

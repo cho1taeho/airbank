@@ -105,7 +105,7 @@ fun ChildLoanScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(
-                            "현도 금액: ${formattedLoamLimit}원",
+                            "한도 금액: ${formattedLoamLimit}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )

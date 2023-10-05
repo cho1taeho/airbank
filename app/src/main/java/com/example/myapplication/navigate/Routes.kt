@@ -5,10 +5,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,6 +45,7 @@ import com.example.myapplication.screens.SavingsScreen
 import com.example.myapplication.screens.SavingsWaitingScreen
 import com.example.myapplication.screens.SignUpScreen
 import com.example.myapplication.screens.WalletScreen
+import com.example.myapplication.viewmodel.SavingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -50,6 +53,12 @@ import kotlinx.coroutines.withContext
 @Composable
 fun AppNavigation(navController: NavHostController){
     var userRole by remember { mutableStateOf("")}
+    val savingsViewModel: SavingsViewModel = hiltViewModel()
+    val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
+
+    LaunchedEffect(Unit){
+        savingsViewModel.getSavings()
+    }
 
     LaunchedEffect(Unit) {
         val userrole = withContext(Dispatchers.IO) {
@@ -70,13 +79,47 @@ fun AppNavigation(navController: NavHostController){
             }
         }
         composable(BottomNavItem.Savings.screenRoute) {
-            SavingsScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildSavingsScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+                if (savingsData?.data?.data?.status == null) {
+                    navController.navigate("SavingsWaiting")
+                } else if (savingsData?.data?.data?.status == "PENDING") {
+                    navController.navigate("savingsApprove")
+                } else if (savingsData?.data?.data?.status == "PROCEEDING") {
+                    navController.navigate("savings")
+                }
+//                SavingsScreen(navController = navController)
+            }
+
+
         }
         composable(BottomNavItem.Loan.screenRoute) {
-            LoanScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildLoanScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+                LoanScreen(navController = navController)
+            }
+
         }
         composable(BottomNavItem.Wallet.screenRoute) {
-            WalletScreen(navController = navController)
+            userRole = AirbankApplication.prefs.getString("role","")
+            Log.d("userRole",userRole)
+            if (userRole == "CHILD"){
+                ChildWalletScreen(navController = navController)
+            }
+            else if(userRole == "PARENT"){
+
+
+                WalletScreen(navController = navController)
+            }
+
         }
         composable(BottomNavItem.MyPage.screenRoute){
             MyPageScreen(navController = navController)

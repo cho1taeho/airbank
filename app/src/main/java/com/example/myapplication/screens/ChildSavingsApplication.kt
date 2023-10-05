@@ -1,11 +1,17 @@
 package com.example.myapplication.screens
 
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ContentResolver
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -40,7 +46,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +65,14 @@ import com.example.myapplication.AirbankApplication
 import com.example.myapplication.R
 import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.viewmodel.SavingsViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 
 //import com.google.accompanist.coil.rememberImagePainter
 
@@ -110,58 +123,33 @@ fun ChildSavingsApplication(navController: NavController) {
             .verticalScroll(rememberScrollState())
 
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.arrowleft),
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        navController.navigate("childSavings")
-                    }
-            )
-
-            Text(
-                "티끌 신청하기",
-                fontSize = 20.sp
-            )
-
-            TextButton(
-                onClick = {
-                    when {
-                        targetValue.text.isEmpty() -> Toast.makeText(context, "목표를 입력하세요.", Toast.LENGTH_SHORT).show()
-                        priceValue.text.isEmpty() -> Toast.makeText(context, "가격을 입력하세요.", Toast.LENGTH_SHORT).show()
-                        requestPriceValue.text.isEmpty() -> Toast.makeText(context, "요청 금액을 입력하세요.", Toast.LENGTH_SHORT).show()
-                        uri == null -> Toast.makeText(context, "첨부파일을 추가하세요.", Toast.LENGTH_SHORT).show()
-                        selectedMonths <= 0 -> Toast.makeText(context, "기간을 선택하세요.", Toast.LENGTH_SHORT).show()
-
-                        else -> {
-                            val createSavingsItemRequest = CreateSavingsItemRequest(
-                                name = targetValue.text,
-                                amount = priceValue.text.toIntOrNull() ?: 0,
-                                month = selectedMonths,
-                                parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
-                                imageUrl = uri.toString()
-                            )
-                            Log.d("CreateItem", "티클 모으기: Sending Item: $createSavingsItemRequest, ${groupId}그아")
-                            viewModel.createSavingsItem(createSavingsItemRequest)
-                            navController.navigate(BottomNavItem.Main.screenRoute)
-                        }
-                    }
-                }
-            ) {
-                Text("신청")
-            }
-
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
+//        Row(
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.CenterVertically,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//
+//        ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.arrowleft),
+//                contentDescription = "Back",
+//                modifier = Modifier
+//                    .size(24.dp)
+//                    .clickable {
+//                        navController.navigate("childSavings")
+//                    }
+//            )
+//
+//            Text(
+//                "티끌 신청하기",
+//                fontSize = 20.sp
+//            )
+//
+//
+//
+//        }
+//
+        Spacer(modifier = Modifier.height(16.dp))
 
         if (snackbarMessage != null) {
             Snackbar(
@@ -353,9 +341,73 @@ fun ChildSavingsApplication(navController: NavController) {
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFF00D2F3))
+                .clickable {
+                    when {
+                        targetValue.text.isEmpty() -> Toast
+                            .makeText(context, "목표를 입력하세요.", Toast.LENGTH_SHORT)
+                            .show()
+
+                        priceValue.text.isEmpty() -> Toast
+                            .makeText(context, "가격을 입력하세요.", Toast.LENGTH_SHORT)
+                            .show()
+
+                        requestPriceValue.text.isEmpty() -> Toast
+                            .makeText(context, "요청 금액을 입력하세요.", Toast.LENGTH_SHORT)
+                            .show()
+
+                        uri == null -> Toast
+                            .makeText(context, "첨부파일을 추가하세요.", Toast.LENGTH_SHORT)
+                            .show()
+
+                        selectedMonths <= 0 -> Toast
+                            .makeText(context, "기간을 선택하세요.", Toast.LENGTH_SHORT)
+                            .show()
+
+                        else -> {
+                            val createSavingsItemRequest = CreateSavingsItemRequest(
+                                name = targetValue.text,
+                                amount = priceValue.text.toIntOrNull() ?: 0,
+                                month = selectedMonths,
+                                parentsAmount = requestPriceValue.text.toIntOrNull() ?: 0,
+                                imageUrl = uri.toString()
+                            )
+                            Log.d("이미지", "${uri}")
+
+                            viewModel.createSavingsItem(createSavingsItemRequest)
+                            Log.d(
+                                "CreateItem",
+                                "티클 모으기: Sending Item: $createSavingsItemRequest, 그룹id: ${groupId}"
+                            )
+
+                            AlertDialog
+                                .Builder(context)
+                                .setTitle("티끌 모으기")
+                                .setMessage("티끌 모으기 신청이 완료되었습니다.")
+                                .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                                    dialog.dismiss()
+                                    navController.navigate("childSavings")
+                                }
+                                .show()
+                        }
+                    }
+                }
+        ) {
+            Text(
+                "신청하기",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
-
-
-
 

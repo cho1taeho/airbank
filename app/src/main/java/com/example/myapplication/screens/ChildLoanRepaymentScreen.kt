@@ -72,9 +72,6 @@ fun ChildLoanRepaymentScreen(navController: NavController) {
 fun LoanRepaymentButton(navController: NavController, viewModel: LoanViewModel) {
     val context = LocalContext.current
 
-    fun onclick() {
-    }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier

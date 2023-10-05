@@ -72,9 +72,18 @@ fun MainScreen(navController: NavController) {
         childs = mutablechilds
     }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         if (childs.isNotEmpty()){
-            Text("관리중인 자녀 "+childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))) )
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
+            Text("관리중인 자녀 ", style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular)) ))
+            Text(childs.size.toString(), style = TextStyle(fontFamily = FontFamily(Font(R.font.pretendardregular))), color = Color(0xFF00D2F3) )
+            }
             ChildProfile(childs,viewModel,navController)
         } else {
             postNewChild(navController)
@@ -86,7 +95,7 @@ fun MainScreen(navController: NavController) {
 fun postNewChild(navController: NavController){
     Box(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(16.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(Color(0xFFD6F2FF))
             .width(351.dp)
@@ -198,7 +207,8 @@ fun ChildCard(viewModel: MainViewModel) {
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFF5FCFEF))
+            .background(Color(0xFFD6F2FF))
+
     ){
         Column (
             modifier = Modifier.padding(16.dp),

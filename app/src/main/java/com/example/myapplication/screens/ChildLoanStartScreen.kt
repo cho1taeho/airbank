@@ -90,7 +90,7 @@ fun CreditScore() {
         val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
         Text(
 
-            "신용점수: ${creditPoint}p",
+            "신용점수: ${creditPoint}",
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -215,7 +215,7 @@ fun LoanDetail() {
 
             Column {
                 Text(
-                    "현도 금액: ${formattedLoamLimit}원",
+                    "한도 금액: ${formattedLoamLimit}원",
                     fontSize = 14.sp,
                     color = Color(0xff515151)
                 )

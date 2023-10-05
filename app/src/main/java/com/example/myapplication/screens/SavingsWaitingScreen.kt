@@ -89,7 +89,7 @@ fun SavingsWaitingScreen(navController: NavController){
 
         ) {
             Text(
-                "진행중인 티끌모으기가 없습니다.",
+                "진행중인 티끌모으기가 없습니다",
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold

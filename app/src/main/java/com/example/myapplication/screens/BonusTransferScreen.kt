@@ -73,6 +73,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.*
@@ -100,21 +101,24 @@ fun BonusTransferScreen(navController: NavController){
 
 
     Column (
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp, 20.dp, 20.dp, 20.dp)
+            .fillMaxSize()
+            .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ){
-        Spacer(modifier = Modifier.size(5.dp))
+        Spacer(modifier = Modifier.size(30.dp))
+        Text(
+            "보너스를 송금해주세요",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(30.dp))
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(470.dp)
-                .background(color = Color(0xFFD6F2FF))
+                .background(color = Color.White)
         ) {
             TextField(
                 value = inputAmount,
@@ -127,8 +131,15 @@ fun BonusTransferScreen(navController: NavController){
                     keyboardType = KeyboardType.Number
                 ),
                 label = { Text("보너스 금액 입력") },
+//                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
             )
         }
+
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Transparent)
+        )
 
         Box(
             contentAlignment = Alignment.Center,
@@ -148,8 +159,9 @@ fun BonusTransferScreen(navController: NavController){
         ) {
             Text(
                 "보너스 송금하기",
-                fontSize = 26.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
+                color = Color.White
             )
         }
     }
