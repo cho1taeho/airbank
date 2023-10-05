@@ -151,7 +151,6 @@ fun MainHistory() {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
             ) {
                 val sortedDates = groupedTransactions.keys.toList().sortedDescending()
 
@@ -256,7 +255,6 @@ fun LoanHistory() {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
             ) {
                 val sortedDates = groupedTransactions.keys.toList().sortedDescending()
 
@@ -361,7 +359,6 @@ fun SavingsHistory() {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
             ) {
                 val sortedDates = groupedTransactions.keys.toList().sortedDescending()
 
