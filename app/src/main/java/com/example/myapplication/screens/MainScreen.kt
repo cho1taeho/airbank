@@ -438,9 +438,28 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     else{
                         AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
                         Log.d(tag,childs.first().groupId.toString())
+                        GETGroupseFund(childs.first().groupId)
                     }
                 } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
             } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }
+        }
+    }
+
+    fun GETGroupseFund(group_id: Int){
+        if (group_id == 0){return}
+        val tag = "ChildRule"
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = HDRetrofitBuilder.HDapiService().getGroupsFund(group_id)
+            val getresponse = response.body()
+            if (getresponse != null){
+                if(getresponse.data != null ){
+                    AirbankApplication.prefs.setString("allowanceAmount",getresponse.data.allowanceAmount.toString())
+                    AirbankApplication.prefs.setString("allowanceDate",getresponse.data.allowanceDate.toString())
+                    AirbankApplication.prefs.setString("taxRate",getresponse.data.taxRate.toString())
+                    AirbankApplication.prefs.setString("confiscationRate",getresponse.data.confiscationRate.toString())
+                    AirbankApplication.prefs.setString("loanLimit",getresponse.data.loanLimit.toString())
+                }
+            }
         }
     }
 }
