@@ -186,7 +186,7 @@ fun SavingsScreen(navController: NavController) {
                         }
                 ) {
                     Text(
-                        "티끌 보너스 송금하기",
+                        "티끌 지원금 송금하기",
                         color = Color.White,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold

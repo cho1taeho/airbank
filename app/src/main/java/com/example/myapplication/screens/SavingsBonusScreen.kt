@@ -114,7 +114,7 @@ fun SavingsBonusScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(470.dp)
+                .height(200.dp)
                 .background(color = Color(0xFFD6F2FF))
         ) {
             Text(
@@ -144,7 +144,7 @@ fun SavingsBonusScreen(navController: NavController) {
                 }
         ) {
             Text(
-                "티끌모으기 지원금 송금하기",
+                "티끌 지원금 송금하기",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
             )

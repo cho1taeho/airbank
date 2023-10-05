@@ -8,6 +8,7 @@ import com.example.myapplication.model.CancelSavingsRequest
 import com.example.myapplication.model.CancelSavingsResponse
 import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.model.CreateSavingsItemResponse
+import com.example.myapplication.model.NotificationResponse
 import com.example.myapplication.model.Resource
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.model.SavingsRemitResponse
@@ -81,4 +82,12 @@ class SavingsRepository @Inject constructor(
         }
     }
 
+    suspend fun getNotifications(groupId: Int): Resource<NotificationResponse> {
+        val response = apiService.getNotifications(groupId)
+        return if (response.isSuccessful) {
+            Resource(State.SUCCESS, response.body(),"SUCCESS!")
+        } else{
+            Resource(State.ERROR, null, "ERROR!")
+        }
+    }
 }

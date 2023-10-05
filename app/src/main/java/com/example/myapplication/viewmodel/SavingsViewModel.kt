@@ -10,6 +10,7 @@ import com.example.myapplication.model.CancelSavingsRequest
 import com.example.myapplication.model.CancelSavingsResponse
 import com.example.myapplication.model.CreateSavingsItemRequest
 import com.example.myapplication.model.CreateSavingsItemResponse
+import com.example.myapplication.model.NotificationResponse
 import com.example.myapplication.model.Resource
 import com.example.myapplication.model.SavingsRemitRequest
 import com.example.myapplication.model.SavingsRemitResponse
@@ -126,5 +127,19 @@ class SavingsViewModel @Inject constructor(
         } catch (e: Exception) {
             _bonusSavingState.emit(Resource(State.ERROR, null, e.localizedMessage))
         }
+    }
+
+    private val _getNotificationsState = MutableStateFlow<Resource<NotificationResponse>>(Resource(State.LOADING,null,null))
+    val getNotificationsState: StateFlow<Resource<NotificationResponse>> get() = _getNotificationsState
+
+    fun getNotifications(groupId: Int) = viewModelScope.launch{
+        _getNotificationsState.emit(Resource(State.LOADING, null, null))
+        try{
+            val response = savingsRepository.getNotifications(groupId)
+            _getNotificationsState.emit(response)
+        } catch(e: Exception) {
+            _getNotificationsState.emit(Resource(State.ERROR, null, e.localizedMessage))
+        }
+
     }
 }
