@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -79,11 +82,14 @@ fun WalletScreen(navController: NavController) {
         accountViewModel.accountCheck()
     }
     
-    
+    val Tamount = accountData?.data?.data?.amount ?:0
+
+    val fommatTamount = NumberFormat.getNumberInstance(Locale.US).format(Tamount)
     Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ){
         Box(
             modifier = Modifier
@@ -105,7 +111,7 @@ fun WalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    "${accountData?.data?.data?.amount ?:0}",
+                    "${fommatTamount}",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -210,10 +216,10 @@ fun WalletScreen(navController: NavController) {
 @Composable
 
 fun CreditPoint() {
-    val list = listOf(500f, 600f, 450f, 480f, 650f, 700f)
+    val list = listOf(500f, 600f, 450f, 480f, 650f, 500f)
     val zipList: List<Pair<Float, Float>> = list.zipWithNext()
     val xAxisLabels = getMonths()
-    val yAxisLabels = List((1000 / 200) + 1) { it * 200 }
+    val yAxisLabels = List((999 / 200) + 1) { it * 200 }
 
     Box(
         modifier = Modifier
@@ -222,7 +228,7 @@ fun CreditPoint() {
     ) {
         val max = list.maxOrNull() ?: 0f
         val min = 0f
-        val lineColor = if (list.last() > list.first()) Color.Green else Color.Red
+        val lineColor = if (list.last() > list.first()) Color(0xFF00D2F3) else Color(0xFF00D2F3)
 
         // Y Axis Labels
         Column(

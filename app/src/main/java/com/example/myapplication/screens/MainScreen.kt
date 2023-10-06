@@ -391,12 +391,14 @@ fun Body(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFEFE4FF))
                     .clickable {
+                        Log.d("티클모으기상태","${savingsData?.data?.data?.status
+                        }")
                         if (savingsData?.data?.data?.status == null) {
                             navController.navigate("SavingsWaiting")
                         } else if (savingsData?.data?.data?.status == "PENDING") {
                             navController.navigate("savingsApprove")
                         } else if (savingsData?.data?.data?.status == "PROCEEDING") {
-                            navController.navigate("savings")
+                            navController.navigate("Savings")
                         }
                     }
             ){

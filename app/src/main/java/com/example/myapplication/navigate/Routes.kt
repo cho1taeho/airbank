@@ -90,7 +90,7 @@ fun AppNavigation(navController: NavHostController){
                 } else if (savingsData?.data?.data?.status == "PENDING") {
                     navController.navigate("savingsApprove")
                 } else if (savingsData?.data?.data?.status == "PROCEEDING") {
-                    navController.navigate("savings")
+                    navController.navigate("Savings")
                 }
 //                SavingsScreen(navController = navController)
             }
@@ -200,7 +200,9 @@ fun AppNavigation(navController: NavHostController){
             GroupConfirmScreen(navController=navController)
         }
 
-
+        composable("Savings"){
+            SavingsScreen(navController=navController)
+        }
     }
 }
 

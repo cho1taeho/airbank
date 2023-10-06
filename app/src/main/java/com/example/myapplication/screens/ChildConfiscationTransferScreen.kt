@@ -115,7 +115,7 @@ fun ChildConfiscationTransferScreen(navController: NavController){
                 .background(color = Color(0xFFD6F2FF))
         ) {
             Text(
-                "변제금액 : ${confiscationData?.data?.data?.amount}원",
+                "변제금액 : ${confiscationData?.data?.data?.amount ?:0}원",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold
             )

@@ -38,8 +38,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.GETGroupsResponse
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import java.text.NumberFormat
@@ -54,7 +56,18 @@ fun LoanScreen(navController: NavController) {
     val loanData by loanViewModel.loanState.collectAsState()
     val accountViewModel: AccountViewModel = hiltViewModel()
     val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
+    val viewModel: MainViewModel = viewModel()
+    var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
+    selectChild = viewModel.selected ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
 
+    var creditScore = AirbankApplication.prefs.getString("creditScore","").toInt()
+    var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
+    LaunchedEffect(Unit, viewModel.childs){
+        viewModel.getGroup()
+        val mutablechilds = viewModel.childs
+        childs = mutablechilds
+    }
+    val creditPoint = selectChild?.creditScore ?: 0
     LaunchedEffect(key1 = groupId) {
         if (groupId.isNotEmpty()) {
             Log.d("LoanScreen", "LaunchedEffect triggered with groupId: $groupId")
@@ -105,7 +118,7 @@ fun LoanScreen(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.size(10.dp))
                         Text(
-                            "현도 금액: ${formattedLoamLimit}원",
+                            "한도 금액: ${formattedLoamLimit}원",
                             fontSize = 14.sp,
                             color = Color(0xff515151)
                         )
@@ -182,17 +195,19 @@ fun LoanScreen(navController: NavController) {
                         .background(color = Color.White)
                         .padding(horizontal = 16.dp)
                 ) {
+//                    val creditPoint = AirbankApplication.prefs.getString("creditPoint","")
                     Column(
                         modifier = Modifier
                             .padding(start = 13.dp)
                     ) {
                         Spacer(modifier = Modifier.size(10.dp))
-                        val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
+
                         Text(
-                            "신용점수 ${creditPoint}p",
+                            "신용점수 ${creditScore}p",
                             fontSize = 16.sp,
                         )
-                        ScoreBar(score = 500)
+                        val creditPoint = selectChild?.creditScore ?: 0
+                        ScoreBar(creditScore )
                         CreditPoint()
                     }
                 }

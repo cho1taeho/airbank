@@ -138,7 +138,7 @@ fun ChildWalletScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = accountData?.data?.data?.amount?.toString() ?: "돈이 엄서ㅠ",
+                    text = accountData?.data?.data?.amount?.toString() ?: "0",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
