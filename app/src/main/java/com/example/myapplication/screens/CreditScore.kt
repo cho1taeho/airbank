@@ -1,18 +1,14 @@
 package com.example.myapplication.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import android.graphics.Paint
 import android.util.Log
 import androidx.compose.foundation.horizontalScroll
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
@@ -23,48 +19,58 @@ import java.util.Locale
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.text.ParseException
-import java.util.*
+import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.GETCreditHistoryResponse
+import com.example.myapplication.network.HDRetrofitBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @Composable
-fun PreviewPerformanceChart() {
+fun CreditScoreBox() {
 
     val viewModel : CreditScoreViewModel = viewModel()
-
-    Column(
+    LaunchedEffect(Unit){
+        val groupid =  AirbankApplication.prefs.getString("group_id","")
+        if (groupid.isNotEmpty()){
+            viewModel.getCreditHistory(groupid.toInt())
+        }
+    }
+    Box(
         modifier = Modifier.fillMaxSize()
 
     ) {
 
-        val data = listOf(
-            Pair("2023-08-04T10:44:01.680342", 0f),
-            Pair("2023-08-05T12:44:01.680342", 720f),
-            Pair("2023-08-06T12:44:01.680342", 820f),
-            Pair("2023-08-07T12:44:01.680342", 920f),
-            Pair("2023-08-10T12:44:01.680342", 620f),
-            Pair("2023-08-14T19:44:01.680342", 715f),
-            // Add more data points as needed
-        )
-        Text(text = "나의 그래프")
-        PerformanceChart2(data)
+//        val data = listOf(
+//            Pair("2023-08-04T10:44:01.680342", 0f),
+//            Pair("2023-08-05T12:44:01.680342", 720f),
+//            Pair("2023-08-06T12:44:01.680342", 820f),
+//            Pair("2023-08-07T12:44:01.680342", 920f),
+//            Pair("2023-08-10T12:44:01.680342", 620f),
+//            Pair("2023-08-14T19:44:01.680342", 715f),
+//            // Add more data points as needed
+//        )
+        Text(text = "신용점수 변화 그래프")
+        PerformanceChart2(viewModel.creditHistories)
     }
 }
 
 
 
 @Composable
-fun PerformanceChart2(data: List<Pair<String, Float>>) {
+fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
 
-    val parsedData = data.map { (dateString, value) ->
-        val date = simpleDateFormat.parse(dateString) ?: Date()
-        Pair(date, value)
+    val parsedData = data.map { (creditScore, createdAt) ->
+        val date = simpleDateFormat.parse(createdAt) ?: Date()
+        Pair(date, creditScore + 0f)
     }
     Log.d("Chart", parsedData.toString())
 
@@ -73,7 +79,7 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
     val minValue = 0f
     val maxValue = 1000f
 
-    val yStep = 200f
+    val yStep = 50f
     val xStep = ((maxDate.time - minDate.time) / (1000 * 24 * 60 * 60)).toFloat()
 
     val density = LocalDensity.current
@@ -92,7 +98,7 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
     ){
         Canvas(
             modifier = Modifier
-                .width((xStep * parsedData.size * 200f).dp)  // 각 데이터 포인트마다 40dp의 간격을 둔다고 가정
+                .width((xStep * parsedData.size * yStep).dp)  // 각 데이터 포인트마다 40dp의 간격을 둔다고 가정
                 .height(1000.dp)
                 .padding(16.dp)
         ) {
@@ -103,7 +109,7 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
 
             // x-축과 y-축을 그립니다
             drawLine(color = Color.Black, start = xAxisStart, end = Offset(size.width, size.height), strokeWidth = 2f)
-            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat(), size.height - 1000f), strokeWidth = 2f)
+            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat(), size.height - yStep*5), strokeWidth = 2f)
 
             var previousX = 0f
             var previousY = 0f
@@ -136,7 +142,7 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
                     }
 
                     drawContext.canvas.nativeCanvas.drawText(
-                        "${SimpleDateFormat("MM/dd", Locale.getDefault()).format(date)}",
+                        SimpleDateFormat("MM/dd", Locale.getDefault()).format(date),
                         x,
                         size.height - 30,
                         textPaint
@@ -153,4 +159,16 @@ fun PerformanceChart2(data: List<Pair<String, Float>>) {
 
 class CreditScoreViewModel @Inject constructor() : ViewModel() {
 
+    var creditHistories: List<GETCreditHistoryResponse.Data.creditHistory> = emptyList()
+    fun getCreditHistory(groupid: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = HDRetrofitBuilder.HDapiService().getCreditHistory(groupid)
+            if (response.isSuccessful){
+                val getresponse = response.body()
+                if(getresponse != null){
+                    creditHistories = getresponse.data.creditHistories
+                }
+            }
+        }
+    }
 }
