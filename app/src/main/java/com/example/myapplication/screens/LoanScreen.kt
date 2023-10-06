@@ -68,6 +68,7 @@ fun LoanScreen(navController: NavController) {
         childs = mutablechilds
     }
     val creditPoint = selectChild?.creditScore ?: 0
+
     LaunchedEffect(key1 = groupId) {
         if (groupId.isNotEmpty()) {
             Log.d("LoanScreen", "LaunchedEffect triggered with groupId: $groupId")
