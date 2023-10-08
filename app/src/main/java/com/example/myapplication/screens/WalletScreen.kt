@@ -199,6 +199,9 @@ fun WalletScreen(navController: NavController) {
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
                 .padding(horizontal = 16.dp)
+                .clickable{
+                    navController.navigate("ChildConfiscationTransfer")
+                }
         ){
             Column {
                 Spacer(modifier = Modifier.size(10.dp))

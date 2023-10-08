@@ -98,11 +98,9 @@ fun ChildConfiscationTransferScreen(navController: NavController){
     var transferAmount by remember { mutableStateOf("") }
 
     Column (
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp, 20.dp, 20.dp, 20.dp)
+            .fillMaxSize()
+            .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.size(5.dp))

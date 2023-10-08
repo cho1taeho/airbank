@@ -172,9 +172,9 @@ class CreditScoreViewModel @Inject constructor() : ViewModel() {
             val response = HDRetrofitBuilder.HDapiService().getCreditHistory(groupid)
             if (response.isSuccessful){
                 val getresponse = response.body()
-                if(getresponse != null){
-                    creditHistories = getresponse.data.creditHistories
-                }
+//                if(getresponse != null){
+//                    creditHistories = getresponse.data.creditHistories
+//                }
             }
         }
     }

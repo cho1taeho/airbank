@@ -132,6 +132,7 @@ fun BonusTransferScreen(navController: NavController){
                 ),
                 label = { Text("보너스 금액 입력") },
 //                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
