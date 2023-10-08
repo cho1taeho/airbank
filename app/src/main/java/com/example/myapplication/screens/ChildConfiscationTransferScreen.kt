@@ -74,12 +74,16 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.AirbankApplication
+import com.example.myapplication.model.BonusRequest
+import com.example.myapplication.model.ConfiscationTransferRequest
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -96,6 +100,17 @@ fun ChildConfiscationTransferScreen(navController: NavController){
     val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
     val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
     var transferAmount by remember { mutableStateOf("") }
+    var groupId by remember { mutableStateOf("") }
+    groupId = AirbankApplication.prefs.getString("group_id", "")
+
+
+    LaunchedEffect(Unit){
+        if (groupId.isNotEmpty()) {
+            accountViewModel.confiscationCheck(groupId.toInt())
+        }
+    }
+
+
 
     Column (
         modifier = Modifier
@@ -103,62 +118,73 @@ fun ChildConfiscationTransferScreen(navController: NavController){
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.size(5.dp))
+        Spacer(modifier = Modifier.size(30.dp))
+        Text(
+            "변제금액을 송금해주세요 ",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(30.dp))
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(100.dp)
-                .background(color = Color(0xFFD6F2FF))
+                .background(color = Color.White)
         ) {
-            Text(
-                "변제금액 : ${confiscationData?.data?.data?.amount ?:0}원",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .height(100.dp)
-                .background(color = Color(0xFFD6F2FF))
-        ) {
-            val accountAmount = accountData?.data?.data?.amount ?: 0
-            val inputAmount = transferAmount.toIntOrNull() ?: 0
-
-            if (inputAmount > accountAmount) {
-                transferAmount = accountAmount.toString()
-            }
-
             TextField(
                 value = transferAmount,
-                onValueChange = {
-                    transferAmount = it
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isDigit() }) {
+                        transferAmount = newValue
+                    }
                 },
-                label = { Text("금액 입력") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
-                maxLines = 1,
-                modifier = Modifier.fillMaxWidth(0.9f)
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                ),
+                label = { Text("변제할 금액 입력") },
+//                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+                modifier = Modifier.fillMaxWidth()
             )
         }
-
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(
+            "변제금액 : ${confiscationData?.data?.data?.amount ?:0}원",
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        val remainingInt = transferAmount.toIntOrNull() ?:0
+        val remainingAmount = (confiscationData?.data?.data?.amount ?: 0) - remainingInt
+        Text(
+            "남은 금액: $remainingAmount 원",
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Transparent)
+        )
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .height(100.dp)
-                .background(color = Color(0xFFD6F2FF))
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = Color(0xFF00D2F3))
+                .clickable {
+                    navController.navigate(BottomNavItem.Wallet.screenRoute)
+                    val request = ConfiscationTransferRequest(transferAmount.toInt())
+                    accountViewModel.confiscationTransfer(request)
+
+                }
         ) {
-            val remainingAmount = (confiscationData?.data?.data?.amount ?: 0) - (accountData?.data?.data?.amount ?: 0)
             Text(
-                "남은 금액: $remainingAmount 원",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
+                "변제금액 송금하기",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
             )
         }
     }

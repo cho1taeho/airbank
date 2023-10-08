@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import android.net.Uri
+import android.net.http.UrlRequest.Status
 import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -73,7 +74,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.*
@@ -82,7 +83,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.myapplication.AirbankApplication
 import com.example.myapplication.model.BonusRequest
-import com.example.myapplication.model.SavingsRemitRequest
+import com.example.myapplication.model.ConfiscationTransferRequest
+import com.example.myapplication.model.InterestRepaymentRequest
 import com.example.myapplication.viewmodel.AccountViewModel
 import com.example.myapplication.viewmodel.LoanViewModel
 import com.example.myapplication.viewmodel.SavingsViewModel
@@ -91,13 +93,20 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
+import com.example.myapplication.model.State
 
 @Composable
-fun BonusTransferScreen(navController: NavController){
+fun ChildInterestRespaymentScreen(navController: NavController){
     val accountViewModel: AccountViewModel = hiltViewModel()
-    val accountData by accountViewModel.bonusTransferState.collectAsState(initial = null)
+    val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
+    var repaymentAmount by remember {mutableStateOf("")}
+    val groupId = AirbankApplication.prefs.getString("group_id","")
 
-    var inputAmount by remember { mutableStateOf("") }
+    LaunchedEffect(Unit){
+        if (groupId.isNotEmpty()) {
+            accountViewModel.interestCheck(groupId.toInt())
+        }
+    }
 
 
     Column (
@@ -105,10 +114,10 @@ fun BonusTransferScreen(navController: NavController){
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
-    ){
+    ) {
         Spacer(modifier = Modifier.size(30.dp))
         Text(
-            "보너스를 송금해주세요",
+            "이번달 이자를 송금해주세요 ",
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -118,31 +127,35 @@ fun BonusTransferScreen(navController: NavController){
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-//                .height(70.dp)
                 .background(color = Color.White)
         ) {
             TextField(
-                value = inputAmount,
+                value = repaymentAmount,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        inputAmount = newValue
+                        repaymentAmount = newValue
                     }
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     keyboardType = KeyboardType.Number
                 ),
-                label = { Text("보너스 금액 입력") },
+                label = { Text("이번달 이자 입력") },
 //                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(
+            "이번달 이자 : ${interestData?.data?.data?.amount ?: 0}원",
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold
+        )
 
         Spacer(
             modifier = Modifier
                 .weight(1f)
                 .background(Color.Transparent)
         )
-
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -152,20 +165,17 @@ fun BonusTransferScreen(navController: NavController){
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
                     navController.navigate(BottomNavItem.Wallet.screenRoute)
-                    val request = BonusRequest(amount = inputAmount.toInt())
-                    val groupId = AirbankApplication.prefs.getString("group_id", "")
-                    Log.d("보너스송금","${groupId}")
-                    accountViewModel.bonusTransfer(groupId.toInt(),request)
+                    val request = InterestRepaymentRequest(repaymentAmount.toInt())
+                    accountViewModel.interestRepayment(request)
 
                 }
         ) {
             Text(
-                "보너스 송금하기",
+                "이번달 이자 송금하기",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
     }
-
 }
