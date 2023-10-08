@@ -1,3 +1,5 @@
+//@file:Suppress("DEPRECATION")
+
 package com.example.myapplication.screens
 
 import androidx.compose.foundation.Canvas
@@ -7,6 +9,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import android.graphics.Paint
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 
 import androidx.compose.foundation.layout.height
@@ -43,22 +47,15 @@ fun CreditScoreBox() {
             viewModel.getCreditHistory(groupid.toInt())
         }
     }
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Column(
+        modifier = Modifier
+            .width(314.dp)
+            .height(212.dp)
 
     ) {
-
-//        val data = listOf(
-//            Pair("2023-08-04T10:44:01.680342", 0f),
-//            Pair("2023-08-05T12:44:01.680342", 720f),
-//            Pair("2023-08-06T12:44:01.680342", 820f),
-//            Pair("2023-08-07T12:44:01.680342", 920f),
-//            Pair("2023-08-10T12:44:01.680342", 620f),
-//            Pair("2023-08-14T19:44:01.680342", 715f),
-//            // Add more data points as needed
-//        )
         Text(text = "신용점수 변화 그래프")
-        PerformanceChart2(viewModel.creditHistories)
+        PerformanceChart2(com.example.myapplication.Util.sortedCreditHistories)
+
     }
 }
 
@@ -74,15 +71,15 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
     }
     Log.d("Chart", parsedData.toString())
 
+    val density = LocalDensity.current
+
     val minDate = parsedData.minByOrNull { it.first }?.first ?: Date()
     val maxDate = parsedData.maxByOrNull { it.first }?.first ?: Date()
-    val minValue = 0f
-    val maxValue = 1000f
 
-    val yStep = 50f
-    val xStep = ((maxDate.time - minDate.time) / (1000 * 24 * 60 * 60)).toFloat()
 
-    val density = LocalDensity.current
+    val days = ((maxDate.time / (1000*24*60*60)) - (minDate.time / (1000*24*60*60))).toFloat()
+    val xStep = 150f
+
     val textPaint = remember(density) {
         Paint().apply {
             color = android.graphics.Color.BLACK
@@ -98,41 +95,58 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
     ){
         Canvas(
             modifier = Modifier
-                .width((xStep * parsedData.size * yStep).dp)  // 각 데이터 포인트마다 40dp의 간격을 둔다고 가정
-                .height(1000.dp)
-                .padding(16.dp)
+                .width(((xStep * (days))/3+200f).dp)
+                .fillMaxHeight()
+                .background(Color.Green)
         ) {
-
+            Log.d("Chart size", "calc= ${xStep * (days)+200f} => ${(xStep * (days)+200f).dp},  width = ${size.width}")
+            val yStep = (size.height-150f) / 5
             // x-축과 y-축의 시작점을 계산합니다
-            val xAxisStart = Offset(x = scrollState.value.toFloat(), y = size.height)
-            val yAxisStart = Offset(x = scrollState.value.toFloat(), y = size.height)
+            val xAxisStart = Offset(scrollState.value.toFloat()+100f,  size.height-100f)
+            val yAxisStart = Offset(scrollState.value.toFloat()+100f,  size.height-100f)
 
             // x-축과 y-축을 그립니다
-            drawLine(color = Color.Black, start = xAxisStart, end = Offset(size.width, size.height), strokeWidth = 2f)
-            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat(), size.height - yStep*5), strokeWidth = 2f)
+            drawLine(color = Color.Black, start = xAxisStart, end = Offset(size.width+100f, size.height-100f), strokeWidth = 2f)
+            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat()+100f, size.height - yStep*5 -100f), strokeWidth = 2f)
+//          // x축은 날짜별로 다 그려놓고, 포인트를 따로찍자
 
-            var previousX = 0f
-            var previousY = 0f
+
+
 
             for (i in 1 until 6) {
-                val yValue = size.height - (i * yStep)
+                val yValue = yAxisStart.y - (i * yStep)
                 Log.d("Chart", "yValue=$yValue")
 
                 drawContext.canvas.nativeCanvas.drawText(
                     "${(i) * 200}",
-                    scrollState.value + 40f,
-                    yValue - 5f,
+                    scrollState.value + 50f,
+                    yValue,
                     textPaint
                 )
             }
 
+            for(i in (minDate.time/(24*60*60*1000)) until (maxDate.time/(24*60*60*1000)) ){
+                val date = Date(i*24*60*60*1000)
+                Log.d("Chart xaxis",date.toString())
+                val x = (date.time / (24 * 60 * 60 * 1000) - minDate.time / (24 * 60 * 60 * 1000)).toFloat() * xStep + 200f
+                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f) {
+                    drawContext.canvas.nativeCanvas.drawText(
+                        SimpleDateFormat("MM/dd", Locale.getDefault()).format(date),
+                        (date.time / (24 * 60 * 60 * 1000) - minDate.time / (24 * 60 * 60 * 1000)).toFloat() * xStep + 200f,
+                        yAxisStart.y + 50f,
+                        textPaint
+                    )
+                }
+            }
+            var previousX = -1f
+            var previousY = -1f
             parsedData.forEachIndexed { index, (date, value) ->
-                val x = ((date.time - minDate.time) / (1000 * 24 * 60 * 60)).toFloat() * 200f + 100f
-                val y = size.height  - value - 100f
+                Log.d("Chart","index: $index, date: $date, value: $value")
+                val x = (date.time/(24*60*60*1000) - minDate.time/(24*60*60*1000)).toFloat() * xStep +200f
+//                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f) {
+                    val y = yAxisStart.y - value*(yStep*5)/1000
 
-                if (x > scrollState.value){
-
-                    if (index > 0) {
+                    if (index > 0 ) {
                         drawLine(
                             Color(0xff5FCFEF),
                             start = Offset(previousX, previousY),
@@ -140,17 +154,10 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
                             strokeWidth = 5f
                         )
                     }
-
-                    drawContext.canvas.nativeCanvas.drawText(
-                        SimpleDateFormat("MM/dd", Locale.getDefault()).format(date),
-                        x,
-                        size.height - 30,
-                        textPaint
-                    )
+                    previousX = x
+                    previousY = y
                 }
-                previousX = x
-                previousY = y
-            }
+//            }
         }
 
     }
