@@ -149,7 +149,7 @@ fun SavingsApproveScreen(navController: NavController) {
                             val request = UpdateSavingsRequest(isAccept = true)
                             viewModel.updateSavings(groupId.toInt(), request)
                             Log.d("티끌 수락","")
-                            navController.navigate("savings")
+                            navController.navigate("Savings")
                         }
                 ) {
                     Text(
