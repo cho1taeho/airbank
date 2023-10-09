@@ -42,6 +42,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -252,7 +253,7 @@ fun ScoreBar(score: Int) {
     val scoreWidth = (score.toFloat() / maxScore.toFloat())
 
     Row (
-        verticalAlignment = Alignment.Bottom,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
 //                .padding(horizontal = 16.dp)
@@ -283,7 +284,8 @@ fun ScoreBar(score: Int) {
                     append("$score")
                 }
                 append("/1000 P")
-            }
+            },
+            textAlign = TextAlign.Center,
         )
     }
 }

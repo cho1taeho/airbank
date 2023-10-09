@@ -38,7 +38,6 @@ fun FirstScreen(navController: NavController){
             modifier = Modifier
                 .clickable { navController.navigate(BottomNavItem.SignIn.screenRoute) }
             )
-        CreditScoreBox()
     }
 
 }

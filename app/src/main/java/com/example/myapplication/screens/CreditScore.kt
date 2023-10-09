@@ -22,10 +22,15 @@ import java.util.Date
 import java.util.Locale
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +39,7 @@ import com.example.myapplication.model.GETCreditHistoryResponse
 import com.example.myapplication.network.HDRetrofitBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -48,12 +54,17 @@ fun CreditScoreBox() {
         }
     }
     Column(
+        verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .width(314.dp)
-            .height(212.dp)
-
+            .height(252.dp)
+            .background(Color.White , RoundedCornerShape(size = 22.dp))
+            .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = 20.dp)
     ) {
-        Text(text = "신용점수 변화 그래프")
+        Text("철수님의 신용점수")
+        var creditPoint = 732
+        ScoreBar(creditPoint)
         PerformanceChart2(com.example.myapplication.Util.sortedCreditHistories)
 
     }
@@ -69,13 +80,16 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
         val date = simpleDateFormat.parse(createdAt) ?: Date()
         Pair(date, creditScore + 0f)
     }
-    Log.d("Chart", parsedData.toString())
+        .plus(Pair(Date(),(data.last().creditScore+0f)))
+
+
 
     val density = LocalDensity.current
 
     val minDate = parsedData.minByOrNull { it.first }?.first ?: Date()
     val maxDate = parsedData.maxByOrNull { it.first }?.first ?: Date()
 
+    Log.d("Chart","Data= $parsedData")
 
     val days = ((maxDate.time / (1000*24*60*60)) - (minDate.time / (1000*24*60*60))).toFloat()
     val xStep = 150f
@@ -84,20 +98,21 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
         Paint().apply {
             color = android.graphics.Color.BLACK
             textAlign = Paint.Align.CENTER
-            textSize = density.run { 12.sp.toPx() }
+            textSize = density.run { 10.sp.toPx() }
         }
     }
-    val scrollState = rememberScrollState(0)
+    val scrollState = rememberScrollState(initial = (xStep*days).toInt())
     Box(
         modifier = Modifier
             .horizontalScroll(scrollState)
             .fillMaxSize()
+            .zIndex(2f)
     ){
         Canvas(
             modifier = Modifier
-                .width(((xStep * (days))/3+200f).dp)
+                .width(((xStep * (days)) / 3 + 200f).dp)
                 .fillMaxHeight()
-                .background(Color.Green)
+//                .background(Color.Green)
         ) {
             Log.d("Chart size", "calc= ${xStep * (days)+200f} => ${(xStep * (days)+200f).dp},  width = ${size.width}")
             val yStep = (size.height-150f) / 5
@@ -106,8 +121,8 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
             val yAxisStart = Offset(scrollState.value.toFloat()+100f,  size.height-100f)
 
             // x-축과 y-축을 그립니다
-            drawLine(color = Color.Black, start = xAxisStart, end = Offset(size.width+100f, size.height-100f), strokeWidth = 2f)
-            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat()+100f, size.height - yStep*5 -100f), strokeWidth = 2f)
+            drawLine(color = Color.Black, start = xAxisStart, end = Offset(size.width+100f, size.height-100f), strokeWidth = 1f)
+            drawLine(color = Color.Black, start = yAxisStart, end = Offset(scrollState.value.toFloat()+100f, size.height - yStep*5 -100f), strokeWidth = 1f)
 //          // x축은 날짜별로 다 그려놓고, 포인트를 따로찍자
 
 
@@ -125,28 +140,30 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
                 )
             }
 
-            for(i in (minDate.time/(24*60*60*1000)) until (maxDate.time/(24*60*60*1000)) ){
+            for(i in (minDate.time/(24*60*60*1000L)) .. maxDate.time/(24*60*60*1000L) ){
                 val date = Date(i*24*60*60*1000)
                 Log.d("Chart xaxis",date.toString())
                 val x = (date.time / (24 * 60 * 60 * 1000) - minDate.time / (24 * 60 * 60 * 1000)).toFloat() * xStep + 200f
-                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f) {
+                if (x >= scrollState.value.toFloat() + 100f && x <= size.width - 100f) {
                     drawContext.canvas.nativeCanvas.drawText(
                         SimpleDateFormat("MM/dd", Locale.getDefault()).format(date),
                         (date.time / (24 * 60 * 60 * 1000) - minDate.time / (24 * 60 * 60 * 1000)).toFloat() * xStep + 200f,
-                        yAxisStart.y + 50f,
+                        yAxisStart.y + 40f,
                         textPaint
                     )
                 }
             }
-            var previousX = -1f
-            var previousY = -1f
+            var previousX = (parsedData.firstOrNull()?.first?.time?.toFloat() ?: 0f) / (24 * 60 * 60 * 1000) * xStep + 100f
+            var previousY = (yAxisStart.y - (parsedData.firstOrNull()?.second ?: 0f) * (yStep * 5) / 1000)
+
             parsedData.forEachIndexed { index, (date, value) ->
                 Log.d("Chart","index: $index, date: $date, value: $value")
-                val x = (date.time/(24*60*60*1000) - minDate.time/(24*60*60*1000)).toFloat() * xStep +200f
-//                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f) {
-                    val y = yAxisStart.y - value*(yStep*5)/1000
+                val x = (date.time / (24 * 60 * 60 * 1000) - minDate.time / (24 * 60 * 60 * 1000)).toFloat() * xStep + 200f
+                val y = yAxisStart.y - value * (yStep * 5) / 1000
 
-                    if (index > 0 ) {
+//                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f)  {
+                    // 그래프의 x 좌표가 화면 내부에 있을 때만 그리기
+                    if (index > 0) {
                         drawLine(
                             Color(0xff5FCFEF),
                             start = Offset(previousX, previousY),
