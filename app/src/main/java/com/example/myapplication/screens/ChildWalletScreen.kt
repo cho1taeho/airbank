@@ -228,7 +228,7 @@ fun ChildWalletScreen(navController: NavController) {
                 .height(110.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
-                .padding(horizontal = 16.dp)
+//                .padding(horizontal = 16.dp)
                 .let { modifier ->
                     when (confiscationCheckState?.status) {
                         State.SUCCESS -> {
