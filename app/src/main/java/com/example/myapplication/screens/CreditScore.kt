@@ -57,7 +57,7 @@ fun CreditScoreBox() {
         verticalArrangement = Arrangement.spacedBy(15.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .width(314.dp)
+            .fillMaxWidth()
             .height(252.dp)
             .background(Color.White , RoundedCornerShape(size = 22.dp))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = 20.dp)
@@ -162,8 +162,8 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
                 val y = yAxisStart.y - value * (yStep * 5) / 1000
 
 //                if (x >= scrollState.value.toFloat() + 100f && x <= scrollState.value.toFloat() + size.width - 100f)  {
-                    // 그래프의 x 좌표가 화면 내부에 있을 때만 그리기
-                    if (index > 0) {
+                // 그래프의 x 좌표가 화면 내부에 있을 때만 그리기
+                if (index > 0) {
                         drawLine(
                             Color(0xff5FCFEF),
                             start = Offset(previousX, previousY),
@@ -171,8 +171,8 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
                             strokeWidth = 5f
                         )
                     }
-                    previousX = x
-                    previousY = y
+                previousX = x
+                previousY = y
                 }
 //            }
         }

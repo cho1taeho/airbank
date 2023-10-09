@@ -188,30 +188,31 @@ fun LoanScreen(navController: NavController) {
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(color = Color.White)
-                        .padding(horizontal = 16.dp)
-                ) {
-//                    val creditPoint = AirbankApplication.prefs.getString("creditPoint","")
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 13.dp)
-                    ) {
-                        Spacer(modifier = Modifier.size(10.dp))
-
-                        Text(
-                            "신용점수 ${creditScore}p",
-                            fontSize = 16.sp,
-                        )
-                        val creditPoint = selectChild?.creditScore ?: 0
-                        ScoreBar(creditScore )
-                        CreditPoint()
-                    }
-                }
+                CreditScoreBox()
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(300.dp)
+//                        .clip(RoundedCornerShape(10.dp))
+//                        .background(color = Color.White)
+//                        .padding(horizontal = 16.dp)
+//                ) {
+////                    val creditPoint = AirbankApplication.prefs.getString("creditPoint","")
+//                    Column(
+//                        modifier = Modifier
+//                            .padding(start = 13.dp)
+//                    ) {
+//                        Spacer(modifier = Modifier.size(10.dp))
+//
+//                        Text(
+//                            "신용점수 ${creditScore}p",
+//                            fontSize = 16.sp,
+//                        )
+//                        val creditPoint = selectChild?.creditScore ?: 0
+//                        ScoreBar(creditScore )
+//                        CreditPoint()
+//                    }
+//                }
             }
         }
     }
