@@ -186,6 +186,7 @@ fun WalletScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

@@ -194,7 +194,7 @@ fun ChildLoanScreen(navController: NavController) {
                         .background(color = Color.White)
                         .padding(horizontal = 16.dp)
                         .clickable {
-                            navController.navigate("ChildInterestRespaymentScreen")
+                            navController.navigate("ChildInterestRepayment")
                         }
                 ) {
                     Column(
