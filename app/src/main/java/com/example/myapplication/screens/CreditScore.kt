@@ -54,7 +54,6 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CreditScoreBox(name: String) {
-    val username = name
     val viewModel : CreditScoreViewModel = viewModel()
     LaunchedEffect(Unit){
         val groupid =  AirbankApplication.prefs.getString("group_id","")
@@ -71,7 +70,7 @@ fun CreditScoreBox(name: String) {
             .background(Color.White, RoundedCornerShape(size = 22.dp))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = 20.dp)
     ) {
-        Text("${username}님의 신용점수")
+        Text("${name}님의 신용점수")
         val data = com.example.myapplication.Util.sortedCreditHistories
         val lastCreditScore = AirbankApplication.prefs.getString("creditScore",data.last().creditScore.toString()).toInt()
         ScoreBar(lastCreditScore)
@@ -226,22 +225,18 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
 
 }
 
-fun Offset.coerceIn(min: Offset, max: Offset): Offset {
-    return Offset(x.coerceIn(min.x, max.x), y.coerceIn(min.y, max.y))
-}
-
 
 class CreditScoreViewModel @Inject constructor() : ViewModel() {
 
-    var creditHistories: List<GETCreditHistoryResponse.Data.creditHistory> = emptyList()
+    private var creditHistories: List<GETCreditHistoryResponse.Data.creditHistory> = emptyList()
     fun getCreditHistory(groupid: Int){
         viewModelScope.launch(Dispatchers.IO) {
             val response = HDRetrofitBuilder.HDapiService().getCreditHistory(groupid)
             if (response.isSuccessful){
                 val getresponse = response.body()
-//                if(getresponse != null){
-//                    creditHistories = getresponse.data.creditHistories
-//                }
+                if(getresponse != null){
+                    creditHistories = getresponse.data.creditHistories
+                }
             }
         }
     }

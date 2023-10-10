@@ -1,7 +1,9 @@
 package com.example.myapplication.screens
 
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,11 +42,12 @@ import java.text.NumberFormat
 import java.util.Locale
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoanScreen(navController: NavController) {
     var groupId by remember { mutableStateOf("") }
     groupId = AirbankApplication.prefs.getString("group_id", "")
-    val loanViewModel: LoanViewModel = hiltViewModel();
+    val loanViewModel: LoanViewModel = hiltViewModel()
     val loanData by loanViewModel.loanState.collectAsState()
     val accountViewModel: AccountViewModel = hiltViewModel()
     val interestData by accountViewModel.interestCheckState.collectAsState(initial = null)
@@ -52,14 +55,12 @@ fun LoanScreen(navController: NavController) {
     var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
     selectChild = viewModel.selected ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
 
-    var creditScore = AirbankApplication.prefs.getString("creditScore","").toInt()
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit, viewModel.childs){
         viewModel.getGroup()
         val mutablechilds = viewModel.childs
         childs = mutablechilds
     }
-    val creditPoint = selectChild?.creditScore ?: 0
 
     LaunchedEffect(key1 = groupId) {
         if (groupId.isNotEmpty()) {
@@ -74,9 +75,9 @@ fun LoanScreen(navController: NavController) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Column(
-        ) {
-            loanData?.let { data ->
+        Column()
+         {
+            loanData.let { data ->
                 Box(
                     modifier = Modifier
                         .padding(16.dp)
@@ -182,30 +183,6 @@ fun LoanScreen(navController: NavController) {
                 Spacer(modifier = Modifier.size(17.dp))
                 val childname = AirbankApplication.prefs.getString("child_name",selectChild.name )
                 CreditScoreBox(name = childname )
-//                Box(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(300.dp)
-//                        .clip(RoundedCornerShape(10.dp))
-//                        .background(color = Color.White)
-//                        .padding(horizontal = 16.dp)
-//                ) {
-////                    val creditPoint = AirbankApplication.prefs.getString("creditPoint","")
-//                    Column(
-//                        modifier = Modifier
-//                            .padding(start = 13.dp)
-//                    ) {
-//                        Spacer(modifier = Modifier.size(10.dp))
-//
-//                        Text(
-//                            "신용점수 ${creditScore}p",
-//                            fontSize = 16.sp,
-//                        )
-//                        val creditPoint = selectChild?.creditScore ?: 0
-//                        ScoreBar(creditScore )
-//                        CreditPoint()
-//                    }
-//                }
             }
         }
     }
