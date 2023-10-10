@@ -92,7 +92,8 @@ fun LoanRepaymentButton(navController: NavController, viewModel: LoanViewModel) 
                         .setPositiveButton(android.R.string.ok) { dialog, _ ->
                             dialog.dismiss()
                             navController.navigate("ChildLoan")
-                        }.show()
+                        }
+                        .show()
                 } else {
                     Toast
                         .makeText(context, "금액을 숫자로 입력해 주세요.", Toast.LENGTH_SHORT)
@@ -121,16 +122,15 @@ fun LoanRepaymentAmount(viewModel: LoanViewModel) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .height(135.dp)
     ) {
-        Spacer(modifier = Modifier.size(30.dp))
+//        Spacer(modifier = Modifier.size(10.dp))
         Text(
-            "보너스를 송금해주세요",
+            "상환금을 입력해주세요",
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
-        Spacer(modifier = Modifier.size(30.dp))
+        Spacer(modifier = Modifier.size(10.dp))
         OutlinedTextField(
             value = requestPriceValue,
             onValueChange = { newValue ->
