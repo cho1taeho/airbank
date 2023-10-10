@@ -100,7 +100,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
             .verticalScroll(rememberScrollState())
     ){

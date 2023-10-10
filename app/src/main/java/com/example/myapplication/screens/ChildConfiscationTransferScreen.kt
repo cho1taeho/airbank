@@ -1,5 +1,6 @@
 package com.example.myapplication.screens
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -166,6 +167,8 @@ fun ChildConfiscationTransferScreen(navController: NavController){
                 .weight(1f)
                 .background(Color.Transparent)
         )
+        val context = LocalContext.current
+
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -174,10 +177,17 @@ fun ChildConfiscationTransferScreen(navController: NavController){
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFF00D2F3))
                 .clickable {
-                    navController.navigate(BottomNavItem.Wallet.screenRoute)
                     val request = ConfiscationTransferRequest(transferAmount.toInt())
                     accountViewModel.confiscationTransfer(request)
 
+                    AlertDialog
+                        .Builder(context)
+                        .setTitle("압류")
+                        .setMessage("변제가 완료되었습니다.")
+                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                            dialog.dismiss()
+                            navController.navigate(BottomNavItem.Wallet.screenRoute)
+                        }.show()
                 }
         ) {
             Text(
