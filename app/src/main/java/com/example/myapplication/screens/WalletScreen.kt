@@ -193,12 +193,14 @@ fun WalletScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.size(8.dp))
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = Color(0xFFE4EBED))
                 .padding(horizontal = 16.dp)
+
 
         ){
 //            Column {
@@ -207,6 +209,7 @@ fun WalletScreen(navController: NavController) {
 //                val creditPoint = selectChild?.creditScore ?: 0
 //                ScoreBar(creditPoint)
 //                CreditPoint()
+
         CreditScoreBox(name = selectChild.name )
 //            }
         }

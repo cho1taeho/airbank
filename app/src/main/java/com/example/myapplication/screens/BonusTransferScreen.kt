@@ -157,8 +157,8 @@ fun BonusTransferScreen(navController: NavController){
                 },
                 label = {Text("송금 할 금액을 입력해 주세요.")},
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White),
+                    .fillMaxWidth(),
+//                    .background(Color.White),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
                 )
