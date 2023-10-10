@@ -67,7 +67,7 @@ fun WalletScreen(navController: NavController) {
 
     var childs by remember { mutableStateOf<List<GETGroupsResponse.Data.Member>>(emptyList()) }
     LaunchedEffect(Unit, viewModel.childs){
-        viewModel.getGroup()
+//        viewModel.getGroup()
         val mutablechilds = viewModel.childs
         childs = mutablechilds
     }
@@ -201,7 +201,7 @@ fun WalletScreen(navController: NavController) {
 //                val creditPoint = selectChild?.creditScore ?: 0
 //                ScoreBar(creditPoint)
 //                CreditPoint()
-        CreditScoreBox(name = childs.first().name )
+//        CreditScoreBox(name = childs.first().name )
 //            }
         }
     }

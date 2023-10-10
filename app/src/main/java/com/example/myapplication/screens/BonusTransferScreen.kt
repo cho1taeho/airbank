@@ -161,8 +161,7 @@ fun BonusTransferScreen(navController: NavController){
 //                    .background(Color.White),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
-                )
-
+                ),
             )
 
 
