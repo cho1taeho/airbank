@@ -139,7 +139,8 @@ fun LoanRepaymentAmount(viewModel: LoanViewModel) {
             },
             label = {Text("상환 금액을 입력 하세요.")},
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
 //                    .background(Color.White),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
