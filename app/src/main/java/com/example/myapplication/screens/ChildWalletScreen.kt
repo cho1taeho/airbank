@@ -94,7 +94,7 @@ import com.example.myapplication.model.State
 fun ChildWalletScreen(navController: NavController) {
     val accountViewModel: AccountViewModel = hiltViewModel()
     val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
-    val confiscationCheckState by accountViewModel.confiscationCheckState.collectAsState(initial = null)
+    val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
 //    val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
     val taxData by accountViewModel.taxCheckState.collectAsState(initial = null)
     val savingsViewModel: SavingsViewModel = hiltViewModel()
@@ -231,9 +231,9 @@ fun ChildWalletScreen(navController: NavController) {
                 .background(color = Color(0xFFE4EBED))
 //                .padding(horizontal = 16.dp)
                 .let { modifier ->
-                    when (confiscationCheckState?.status) {
+                    when (confiscationData?.status) {
                         State.SUCCESS -> {
-                            if (confiscationCheckState?.data?.data?.startedAt != null) {
+                            if (confiscationData?.data?.data?.startedAt != null) {
                                 modifier.clickable {
                                     navController.navigate("ChildConfiscationTransfer")
                                 }
@@ -255,7 +255,7 @@ fun ChildWalletScreen(navController: NavController) {
                 Spacer(modifier = Modifier.size(13.dp))
                 Text("대출금")
                 Spacer(modifier = Modifier.size(8.dp))
-                if (confiscationCheckState?.data?.data?.startedAt != null) {
+                if (confiscationData?.data?.data?.startedAt != null) {
                     Text(
                         "${loanData?.data?.data?.amount ?: 0}원",
                         fontSize = 23.sp,
@@ -263,16 +263,16 @@ fun ChildWalletScreen(navController: NavController) {
                     )
                 } else {
                     Text(
-                        "${confiscationCheckState?.data?.data?.amount ?:0}원",
+                        "${confiscationData?.data?.data?.amount ?:0}원",
                         fontSize = 23.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
 
             }
-            when (confiscationCheckState?.status) {
+            when (confiscationData?.status) {
                 State.SUCCESS -> {
-                    if (confiscationCheckState?.data?.data?.startedAt != null) {
+                    if (confiscationData?.data?.data?.startedAt != null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
