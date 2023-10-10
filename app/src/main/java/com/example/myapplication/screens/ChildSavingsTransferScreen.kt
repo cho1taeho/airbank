@@ -97,28 +97,40 @@ fun ChildSavingsTransferScreen(navController: NavController) {
 
 
     Column (
-        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
-        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
+//        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp, 20.dp, 20.dp, 20.dp)
             .verticalScroll(rememberScrollState())
     ){
-        Spacer(modifier = Modifier.size(5.dp))
+        Spacer(modifier = Modifier.size(30.dp))
+        Text(
+            "티끌모으기를 송금해주세요",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(30.dp))
         Box(
-            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .height(200.dp)
-                .background(color = Color(0xFFD6F2FF))
+                .background(color = Color.White)
         ) {
             Text(
-                "${savingsData?.data?.data?.monthlyAmount}원",
+                modifier = Modifier
+                    .padding(16.dp),
+                text = "${savingsData?.data?.data?.monthlyAmount}원",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold
             )
         }
+
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color.Transparent)
+        )
 
         val context = LocalContext.current
 
@@ -140,7 +152,8 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                         .setPositiveButton(android.R.string.ok) { dialog, _ ->
                             dialog.dismiss()
                             navController.navigate("childSavings")
-                        }.show()
+                        }
+                        .show()
 
                 }
         ) {
