@@ -95,7 +95,7 @@ fun ChildWalletScreen(navController: NavController) {
     val accountViewModel: AccountViewModel = hiltViewModel()
     val accountData by accountViewModel.accountCheckState.collectAsState(initial = null)
     val confiscationCheckState by accountViewModel.confiscationCheckState.collectAsState(initial = null)
-    val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
+//    val confiscationData by accountViewModel.confiscationCheckState.collectAsState(initial = null)
     val taxData by accountViewModel.taxCheckState.collectAsState(initial = null)
     val savingsViewModel: SavingsViewModel = hiltViewModel()
     val savingsData by savingsViewModel.savingsState.collectAsState(initial = null)
@@ -263,7 +263,7 @@ fun ChildWalletScreen(navController: NavController) {
                     )
                 } else {
                     Text(
-                        "${confiscationData?.data?.data?.amount ?:0}원",
+                        "${confiscationCheckState?.data?.data?.amount ?:0}원",
                         fontSize = 23.sp,
                         fontWeight = FontWeight.Bold
                     )
