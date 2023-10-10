@@ -86,11 +86,14 @@ fun AppNavigation(navController: NavHostController){
             }
             else if(userRole == "PARENT"){
                 if (savingsData?.data?.data?.status == null) {
-                    navController.navigate("SavingsWaiting")
+                    SavingsWaitingScreen(navController = navController)
+//                    navController.navigate("SavingsWaiting")
                 } else if (savingsData?.data?.data?.status == "PENDING") {
-                    navController.navigate("savingsApprove")
+//                    navController.navigate("savingsApprove")
+                    SavingsApproveScreen(navController = navController)
                 } else if (savingsData?.data?.data?.status == "PROCEEDING") {
-                    navController.navigate("Savings")
+//                    navController.navigate("Savings")
+                    SavingsScreen(navController = navController)
                 }
 //                SavingsScreen(navController = navController)
             }

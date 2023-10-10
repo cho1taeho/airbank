@@ -63,7 +63,6 @@ fun MyUI() {
     val currentRoute = navBackStackEntry?.destination?.route
     var title by remember {mutableStateOf("")}
     var nowon by remember { mutableStateOf("") }
-    val isLoggedin = true
     LaunchedEffect(navController.currentDestination){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             title = BottomNavItem.fromRoute(destination.route.toString()).title
@@ -155,10 +154,22 @@ fun MyUI() {
                     )
                     items.forEach {item ->
                         NavigationBarItem(
-                            icon = {Icon(painter = painterResource(id = item.icon), contentDescription = item.title)},
-//                            label = { Text(item.title) },
+                            icon = {Icon(painter = painterResource(
+                                id = if (nowon == item.screenRoute) {
+                                    item.selectedIcon
+                                } else {
+                                    item.icon
+                                }),
+                                contentDescription = item.title,
+                                tint = if (nowon == item.screenRoute) {
+                                    Color(0xff00D2F3) // 선택된 아이콘의 색상을 여기에 지정하세요.
+                                } else {
+                                    Color.Gray // 선택되지 않은 아이콘의 색상을 여기에 지정하세요.
+                                }
+                            )},
+                            label = { Text(item.title) },
                             selected = currentRoute == item.screenRoute,
-                            alwaysShowLabel = false,
+                            alwaysShowLabel = true,
                             onClick = {
                                 navController.navigate(item.screenRoute){
                                     navController.graph.startDestinationRoute?.let {
