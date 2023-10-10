@@ -91,14 +91,21 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.core.text.isDigitsOnly
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BonusTransferScreen(navController: NavController){
     val accountViewModel: AccountViewModel = hiltViewModel()
     val accountData by accountViewModel.bonusTransferState.collectAsState(initial = null)
 
     var inputAmount by remember { mutableStateOf("") }
-
+    var bonus by remember {mutableStateOf("")}
+    var showError by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column (
         modifier = Modifier
@@ -113,29 +120,54 @@ fun BonusTransferScreen(navController: NavController){
             fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.size(30.dp))
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-//                .height(70.dp)
-                .background(color = Color.White)
-        ) {
-            TextField(
+//        Box(
+//            contentAlignment = Alignment.Center,
+//            modifier = Modifier
+//                .fillMaxWidth()
+////                .clip(RoundedCornerShape(14.dp))
+////                .height(70.dp)
+//                .background(color = Color.White)
+//        ) {
+//            TextField(
+//                value = inputAmount,
+//                onValueChange = { newValue ->
+//                    if (newValue.all { it.isDigit() }) {
+//                        inputAmount = newValue
+//                    }
+//                },
+//                keyboardOptions = KeyboardOptions.Default.copy(
+//                    keyboardType = KeyboardType.Number
+//                ),
+//                label = { Text("보너스 금액 입력") },
+////                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+//                modifier = Modifier.fillMaxWidth()
+//            )
+            OutlinedTextField(
                 value = inputAmount,
                 onValueChange = { newValue ->
-                    if (newValue.all { it.isDigit() }) {
+
+                    if (newValue.length <= 11 && newValue.isDigitsOnly()) {
                         inputAmount = newValue
+                        showError = true
+                        if(newValue.isEmpty() || (newValue.length == 11 && newValue.startsWith("010"))){
+                            showError = false
+                        }
                     }
+
                 },
-                keyboardOptions = KeyboardOptions.Default.copy(
+                label = {Text("송금 할 금액을 입력해 주세요.")},
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White),
+                keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number
-                ),
-                label = { Text("보너스 금액 입력") },
-//                colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
-                modifier = Modifier.fillMaxWidth()
+                )
+
             )
-        }
+
+
+
+//        }
 
         Spacer(
             modifier = Modifier
@@ -167,5 +199,6 @@ fun BonusTransferScreen(navController: NavController){
             )
         }
     }
-
 }
+
+
