@@ -90,6 +90,8 @@ import java.util.Calendar
 import java.util.Locale
 import java.text.SimpleDateFormat
 import com.example.myapplication.model.State
+import java.text.NumberFormat
+
 @Composable
 fun ChildWalletScreen(navController: NavController) {
     val accountViewModel: AccountViewModel = hiltViewModel()
@@ -138,8 +140,12 @@ fun ChildWalletScreen(navController: NavController) {
                     fontSize = 14.sp,
                 )
                 Spacer(modifier = Modifier.size(8.dp))
+
+                val amount = accountData?.data?.data?.amount ?: 0
+                val formattedAccountAmount = NumberFormat.getNumberInstance(Locale.US).format(amount)
+
                 Text(
-                    text = accountData?.data?.data?.amount?.toString() ?: "0",
+                    text = "${formattedAccountAmount}원",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold
                 )
