@@ -247,12 +247,12 @@ fun ChildLoanScreen(navController: NavController) {
                         modifier = Modifier
                             .padding(start = 13.dp)
                     ) {
-                        Spacer(modifier = Modifier.size(10.dp))
-
-                        Text(
-                            "신용점수 ${creditScore}p",
-                            fontSize = 16.sp,
-                        )
+//                        Spacer(modifier = Modifier.size(10.dp))
+//
+//                        Text(
+//                            "신용점수 ${creditScore}p",
+//                            fontSize = 16.sp,
+//                        )
                         ScoreBar(creditScore)
                         CreditScoreBox(name)
                     }

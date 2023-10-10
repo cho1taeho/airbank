@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 @Composable
 fun CreditScoreBox(name: String) {
-
+    val username = AirbankApplication.prefs.getString("name",name)
     val viewModel : CreditScoreViewModel = viewModel()
     LaunchedEffect(Unit){
         val groupid =  AirbankApplication.prefs.getString("group_id","")
@@ -64,10 +64,10 @@ fun CreditScoreBox(name: String) {
             .background(Color.White , RoundedCornerShape(size = 22.dp))
             .padding(start = 18.dp, top = 20.dp, end = 18.dp, bottom = 20.dp)
     ) {
-        Text("${name}님의 신용점수")
-        var creditPoint = 732
-        ScoreBar(creditPoint)
-        PerformanceChart2(com.example.myapplication.Util.sortedCreditHistories)
+        Text("${username}님의 신용점수")
+        val data = com.example.myapplication.Util.sortedCreditHistories
+        ScoreBar(data.last().creditScore)
+        PerformanceChart2(data)
 
     }
 }
@@ -77,12 +77,12 @@ fun CreditScoreBox(name: String) {
 @Composable
 fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
-
+    val lastCreditScore = AirbankApplication.prefs.getString("creditScore",data.last().creditScore.toString()).toFloat()
     val parsedData = data.map { (creditScore, createdAt) ->
         val date = simpleDateFormat.parse(createdAt) ?: Date()
         Pair(date, creditScore + 0f)
     }
-        .plus(Pair(Date(),(data.last().creditScore+0f)))
+        .plus(Pair(Date(),(lastCreditScore+0f)))
 
 
 
