@@ -202,11 +202,12 @@ fun WalletScreen(navController: NavController) {
 
         ){
             Column {
-                Spacer(modifier = Modifier.size(10.dp))
-                Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 신용점수")
-                val creditPoint = selectChild?.creditScore ?: 0
-                ScoreBar(creditPoint)
-                CreditPoint()
+//                Spacer(modifier = Modifier.size(10.dp))
+//                Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 신용점수")
+//                val creditPoint = selectChild?.creditScore ?: 0
+//                ScoreBar(creditPoint)
+//                CreditPoint()
+            CreditScoreBox(name = selectChild.name )
             }
         }
     }

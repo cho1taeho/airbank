@@ -65,6 +65,7 @@ fun ChildMainScreen(navController: NavController) {
     var group_id by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit){
         viewModel.getGroup(navController)
+        viewModel.getMembers()
         val mutablegroupid = viewModel.groupid
         group_id = mutablegroupid
     }
@@ -339,6 +340,19 @@ class ChildMainViewModel @Inject constructor() : ViewModel() {
     var tempid by mutableIntStateOf(0)
     var childs : List<GETGroupsResponse.Data.Member> = emptyList()
     var child: GETGroupsResponse.Data.Member? by mutableStateOf(null)
+
+
+    fun getMembers() {
+        val tag = "getMember"
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = HDRetrofitBuilder.HDapiService().getUserInfo()
+            if (response.body() != null){
+                val getMembersResponse = response.body()!!.data
+                AirbankApplication.prefs.setString("creditScore",getMembersResponse.creditScore.toString())
+                Log.d(tag,"CreditScore= ${AirbankApplication.prefs.getString("creditScore","")}")
+            }
+        }
+    }
 
     fun getGroup(navController: NavController) {
         val tag = "getGroup"

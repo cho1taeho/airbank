@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -204,6 +205,11 @@ fun ChildProfile(childs: List<GETGroupsResponse.Data.Member>, viewModel: MainVie
 fun ChildCard(viewModel: MainViewModel) {
     var selectChild by remember { mutableStateOf(GETGroupsResponse.Data.Member(0,0,"","",0)) }
     selectChild = viewModel.selected ?: viewModel.childs.firstOrNull() ?: GETGroupsResponse.Data.Member(0,0,"","",0)
+    var creditPoint by remember { mutableIntStateOf(0) }
+    creditPoint = AirbankApplication.prefs.getString("creditScore", "").toInt() ?: selectChild?.creditScore ?:  0
+    LaunchedEffect(Unit){
+        viewModel.getMembers()
+    }
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -240,7 +246,6 @@ fun ChildCard(viewModel: MainViewModel) {
             }
             Text("신용점수")
 //            val creditPoint = AirbankApplication.prefs.getString("creditScore", "")
-            val creditPoint = selectChild?.creditScore ?: 0
             ScoreBar(creditPoint)
         }
     }
@@ -393,8 +398,11 @@ fun Body(navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0xFFEFE4FF))
                     .clickable {
-                        Log.d("티클모으기상태","${savingsData?.data?.data?.status
-                        }")
+                        Log.d(
+                            "티클모으기상태", "${
+                                savingsData?.data?.data?.status
+                            }"
+                        )
                         if (savingsData?.data?.data?.status == null) {
                             navController.navigate("SavingsWaiting")
                         } else if (savingsData?.data?.data?.status == "PENDING") {
@@ -438,6 +446,18 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     var selected: GETGroupsResponse.Data.Member? by mutableStateOf(null)
     var childs : List<GETGroupsResponse.Data.Member> = emptyList()
+
+    fun getMembers() {
+        val tag = "getMember"
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = HDRetrofitBuilder.HDapiService().getUserInfo()
+            if (response.body() != null){
+                val getMembersResponse = response.body()!!.data
+                AirbankApplication.prefs.setString("creditScore",getMembersResponse.creditScore.toString())
+                Log.d(tag,"CreditScore= ${AirbankApplication.prefs.getString("creditScore","")}")
+            }
+        }
+    }
 
 
     fun getGroup() {
