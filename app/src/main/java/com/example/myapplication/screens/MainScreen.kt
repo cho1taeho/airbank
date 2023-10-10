@@ -470,9 +470,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     childs = getGroupsResponse.members
                     if (childs.isNullOrEmpty()){Log.e("MainViewModel","Childs are empty")}
                     else{
-                        AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
-                        Log.d(tag,childs.first().groupId.toString())
-                        GETGroupseFund(childs.first().groupId)
+                        if(childs.firstOrNull() != null){
+                            AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
+                            AirbankApplication.prefs.setString("child_name",childs.first().name)
+                            Log.d(tag,childs.first().groupId.toString())
+                            GETGroupseFund(childs.first().groupId)
+                        }
                     }
                 } else { Log.e("MainViewModel", "Response not successful: ${response.code()}") }
             } catch (e: Exception) { Log.e("MainViewModel", "Error: ${e.message}")  }

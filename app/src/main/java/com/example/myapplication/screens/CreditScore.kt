@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 @Composable
 fun CreditScoreBox(name: String) {
-    val username = AirbankApplication.prefs.getString("name",name)
+    val username = name
     val viewModel : CreditScoreViewModel = viewModel()
     LaunchedEffect(Unit){
         val groupid =  AirbankApplication.prefs.getString("group_id","")

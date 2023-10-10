@@ -180,7 +180,8 @@ fun LoanScreen(navController: NavController) {
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
-                CreditScoreBox(selectChild.name)
+                val childname = AirbankApplication.prefs.getString("child_name",selectChild.name )
+                CreditScoreBox(name = childname )
 //                Box(
 //                    modifier = Modifier
 //                        .fillMaxWidth()

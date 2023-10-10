@@ -200,7 +200,8 @@ fun WalletScreen(navController: NavController) {
 //                val creditPoint = selectChild?.creditScore ?: 0
 //                ScoreBar(creditPoint)
 //                CreditPoint()
-        CreditScoreBox(name = childs.first().name )
+            val childname = childs.firstOrNull()?.name ?: "Unknown"
+            CreditScoreBox(name = childname)
 //            }
         }
     }
