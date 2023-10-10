@@ -121,8 +121,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(16.dp),
                 text = "${savingsData?.data?.data?.monthlyAmount}원",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 26.sp
             )
         }
 
@@ -161,6 +160,7 @@ fun ChildSavingsTransferScreen(navController: NavController) {
                 "티끌모으기 송금하기",
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
+                color = Color.White
             )
 
         }

@@ -66,7 +66,8 @@ fun CreditScoreBox(name: String) {
     ) {
         Text("${username}님의 신용점수")
         val data = com.example.myapplication.Util.sortedCreditHistories
-        ScoreBar(data.last().creditScore)
+        val lastCreditScore = AirbankApplication.prefs.getString("creditScore",data.last().creditScore.toString()).toInt()
+        ScoreBar(lastCreditScore)
         PerformanceChart2(data)
 
     }

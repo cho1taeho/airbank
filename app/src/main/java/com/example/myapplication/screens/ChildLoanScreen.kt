@@ -253,7 +253,6 @@ fun ChildLoanScreen(navController: NavController) {
 //                            "신용점수 ${creditScore}p",
 //                            fontSize = 16.sp,
 //                        )
-                        ScoreBar(creditScore)
                         CreditScoreBox(name)
                     }
                 }

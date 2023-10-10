@@ -201,124 +201,123 @@ fun WalletScreen(navController: NavController) {
                 .padding(horizontal = 16.dp)
 
         ){
-            Column {
+//            Column {
 //                Spacer(modifier = Modifier.size(10.dp))
 //                Text("${childs.firstOrNull()?.name ?: "Unknown"}님의 신용점수")
 //                val creditPoint = selectChild?.creditScore ?: 0
 //                ScoreBar(creditPoint)
 //                CreditPoint()
-            CreditScoreBox(name = selectChild.name )
-            }
+        CreditScoreBox(name = selectChild.name )
+//            }
         }
     }
 }
 
 
-@Preview
-@Composable
-
-fun CreditPoint() {
-    val list = listOf(500f, 600f, 450f, 480f, 650f, 500f)
-    val zipList: List<Pair<Float, Float>> = list.zipWithNext()
-    val xAxisLabels = getMonths()
-    val yAxisLabels = List((999 / 200) + 1) { it * 200 }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        val max = list.maxOrNull() ?: 0f
-        val min = 0f
-        val lineColor = if (list.last() > list.first()) Color(0xFF00D2F3) else Color(0xFF00D2F3)
-
-        // Y Axis Labels
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            yAxisLabels.reversed().forEach { label ->
-                Text(text = label.toString(), modifier = Modifier.padding(end = 4.dp))
-            }
-        }
-
-        // Graph, X Axis Labels, and Axis Lines
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .fillMaxSize()
-                .padding(start = 32.dp)
-        ) {
-            Canvas(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(1.dp)
-                    .align(Alignment.TopStart),
-                onDraw = { drawRect(color = Color.Black) }
-            )
-
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                for ((index, pair) in zipList.withIndex()) {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                    ) {
-                        Canvas(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(bottom = 16.dp), // Making space for X Axis Labels
-                            onDraw = {
-                                val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
-                                val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
-                                val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage))
-                                val toPoint = Offset(x = size.width, y = size.height.times(1 - toValuePercentage))
-
-                                drawLine(
-                                    color = lineColor,
-                                    start = fromPoint,
-                                    end = toPoint,
-                                    strokeWidth = 3f
-                                )
-                            }
-                        )
-                        Canvas(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .align(Alignment.BottomStart),
-                            onDraw = { drawRect(color = Color.Black) }
-                        )
-                        Text(
-                            text = xAxisLabels.getOrNull(index) ?: "",
-                            modifier = Modifier.align(Alignment.BottomStart)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
+//@Preview
+//@Composable
+//fun CreditPoint() {
+//    val list = listOf(500f, 600f, 450f, 480f, 650f, 500f)
+//    val zipList: List<Pair<Float, Float>> = list.zipWithNext()
+//    val xAxisLabels = getMonths()
+//    val yAxisLabels = List((999 / 200) + 1) { it * 200 }
+//
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp)
+//    ) {
+//        val max = list.maxOrNull() ?: 0f
+//        val min = 0f
+//        val lineColor = if (list.last() > list.first()) Color(0xFF00D2F3) else Color(0xFF00D2F3)
+//
+//        // Y Axis Labels
+//        Column(
+//            modifier = Modifier
+//                .align(Alignment.TopStart)
+//                .fillMaxHeight(),
+//            verticalArrangement = Arrangement.SpaceBetween
+//        ) {
+//            yAxisLabels.reversed().forEach { label ->
+//                Text(text = label.toString(), modifier = Modifier.padding(end = 4.dp))
+//            }
+//        }
+//
+//        // Graph, X Axis Labels, and Axis Lines
+//        Box(
+//            modifier = Modifier
+//                .align(Alignment.BottomStart)
+//                .fillMaxSize()
+//                .padding(start = 32.dp)
+//        ) {
+//            Canvas(
+//                modifier = Modifier
+//                    .fillMaxHeight()
+//                    .width(1.dp)
+//                    .align(Alignment.TopStart),
+//                onDraw = { drawRect(color = Color.Black) }
+//            )
+//
+//            Row(
+//                modifier = Modifier.fillMaxSize(),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                for ((index, pair) in zipList.withIndex()) {
+//                    Box(
+//                        modifier = Modifier
+//                            .weight(1f)
+//                            .fillMaxHeight()
+//                    ) {
+//                        Canvas(
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .padding(bottom = 16.dp), // Making space for X Axis Labels
+//                            onDraw = {
+//                                val fromValuePercentage = getValuePercentageForRange(pair.first, max, min)
+//                                val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
+//                                val fromPoint = Offset(x = 0f, y = size.height.times(1 - fromValuePercentage))
+//                                val toPoint = Offset(x = size.width, y = size.height.times(1 - toValuePercentage))
+//
+//                                drawLine(
+//                                    color = lineColor,
+//                                    start = fromPoint,
+//                                    end = toPoint,
+//                                    strokeWidth = 3f
+//                                )
+//                            }
+//                        )
+//                        Canvas(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .height(1.dp)
+//                                .align(Alignment.BottomStart),
+//                            onDraw = { drawRect(color = Color.Black) }
+//                        )
+//                        Text(
+//                            text = xAxisLabels.getOrNull(index) ?: "",
+//                            modifier = Modifier.align(Alignment.BottomStart)
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 
-@Composable
-fun getMonths(): List<String> {
-    val calendar = Calendar.getInstance()
-    val dateFormat = SimpleDateFormat("MMM", Locale.getDefault())
-    return List(6) {
-        val month = dateFormat.format(calendar.time)
-        calendar.add(Calendar.MONTH, -1)
-        month
-    }.reversed()
-}
 
-fun getValuePercentageForRange(value: Float, max: Float, min: Float): Float {
-    if (max - min == 0f) return 0f
-    return (value - min) / (max - min)
-}
+//@Composable
+//fun getMonths(): List<String> {
+//    val calendar = Calendar.getInstance()
+//    val dateFormat = SimpleDateFormat("MMM", Locale.getDefault())
+//    return List(6) {
+//        val month = dateFormat.format(calendar.time)
+//        calendar.add(Calendar.MONTH, -1)
+//        month
+//    }.reversed()
+//}
+//
+//fun getValuePercentageForRange(value: Float, max: Float, min: Float): Float {
+//    if (max - min == 0f) return 0f
+//    return (value - min) / (max - min)
+//}
