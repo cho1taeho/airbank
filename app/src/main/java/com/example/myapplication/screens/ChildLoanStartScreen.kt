@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -106,40 +107,34 @@ fun LoanAmount(viewModel: LoanViewModel) {
         focusRequester.requestFocus()
     }
 
-    Box(
+    Column (
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .height(135.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(color = Color(0xffD6F2FF))
-            .padding(horizontal = 16.dp)
     ) {
-        Column(
+//        Spacer(modifier = Modifier.size(10.dp))
+        Text(
+            "땡겨쓸 금액을 입력해주세요",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(modifier = Modifier.size(10.dp))
+        OutlinedTextField(
+            value = requestPriceValue,
+            onValueChange = { newValue ->
+                requestPriceValue = newValue
+                viewModel.setLoanAmount(requestPriceValue)
+            },
+            label = { Text("땡겨쓸 금액을 입력해주세요") },
             modifier = Modifier
-                .padding(13.dp)
-        ) {
-            Text(
-                "땡겨쓸 금액",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-            Spacer(modifier = Modifier.size(10.dp))
-            TextField(
-                value = requestPriceValue,
-                onValueChange = { newValue ->
-                    requestPriceValue = newValue
-                    viewModel.setLoanAmount(requestPriceValue)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .background(color = Color(0xFFD6F2FF)),
-                label = { Text("땡겨쓸 금액을 입력 하세요.") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-            )
-        }
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+//                    .background(Color.White),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+        )
+
     }
 }
 
@@ -238,4 +233,40 @@ fun LoanDetail() {
         }
     }
 }
+
+//Box(
+//modifier = Modifier
+//.fillMaxWidth()
+//.height(135.dp)
+//.clip(RoundedCornerShape(10.dp))
+//.background(color = Color(0xffD6F2FF))
+//.padding(horizontal = 16.dp)
+//) {
+//    Column(
+//        modifier = Modifier
+//            .padding(13.dp)
+//    ) {
+//        Text(
+//            "땡겨쓸 금액",
+//            fontSize = 18.sp,
+//            fontWeight = FontWeight.SemiBold
+//        )
+//        Spacer(modifier = Modifier.size(10.dp))
+//        TextField(
+//            value = requestPriceValue,
+//            onValueChange = { newValue ->
+//                requestPriceValue = newValue
+//                viewModel.setLoanAmount(requestPriceValue)
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .focusRequester(focusRequester)
+//                .background(color = Color(0xFFD6F2FF)),
+//            label = { Text("땡겨쓸 금액을 입력 하세요.") },
+//            keyboardOptions = KeyboardOptions(
+//                keyboardType = KeyboardType.Number
+//            ),
+//        )
+//    }
+//}
 
