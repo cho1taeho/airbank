@@ -32,8 +32,8 @@ sealed class BottomNavItem(
         }
     }
     object Main : BottomNavItem("메인", R.drawable.ihome, "main",R.drawable.ihome)
-    object Wallet : BottomNavItem("지갑 관리하기", R.drawable.iwallet, "wallet", R.drawable.iwallet)
-    object ChildWallet : BottomNavItem("내 지갑", R.drawable.iwallet, "ChildWallet", R.drawable.iwallet)
+    object Wallet : BottomNavItem("지갑", R.drawable.iwallet, "wallet", R.drawable.iwallet)
+    object ChildWallet : BottomNavItem("지갑", R.drawable.iwallet, "ChildWallet", R.drawable.iwallet)
     object Savings : BottomNavItem("티끌 모으기", R.drawable.isavings, "savings",R.drawable.isavings)
     object SavingsBonus : BottomNavItem("티끌 모으기", R.drawable.isavings, "savingsBonus",R.drawable.isavings)
     object SavingsWaiting : BottomNavItem("티끌 모으기", R.drawable.isavings, "SavingsWaiting",R.drawable.isavings)
