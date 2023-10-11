@@ -258,18 +258,24 @@ fun ChildWalletScreen(navController: NavController) {
                 modifier = Modifier
                     .padding(start = 16.dp)
             ){
-                Spacer(modifier = Modifier.size(13.dp))
-                Text("대출금")
-                Spacer(modifier = Modifier.size(8.dp))
+//                Spacer(modifier = Modifier.size(13.dp))
+//                Text("대출금")
+//                Spacer(modifier = Modifier.size(8.dp))
                 when (confiscationData?.status) {
                     State.SUCCESS -> {
-                        if (confiscationData?.data?.data?.startedAt != null) {
+                        if (confiscationData?.data?.data?.startedAt == null) {
+                            Spacer(modifier = Modifier.size(13.dp))
+                            Text("대출금")
+                            Spacer(modifier = Modifier.size(8.dp))
                             Text(
                                 "${loanData?.data?.data?.amount ?: 0}원",
                                 fontSize = 23.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         } else {
+                            Spacer(modifier = Modifier.size(13.dp))
+                            Text("압류금")
+                            Spacer(modifier = Modifier.size(8.dp))
                             Text(
                                 "${confiscationData?.data?.data?.amount ?:0}원",
                                 fontSize = 23.sp,
