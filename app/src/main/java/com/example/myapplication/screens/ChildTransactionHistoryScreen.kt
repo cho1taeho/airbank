@@ -34,7 +34,11 @@ import androidx.navigation.NavController
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.myapplication.viewmodel.AccountViewModel
 import java.time.LocalDateTime
@@ -206,11 +210,61 @@ fun MainHistory() {
                                 )
                             }
                             Spacer(modifier = Modifier.weight(1f))
+//                            Text(
+//                                text = if (transaction.transactionDistinction == "입금") {
+//                                    "${transaction.amount}원 입금"
+//                                } else {
+//                                    "${transaction.amount}원 출금"
+//                                },
+//                                style = TextStyle(color = Color.Black),
+//                                fontSize = 15.sp,
+//                                fontWeight = FontWeight.Bold
+//                            )
+                            Log.d("입금확인","transaction.transactionDistinction")
                             Text(
-                                text = "${transaction.amount}원",
-                                style = TextStyle(color = Color.Black),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold
+                                if (transaction.transactionDistinction == "DEPOSIT") {
+                                    buildAnnotatedString {
+                                        withStyle(style = ParagraphStyle(lineHeight = 15.sp)) {
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    color = Color.Blue,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            ){
+                                                append("+")
+                                            }
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color.Black
+                                                )
+                                            ){
+                                                append("${transaction.amount}원")
+                                            }
+                                        }
+                                    }
+                                } else{
+                                    buildAnnotatedString {
+                                        withStyle(style = ParagraphStyle(lineHeight = 15.sp)) {
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    color = Color.Red,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            ){
+                                                append("-")
+                                            }
+                                            withStyle(
+                                                style = SpanStyle(
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color.Black
+                                                )
+                                            ){
+                                                append("${transaction.amount}원")
+                                            }
+                                        }
+                                    }
+                                }
                             )
                             Spacer(modifier = Modifier.size(10.dp))
                         }
@@ -311,7 +365,11 @@ fun LoanHistory() {
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "${transaction.amount}원",
+                                text = if (transaction.transactionDistinction == "입금") {
+                                    "+${transaction.amount}원"
+                                } else {
+                                    "-${transaction.amount}원"
+                                },
                                 style = TextStyle(color = Color.Black),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
@@ -415,7 +473,11 @@ fun SavingsHistory() {
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "${transaction.amount}원",
+                                text = if (transaction.transactionDistinction == "입금") {
+                                    "+${transaction.amount}원"
+                                } else {
+                                    "-${transaction.amount}원"
+                                },
                                 style = TextStyle(color = Color.Black),
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold
