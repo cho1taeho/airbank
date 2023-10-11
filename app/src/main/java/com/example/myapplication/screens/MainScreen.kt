@@ -453,7 +453,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
             val response = HDRetrofitBuilder.HDapiService().getUserInfo()
             if (response.body() != null){
                 val getMembersResponse = response.body()!!.data
-                AirbankApplication.prefs.setString("creditScore",getMembersResponse.creditScore.toString())
+//                AirbankApplication.prefs.setString("creditScore",getMembersResponse.creditScore.toString())
                 Log.d(tag,"CreditScore= ${AirbankApplication.prefs.getString("creditScore","")}")
             }
         }
@@ -473,7 +473,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
                         if(childs.firstOrNull() != null){
                             AirbankApplication.prefs.setString("group_id",childs.first().groupId.toString())
                             AirbankApplication.prefs.setString("child_name",childs.first().name)
-                            Log.d(tag,childs.first().groupId.toString())
+                            AirbankApplication.prefs.setString("creditScore",childs.first().creditScore.toString())
+
+                            Log.d(tag,"firstChild: ${childs.first()}")
                             GETGroupseFund(childs.first().groupId)
                         }
                     }

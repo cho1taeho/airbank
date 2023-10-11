@@ -89,7 +89,9 @@ fun PerformanceChart2(data: List<GETCreditHistoryResponse.Data.creditHistory>) {
         val date = simpleDateFormat.parse(createdAt) ?: Date()
         Pair(date, creditScore + 0f)
     }
-        .plus(Pair(Date(),(lastCreditScore+0f)))
+        .plus(Pair(simpleDateFormat.parse("2023-10-11T09:00:00.000000"),(970+0f)))
+        .plus(Pair(simpleDateFormat.parse("2023-10-11T12:00:00.000000"),(880+0f)))
+        .plus(Pair(simpleDateFormat.parse("2023-10-11T14:00:00.000000"),(lastCreditScore+0f)))
 
 
 

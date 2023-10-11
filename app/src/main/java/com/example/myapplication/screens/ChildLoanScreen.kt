@@ -1,7 +1,9 @@
 package com.example.myapplication.screens
 
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +46,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChildLoanScreen(navController: NavController) {
     var groupId by remember { mutableStateOf("") }
@@ -235,27 +238,8 @@ fun ChildLoanScreen(navController: NavController) {
                     }
                 }
                 Spacer(modifier = Modifier.size(17.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(color = Color.White)
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 13.dp)
-                    ) {
-//                        Spacer(modifier = Modifier.size(10.dp))
-//
-//                        Text(
-//                            "신용점수 ${creditScore}p",
-//                            fontSize = 16.sp,
-//                        )
-                        CreditScoreBox(name)
-                    }
-                }
+                CreditScoreBox(name)
+
             }
         }
     }
