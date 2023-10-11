@@ -126,7 +126,7 @@ fun LoanRepaymentAmount(viewModel: LoanViewModel) {
     ) {
         Spacer(modifier = Modifier.size(30.dp))
         Text(
-            "보너스를 송금해주세요",
+            "상환할 금액을 송금해주세요",
             fontSize = 28.sp,
             fontWeight = FontWeight.SemiBold
         )
